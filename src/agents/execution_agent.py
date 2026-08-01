@@ -31,7 +31,20 @@ class ExecutionAgent(BaseAgent):
     ) -> None:
         self.gophish = gophish or GophishService()
 
+    def _resolve_target_email(self, emp: Employee, email_mode: str) -> str:
+        email = emp.email or emp.email_hash
+        if email_mode != "prod":
+            return email
+        local, sep, domain = email.rpartition("@")
+        if not sep or "+" not in local:
+            return email
+        user = local.split("+", 1)[1]
+        if not user:
+            return email
+        return f"{user}@{domain}"
+
     async def execute_campaign(self, campaign_id: uuid.UUID, plan: dict[str, Any] | None = None) -> bool:
+        email_mode = (plan or {}).get("email_mode", "test")
         async with async_session() as db:
             campaign = await self._load_campaign(db, campaign_id)
             if not campaign:
@@ -74,7 +87,7 @@ class ExecutionAgent(BaseAgent):
                         db, campaign, scenario_type, employee_contexts
                     )
                     gophish_group = await self._create_group_for_targets(
-                        db, campaign, group_employees, scenario_type.value
+                        db, campaign, group_employees, scenario_type.value, email_mode
                     )
                     gophish_campaign = await self._launch_gophish_campaign(
                         db, campaign, gophish_group, template, pages, smtp_name
@@ -196,12 +209,13 @@ class ExecutionAgent(BaseAgent):
         campaign: Campaign,
         employees: list[Employee],
         scenario_label: str,
+        email_mode: str = "test",
     ) -> dict[str, Any]:
         targets = []
         for emp in employees:
             emp_name = emp.name or emp.name_hash or ""
             targets.append({
-                "email": emp.email or emp.email_hash,
+                "email": self._resolve_target_email(emp, email_mode),
                 "first_name": emp_name.split()[0] if emp_name else "",
                 "last_name": " ".join(emp_name.split()[1:]) if emp_name and len(emp_name.split()) > 1 else "",
                 "position": emp.role or "Employee",

@@ -24,11 +24,11 @@ def _api(method: str, path: str, **kwargs) -> httpx.Response:
         if method == "GET":
             return httpx.get(url, params=kwargs.get("params"), timeout=30)
         elif method == "POST":
-            return httpx.post(url, json=kwargs.get("json"), timeout=30)
+            return httpx.post(url, json=kwargs.get("json"), params=kwargs.get("params"), timeout=30)
         elif method == "PUT":
-            return httpx.put(url, json=kwargs.get("json"), timeout=30)
+            return httpx.put(url, json=kwargs.get("json"), params=kwargs.get("params"), timeout=30)
         elif method == "DELETE":
-            return httpx.delete(url, timeout=30)
+            return httpx.delete(url, params=kwargs.get("params"), timeout=30)
     except httpx.ConnectError:
         console.print("[red]Could not connect to API at {}. Is the server running?[/]".format(API_BASE))
         raise SystemExit(1)
@@ -146,10 +146,30 @@ def campaign():
 @click.argument("client_id")
 @click.option("--difficulty", default="medium", type=click.Choice(["easy", "medium", "hard"]))
 def campaign_run(client_id, difficulty):
-    """Trigger a campaign immediately."""
-    resp = _api("POST", f"/clients/{client_id}/campaigns", json={"difficulty": difficulty})
+    """Trigger a campaign immediately, targeting prod-style emails (xyz@email.com)."""
+    resp = _api(
+        "POST",
+        f"/clients/{client_id}/campaigns",
+        params={"email_mode": "prod"},
+        json={"difficulty": difficulty},
+    )
     data = resp.json()
-    console.print(f"[green]Campaign started[/]\nID: {data['id']}\nStatus: {data['status']}")
+    console.print(f"[green]Campaign started (prod emails)[/]\nID: {data['id']}\nStatus: {data['status']}")
+
+
+@campaign.command("run-test")
+@click.argument("client_id")
+@click.option("--difficulty", default="medium", type=click.Choice(["easy", "medium", "hard"]))
+def campaign_run_test(client_id, difficulty):
+    """Trigger a campaign against test addresses (base+xyz@email.com)."""
+    resp = _api(
+        "POST",
+        f"/clients/{client_id}/campaigns",
+        params={"email_mode": "test"},
+        json={"difficulty": difficulty},
+    )
+    data = resp.json()
+    console.print(f"[green]Campaign started (test emails)[/]\nID: {data['id']}\nStatus: {data['status']}")
 
 
 @campaign.command("list")

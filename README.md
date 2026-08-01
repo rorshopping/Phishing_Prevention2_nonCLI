@@ -70,7 +70,8 @@ python -m src.cli.main client employees import --client-id <id> --file employees
 # Groups: executive, finance, hr, it_management, it_staff, sales, engineering, general
 
 # --- Campaigns ---
-python -m src.cli.main campaign run --client-id <id>
+python -m src.cli.main campaign run <client-id>          # prod: targets xyz@email.com
+python -m src.cli.main campaign run-test <client-id>     # test: targets base+xyz@email.com
 python -m src.cli.main campaign list --client-id <id>
 python -m src.cli.main campaign results <campaign-id>
 
@@ -116,7 +117,7 @@ Training types: `phishing_awareness`, `password_security`, `social_engineering`,
 | DELETE | `/clients/{id}` | Deactivate client |
 | GET | `/clients/{id}/employees` | List employees |
 | POST | `/clients/{id}/employees` | Upload employees (CSV batch) |
-| POST | `/clients/{id}/campaigns` | Trigger campaign (AI-planned) |
+| POST | `/clients/{id}/campaigns?email_mode=test\|prod` | Trigger campaign (AI-planned); `test` uses `base+xyz@email.com`, `prod` strips the `+` prefix (`xyz@email.com`) |
 | GET | `/clients/{id}/campaigns` | List campaigns for client |
 | GET | `/clients/{id}/stats` | Aggregate stats |
 | GET | `/clients/{id}/dashboard` | **Consolidated dashboard** (summary, risk, trend, recent campaigns) |

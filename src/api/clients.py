@@ -254,6 +254,7 @@ async def trigger_campaign(
     client_id: uuid.UUID,
     body: CampaignTrigger,
     template_id: uuid.UUID = Query(None),
+    email_mode: str = Query("test", pattern="^(test|prod)$"),
     db: AsyncSession = Depends(get_db),
 ):
     client = await db.get(m.Client, client_id)
@@ -287,6 +288,8 @@ async def trigger_campaign(
 
     if body.difficulty:
         plan["difficulty"] = body.difficulty
+
+    plan["email_mode"] = email_mode
 
     campaign = m.Campaign(
         client_id=client_id,

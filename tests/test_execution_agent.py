@@ -156,3 +156,36 @@ class TestSanitizeForLlm:
         agent = ExecutionAgent(gophish=MagicMock())
         result = agent._sanitize_for_llm({"name": "Tom", "role": "dev", "group": "engineering"})
         assert result["group"] == "engineering"
+
+
+class TestResolveTargetEmail:
+    def make_emp(self, email, email_hash):
+        emp = MagicMock()
+        emp.email = email
+        emp.email_hash = email_hash
+        return emp
+
+    def test_test_mode_uses_email_as_is(self):
+        agent = ExecutionAgent(gophish=MagicMock())
+        emp = self.make_emp("rorshopping+anja@gmail.com", None)
+        assert agent._resolve_target_email(emp, "test") == "rorshopping+anja@gmail.com"
+
+    def test_prod_mode_strips_plus_prefix(self):
+        agent = ExecutionAgent(gophish=MagicMock())
+        emp = self.make_emp("rorshopping+anja@gmail.com", None)
+        assert agent._resolve_target_email(emp, "prod") == "anja@gmail.com"
+
+    def test_prod_mode_uses_email_hash_when_email_missing(self):
+        agent = ExecutionAgent(gophish=MagicMock())
+        emp = self.make_emp(None, "rorshopping+felix@gmail.com")
+        assert agent._resolve_target_email(emp, "prod") == "felix@gmail.com"
+
+    def test_prod_mode_keeps_clean_emails_unchanged(self):
+        agent = ExecutionAgent(gophish=MagicMock())
+        emp = self.make_emp("anja@company.de", None)
+        assert agent._resolve_target_email(emp, "prod") == "anja@company.de"
+
+    def test_prod_mode_keeps_plus_email_without_user(self):
+        agent = ExecutionAgent(gophish=MagicMock())
+        emp = self.make_emp("rorshopping+@gmail.com", None)
+        assert agent._resolve_target_email(emp, "prod") == "rorshopping+@gmail.com"
