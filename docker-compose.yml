@@ -1,0 +1,40 @@
+version: "3.9"
+
+services:
+  db:
+    image: postgres:16-alpine
+    environment:
+      POSTGRES_USER: phishguard
+      POSTGRES_PASSWORD: phishguard
+      POSTGRES_DB: phishguard
+    ports:
+      - "5432:5432"
+    volumes:
+      - pgdata:/var/lib/postgresql/data
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U phishguard"]
+      interval: 5s
+      timeout: 5s
+      retries: 5
+
+  gophish:
+    image: gophish/gophish:latest
+    ports:
+      - "3333:3333"
+      - "8080:8080"
+    volumes:
+      - gophish_data:/opt/gophish/data
+
+  phishguard:
+    build: .
+    ports:
+      - "8000:8000"
+    env_file: .env
+    depends_on:
+      db:
+        condition: service_healthy
+    restart: unless-stopped
+
+volumes:
+  pgdata:
+  gophish_data:

@@ -1,0 +1,801 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>PhishGuard — Architecture Visualization</title>
+<style>
+  *,*::before,*::after{margin:0;padding:0;box-sizing:border-box}
+  :root{--bg:#0a0a0f;--bg-card:#111118;--surface:#1a1a2e;--border:#2a2a3e;--text:#e4e4ed;--text-muted:#8888a0;--accent:#00d4aa;--accent-dim:rgba(0,212,170,0.15);--p:#7c3aed;--p-dim:rgba(124,58,237,0.15);--radius:12px;--radius-lg:20px}
+  body{font-family:Inter,-apple-system,BlinkMacSystemFont,sans-serif;background:var(--bg);color:var(--text);line-height:1.6;-webkit-font-smoothing:antialiased}
+  .container{max-width:1400px;margin:0 auto;padding:0 24px}
+  h1{font-size:2.5rem;font-weight:900;text-align:center;padding:48px 0 8px;letter-spacing:-0.03em}
+  h1 span{background:linear-gradient(135deg,var(--accent),var(--p));-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text}
+  .subtitle{text-align:center;color:var(--text-muted);font-size:1.05rem;margin-bottom:32px;max-width:800px;margin-left:auto;margin-right:auto}
+  .legend{display:flex;gap:24px;justify-content:center;flex-wrap:wrap;margin-bottom:40px;padding:16px 24px;background:var(--bg-card);border-radius:var(--radius-lg);border:1px solid var(--border)}
+  .legend-item{display:flex;align-items:center;gap:8px;font-size:0.85rem;color:var(--text-muted)}
+  .legend-dot{width:14px;height:14px;border-radius:50%;flex-shrink:0}
+  .section-title{font-size:1.5rem;font-weight:800;margin:48px 0 24px;padding-bottom:12px;border-bottom:2px solid var(--border);letter-spacing:-0.02em}
+  .flow-grid{display:grid;grid-template-columns:1fr 1fr;gap:32px}
+  .flow-card{background:var(--bg-card);border:1px solid var(--border);border-radius:var(--radius-lg);padding:28px;transition:border-color 0.3s}
+  .flow-card:hover{border-color:rgba(0,212,170,0.2)}
+  .flow-card h3{font-size:1.15rem;font-weight:700;margin-bottom:16px;display:flex;align-items:center;gap:10px;flex-wrap:wrap}
+  .flow-card h3 .badge{font-size:0.7rem;font-weight:600;padding:3px 10px;border-radius:100px;text-transform:uppercase;letter-spacing:0.06em}
+  .badge-test{background:var(--accent-dim);color:var(--accent);border:1px solid rgba(0,212,170,0.3)}
+  .badge-prod{background:var(--p-dim);color:var(--p);border:1px solid rgba(124,58,237,0.3)}
+  .step-list{display:flex;flex-direction:column;gap:4px;margin-bottom:16px}
+  .step-row{display:flex;align-items:flex-start;gap:12px;padding:10px 14px;border-radius:var(--radius);background:var(--surface);font-size:0.88rem;line-height:1.5}
+  .step-row .num{font-family:"JetBrains Mono",monospace;font-size:0.75rem;font-weight:700;color:var(--accent);min-width:20px;padding-top:1px}
+  .step-row .icon{font-size:1.1rem;min-width:22px;text-align:center}
+  .step-row .label{font-weight:600;white-space:nowrap;color:var(--text)}
+  .step-row .desc{color:var(--text-muted)}
+  .step-row.sub{background:var(--bg);margin-left:24px;font-size:0.8rem;padding:7px 14px}
+  .arrow-down{text-align:center;color:var(--text-muted);font-size:0.85rem;padding:3px 0;letter-spacing:0.1em}
+  .file-box{background:var(--surface);border:1px solid var(--border);border-radius:var(--radius);padding:16px;margin-bottom:16px}
+  .file-box .file-header{font-family:"JetBrains Mono",monospace;font-size:0.8rem;color:var(--accent);margin-bottom:8px;font-weight:600}
+  .file-box .file-desc{font-size:0.85rem;color:var(--text-muted);line-height:1.5}
+  .flow-section{margin-top:48px;padding:28px;background:var(--bg-card);border:1px solid var(--border);border-radius:var(--radius-lg)}
+  .flow-section h4{font-size:1.05rem;font-weight:700;margin-bottom:16px;color:var(--accent)}
+  .table-wrap{overflow-x:auto}
+  table{width:100%;border-collapse:collapse;font-size:0.85rem}
+  th{text-align:left;padding:10px 14px;background:var(--surface);color:var(--text-muted);font-weight:600;font-size:0.8rem;text-transform:uppercase;letter-spacing:0.05em}
+  td{padding:10px 14px;border-top:1px solid var(--border);color:var(--text)}
+  tr:hover td{background:rgba(255,255,255,0.02)}
+  .code{font-family:"JetBrains Mono",monospace;font-size:0.8rem;background:var(--surface);padding:1px 6px;border-radius:4px;color:var(--accent)}
+  .tag{font-size:0.7rem;padding:2px 8px;border-radius:4px;font-weight:600;text-transform:uppercase}
+  .tag-py{background:rgba(55,118,171,0.25);color:#3776ab}
+  .tag-ai{background:var(--p-dim);color:var(--p)}
+  .tag-api{background:var(--accent-dim);color:var(--accent)}
+  .tag-db{background:rgba(245,158,11,0.25);color:#f59e0b}
+  .diagram{background:var(--surface);border-radius:var(--radius-lg);padding:24px;margin:20px 0;border:1px solid var(--border);overflow-x:auto}
+  .diagram pre{font-family:"JetBrains Mono",monospace;font-size:0.78rem;line-height:1.7;color:var(--text-muted);white-space:pre}
+  .diagram pre .kw{color:var(--accent);font-weight:600}
+  .diagram pre .fn{color:var(--p)}
+  .diagram pre .str{color:#f59e0b}
+  .diagram pre .cm{color:#555;font-style:italic}
+  .info-box{display:flex;gap:12px;padding:16px;background:var(--surface);border-radius:var(--radius);border-left:3px solid var(--accent);margin:16px 0;font-size:0.85rem;color:var(--text-muted);line-height:1.5}
+  .info-box strong{color:var(--text)}
+  @media(max-width:900px){.flow-grid{grid-template-columns:1fr}.diagram pre{font-size:0.7rem}}
+</style>
+</head>
+<body>
+
+<div class="container">
+
+<h1><span>PhishGuard</span> Architecture Visualization</h1>
+<p class="subtitle">Side-by-side: <strong>Quick Test</strong> (<code>run_test.py</code>) vs <strong>Production</strong> (4-Agent Orchestrator via FastAPI &amp; scheduler)</p>
+
+<div class="legend">
+  <div class="legend-item"><div class="legend-dot" style="background:var(--accent)"></div> Quick Test (run_test.py) path</div>
+  <div class="legend-item"><div class="legend-dot" style="background:var(--p)"></div> Production Orchestrator path</div>
+  <div class="legend-item"><div class="legend-dot" style="background:#555"></div> Shared / Gophish infrastructure</div>
+</div>
+
+<h2 class="section-title">1. Execution Flow Comparison</h2>
+
+<div class="flow-grid">
+
+  <!-- LEFT: QUICK TEST -->
+  <div class="flow-card">
+    <h3><span style="color:var(--accent)">&#9654;</span> Quick Test <span class="badge badge-test">run_test.py</span></h3>
+    <div class="step-list">
+
+      <div class="step-row">
+        <span class="num">0</span>
+        <span class="icon">&#x1F4E4;</span>
+        <span><strong class="label">Precondition:</strong> <span class="desc">Set target emails via <code>update_emails.py --old @gmail.com --new @yourdomain.com</code></span></span>
+      </div>
+      <div class="step-row sub">
+        <span class="icon">&#x1F504;</span>
+        <span class="desc">Swaps email substrings in <code>phishguard_test.db</code> employees table. Sets both <code>email</code> and <code>email_hash</code> columns. One-time setup.</span>
+      </div>
+
+      <div class="arrow-down">&#x25BC;</div>
+
+      <div class="step-row">
+        <span class="num">1</span>
+        <span class="icon">&#x1F3DB;</span>
+        <span><strong class="label">Create throwaway client</strong> <span class="desc">— picks random name from 10 German company names (Muller &amp; Sohne GmbH, Schmidt Metallbau AG, etc.)</span></span>
+      </div>
+      <div class="step-row sub">
+        <span class="icon">&#x1F4BE;</span>
+        <span class="desc">Inserts into <code>clients</code> table: contact_email=admin@test.de, industry=Technology, country=DE, campaigns_per_year=25</span>
+      </div>
+
+      <div class="arrow-down">&#x25BC;</div>
+
+      <div class="step-row">
+        <span class="num">2</span>
+        <span class="icon">&#x1F465;</span>
+        <span><strong class="label">Create 4 employees</strong> <span class="desc">— hardcoded with German names and roles:</span></span>
+      </div>
+      <div class="step-row sub">
+        <span class="icon">&#x1F4BC;</span>
+        <span class="desc"><strong>Anja Schneider</strong> (CFO, Finance) &bull; <strong>Felix Wagner</strong> (Engineer, Engineering) &bull; <strong>Lena Hoffmann</strong> (HR Manager, HR) &bull; <strong>Klaus Weber</strong> (IT Admin, IT)</span>
+      </div>
+      <div class="step-row sub">
+        <span class="icon">&#x2709;</span>
+        <span class="desc">Email format: <code>{base_local}+{alias}@{domain}</code> — e.g. <code>bob+anja@company.com</code></span>
+      </div>
+
+      <div class="arrow-down">&#x25BC;</div>
+
+      <div class="step-row">
+        <span class="num">3</span>
+        <span class="icon">&#x1F4CB;</span>
+        <span><strong class="label">Create draft Campaign</strong> <span class="desc">— named &quot;4-Email {HH:MM}&quot;, status=draft, difficulty=easy</span></span>
+      </div>
+
+      <div class="arrow-down">&#x25BC;</div>
+
+      <div class="step-row">
+        <span class="num">4</span>
+        <span class="icon">&#x1F9E0;</span>
+        <span><strong class="label">Hardcoded plan dict</strong> <span class="desc">— maps employee_id to scenario_type:</span></span>
+      </div>
+      <div class="step-row sub">
+        <span class="icon">&#x1F3AF;</span>
+        <span class="desc">Anja &rarr; <code>ceo_fraud</code> &bull; Felix &rarr; <code>cloud_notification</code> &bull; Lena &rarr; <code>dropbox_share</code> &bull; Klaus &rarr; <code>credential_harvest</code></span>
+      </div>
+
+      <div class="arrow-down">&#x25BC;</div>
+
+      <div class="step-row" style="border-left:3px solid var(--accent);border-radius:4px">
+        <span class="num">5</span>
+        <span class="icon" style="color:var(--accent)">&#x2699;</span>
+        <span><strong class="label">ExecutionAgent.execute_campaign(id, plan)</strong> <span class="desc">— same agent as production, but with pre-made plan &amp; no monitoring/vishing follow-up</span></span>
+      </div>
+      <div class="step-row sub">
+        <span class="icon">&#x2705;</span>
+        <span class="desc">Prints: &quot;Result: Success/Failed&quot;, Gophish campaign IDs, final status</span>
+      </div>
+
+    </div>
+  </div>
+
+  <!-- RIGHT: PRODUCTION -->
+  <div class="flow-card">
+    <h3><span style="color:var(--p)">&#9654;</span> Production Full Flow <span class="badge badge-prod">orchestrator.py</span></h3>
+    <div class="step-list">
+
+      <div class="step-row">
+        <span class="num">0</span>
+        <span class="icon">&#x1F4E6;</span>
+        <span><strong class="label">Trigger mechanisms</strong> <span class="desc">— 3 ways to start a production campaign:</span></span>
+      </div>
+      <div class="step-row sub">
+        <span class="icon">&#x23F0;</span>
+        <span class="desc"><strong>Scheduler:</strong> asyncio loop runs every 300s in FastAPI (auto-startup when GOPHISH_API_KEY set)</span>
+      </div>
+      <div class="step-row sub">
+        <span class="icon">&#x1F4E1;</span>
+        <span class="desc"><strong>API:</strong> <code>POST /clients/{id}/campaigns</code> triggers orchestrated campaign</span>
+      </div>
+      <div class="step-row sub">
+        <span class="icon">&#x2328;</span>
+        <span class="desc"><strong>CLI:</strong> <code>python -m src.cli.main campaign run --client-id &lt;id&gt;</code></span>
+      </div>
+
+      <div class="arrow-down">&#x25BC;</div>
+
+      <div class="step-row" style="border-left:3px solid var(--p);border-radius:4px">
+        <span class="num">1</span>
+        <span class="icon" style="color:var(--p)">&#x1F500;</span>
+        <span><strong class="label">Orchestrator checks pacing</strong> <span class="desc">— <code>run_scheduled_campaigns()</code> iterates active clients, calls <code>_client_needs_campaign()</code></span></span>
+      </div>
+      <div class="step-row sub">
+        <span class="icon">&#x1F4C5;</span>
+        <span class="desc">Checks: campaigns_this_year &lt; campaigns_per_year &bull; campaigns_this_year &lt; expected_by_month &bull; days_since_last &gt; max(14, 365/campaigns_per_year)</span>
+      </div>
+
+      <div class="arrow-down">&#x25BC;</div>
+
+      <div class="step-row" style="border-left:3px solid var(--p);border-radius:4px">
+        <span class="num">2</span>
+        <span class="icon" style="color:var(--p)">&#x1F916;</span>
+        <span><strong class="label">CampaignPlanner.plan_campaign(client, employees)</strong> <span class="desc">— AI-powered strategy design</span></span>
+      </div>
+      <div class="step-row sub">
+        <span class="icon">&#x1F4DD;</span>
+        <span class="desc">LLM prompt: &quot;Design phishing campaign for {company}, {industry}, {country}, {employee_count} employees. Recent threats: {...}&quot;</span>
+      </div>
+      <div class="step-row sub">
+        <span class="icon">&#x2696;</span>
+        <span class="desc">Returns JSON: difficulty (easy/medium/hard), scenario_weights (0&ndash;100 per scenario), rationale</span>
+      </div>
+      <div class="step-row sub">
+        <span class="icon">&#x1F3AF;</span>
+        <span class="desc">Per-employee: <code>decide_scenario_for_employee()</code> uses GROUP_SCENARIO_AFFINITY (e.g. Finance &rarr; invoice_fraud, ceo_fraud, credential_harvest) weighted by LLM strategy</span>
+      </div>
+
+      <div class="arrow-down">&#x25BC;</div>
+
+      <div class="step-row">
+        <span class="num">3</span>
+        <span class="icon">&#x1F4CB;</span>
+        <span><strong class="label">Create Campaign record</strong> <span class="desc">— status=scheduled, stores plan name, difficulty, scheduled_date (+1 hour), logs &quot;campaign_planned&quot; audit action</span></span>
+      </div>
+
+      <div class="arrow-down">&#x25BC;</div>
+
+      <div class="step-row" style="border-left:3px solid var(--p);border-radius:4px">
+        <span class="num">4</span>
+        <span class="icon" style="color:var(--p)">&#x2699;</span>
+        <span><strong class="label">ExecutionAgent.execute_campaign(id, plan)</strong> <span class="desc">— identical agent to Quick Test, but plan comes from LLM planner</span></span>
+      </div>
+
+      <div class="arrow-down">&#x25BC;</div>
+
+      <div class="step-row" style="border-left:3px solid var(--p);border-radius:4px">
+        <span class="num">5</span>
+        <span class="icon" style="color:var(--p)">&#x1F3A4;</span>
+        <span><strong class="label">VishingAgent (conditional)</strong> <span class="desc">— if <code>client.vishing_enabled</code>, triggers AI voice calls for each employee</span></span>
+      </div>
+      <div class="step-row sub">
+        <span class="icon">&#x1F3E0;</span>
+        <span class="desc">Scenarios: tech_support, bank_fraud, hr_benefits, vendor_call, ceo_urgence. Uses ElevenLabs TTS (fallback: Twilio TTS). Simulates if no Twilio configured.</span>
+      </div>
+
+      <div class="arrow-down">&#x25BC;</div>
+
+      <div class="step-row" style="border-left:3px solid var(--p);border-radius:4px">
+        <span class="num">6</span>
+        <span class="icon" style="color:var(--p)">&#x1F50D;</span>
+        <span><strong class="label">MonitoringAgent (ongoing)</strong> <span class="desc">— polls Gophish every 300s for all running campaigns</span></span>
+      </div>
+      <div class="step-row sub">
+        <span class="icon">&#x1F4CA;</span>
+        <span class="desc">Updates CampaignResult: email_opened, link_clicked, credentials_submitted, ip_address. Detects completion. Logs &quot;failure_alert&quot; if clicks detected.</span>
+      </div>
+      <div class="step-row sub">
+        <span class="icon">&#x1F3C1;</span>
+        <span class="desc">Finalizes: status=completed, aggregates sent/clicked/fail counts, triggers alert if clicked&gt;0</span>
+      </div>
+
+    </div>
+  </div>
+
+</div>
+
+<h2 class="section-title">2. ExecutionAgent Internals <span class="code">src/agents/execution_agent.py</span></h2>
+
+<p style="color:var(--text-muted);margin-bottom:16px;font-size:0.9rem">
+Both paths funnel through <code>ExecutionAgent.execute_campaign()</code>. For each <strong>scenario group</strong>, one Gophish campaign is created:
+</p>
+
+<div class="diagram">
+<pre>
+<span class="cm">ExecutionAgent.execute_campaign(campaign_id, plan?)</span>
+    <span class="kw">|</span>
+    <span class="kw">+--</span> 1. Load campaign from DB
+    <span class="kw">+--</span> 2. Set status = <span class="fn">running</span>
+    <span class="kw">+--</span> 3. Load active employees for this client
+    <span class="kw">+--</span> 4. <span class="fn">_ensure_landing_pages()</span>  <span class="cm">--&gt; Gophish Page (captures creds + passwords)</span>
+    <span class="kw">+--</span> 5. <span class="fn">_ensure_smtp_profile()</span> <span class="cm">--&gt; Gophish SMTP (Gmail, created once, reused)</span>
+    <span class="kw">+--</span> 6. Parse employee assignments from plan
+    <span class="kw">|</span>      <span class="cm">- No plan? All employees get ScenarioType.bank_transfer</span>
+    <span class="kw">|</span>      <span class="cm">- Map planner scenarios via PLANNER_TO_EMAIL_SCENARIO dict</span>
+    <span class="kw">+--</span> 7. <span class="fn">_group_employees_by_scenario()</span>
+    <span class="kw">|</span>      <span class="cm">- Groups employees so each Gophish campaign gets ONE template</span>
+    <span class="kw">|</span>      <span class="cm">- Prevents &quot;identical emails&quot; bug</span>
+    <span class="kw">|</span>
+    <span class="kw">+--</span> <span class="fn">FOR each scenario group:</span>
+          <span class="kw">|</span>
+          <span class="kw">+--</span> 8. Build target context (name, role, dept, group, linkedin, public_data)
+          <span class="kw">+--</span> 9. <span class="fn">_generate_single_template()</span>
+          <span class="kw">|</span>      <span class="cm">- Sanitizes context (first name only) for LLM privacy</span>
+          <span class="kw">|</span>      <span class="cm">- Queries Client table for company name</span>
+          <span class="kw">|</span>      <span class="cm">- Calls generate_email(scenario, ctx, company)  --&gt; LLM via OpenRouter</span>
+          <span class="kw">|</span>      <span class="cm">- Fallback 1: Groq (if FALLBACK_LLM_API_KEY set)</span>
+          <span class="kw">|</span>      <span class="cm">- Fallback 2: hardcoded German templates in _fallback_email()</span>
+          <span class="kw">|</span>      <span class="cm">- Strips &lt;body&gt; tags, saves as Gophish Template</span>
+          <span class="kw">|</span>
+          <span class="kw">+--</span> 10. <span class="fn">_create_group_for_targets()</span> <span class="cm">--&gt; Gophish Group (targets with email, name, position)</span>
+          <span class="kw">+--</span> 11. <span class="fn">_launch_gophish_campaign()</span>
+          <span class="kw">|</span>      <span class="cm">- POST /campaigns with {group, template, page, smtp, url, launch_date}</span>
+          <span class="kw">|</span>      <span class="cm">- URL: http://localhost:8080 (Gophish phishing server)</span>
+          <span class="kw">+--</span> 12. Collect Gophish IDs (campaign, group, template)
+    <span class="kw">|</span>
+    <span class="kw">+--</span> 13. Store comma-separated IDs: gophish_campaign_id, gophish_group_id, gophish_template_id
+    <span class="kw">+--</span> 14. <span class="fn">_create_result_records()</span> <span class="cm">--&gt; CampaignResult rows (one per employee, personalization context)</span>
+    <span class="kw">+--</span> 15. AuditLog: &quot;campaign_executed&quot; with scenario_count, employee_count, gophish_ids
+    <span class="kw">+--</span> 16. Commit transaction
+</pre>
+</div>
+
+<h2 class="section-title">3. Email Generation Flow <span class="code">src/engine/email_builder.py</span></h2>
+
+<div class="diagram">
+<pre>
+<span class="fn">generate_email(scenario_type, employee_context, company_context)</span>
+    <span class="kw">|</span>
+    <span class="kw">+--</span> Build SystemPrompt:
+    <span class="kw">|</span>     &quot;You are a phishing simulation email generator. ALL emails in German.
+    <span class="kw">|</span>      Return JSON with keys: subject, body_html. Use {{.URL}} for links,
+    <span class="kw">|</span>      {{.FirstName}} for name. No disclaimer. No training notice.&quot;
+    <span class="kw">|</span>
+    <span class="kw">+--</span> Build UserPrompt:
+    <span class="kw">|</span>     Scenario: {type}, Description: {SCENARIO_PROMPTS[type]},
+    <span class="kw">|</span>     Employee: {name}, Role: {role}, Company: {company}
+    <span class="kw">|</span>
+    <span class="kw">+--</span> Call <span class="fn">_try_provider()</span> with <span class="str">OpenRouter</span> (primary)
+    <span class="kw">|</span>     <span class="kw">|</span>
+    <span class="kw">|</span>     <span class="kw">+--</span> [Success] Parse JSON, clean subject + body, replace real URLs with {{.URL}}
+    <span class="kw">|</span>     <span class="kw">+--</span> [Fail + fallback configured] Call <span class="str">Groq</span> (secondary)
+    <span class="kw">|</span>     <span class="kw">+--</span> [All LLMs fail] <span class="fn">_fallback_email()</span>
+    <span class="kw">|</span>
+    <span class="kw">+--</span> Fallback templates (German):
+          <span class="cm">- bank_transfer  : &quot;Dringend: Uberweisung freigeben&quot;</span>
+          <span class="cm">- password_reset : &quot;Ihr Passwort lauft in 24 Stunden ab&quot;</span>
+          <span class="cm">- invoice        : &quot;Uberfallige Rechnung #INV-2024-{hash}&quot;</span>
+          <span class="cm">- security_alert : &quot;Neue Anmeldung von unbekanntem Gerat&quot;</span>
+          <span class="cm">- shared_doc     : &quot;{Name} - Dokument fur Sie freigegeben&quot;</span>
+          <span class="cm">- ... (10 scenario types total)</span>
+</pre>
+</div>
+
+<div class="info-box">
+  <strong>PLANNER_TO_EMAIL_SCENARIO mapping:</strong> The planner uses high-level scenario names (ceo_fraud, credential_harvest, etc.) which are mapped to concrete ScenarioType enums (bank_transfer, password_reset, etc.) before email generation. This decouples campaign planning from email rendering.
+</div>
+
+<div class="flow-section">
+<h4>&#x1F4CB; Planner Scenario to Email Scenario Mapping</h4>
+<div class="table-wrap">
+<table>
+<thead>
+<tr><th>Planner Scenario</th><th>Email ScenarioType</th><th>Fallback Subject (German)</th><th>Target Groups (affinity)</th></tr>
+</thead>
+<tbody>
+<tr><td><code>credential_harvest</code></td><td>password_reset</td><td>&quot;Ihr Passwort lauft in 24 Stunden ab&quot;</td><td>Finance, HR, IT, General</td></tr>
+<tr><td><code>malware_attachment</code></td><td>shared_doc</td><td>&quot;{Name} &ndash; Dokument fur Sie freigegeben&quot;</td><td>HR, IT Staff, Engineering</td></tr>
+<tr><td><code>urgency_alert</code></td><td>urgent_review</td><td>&quot;DRINGEND: Dokumentenprufung angefordert&quot;</td><td>Executive, Sales, General</td></tr>
+<tr><td><code>ceo_fraud</code></td><td>bank_transfer</td><td>&quot;Dringend: Uberweisung freigeben&quot;</td><td>Executive, Finance</td></tr>
+<tr><td><code>invoice_fraud</code></td><td>invoice</td><td>&quot;Uberfallige Rechnung #INV-2024-{id}&quot;</td><td>Finance</td></tr>
+<tr><td><code>cloud_notification</code></td><td>security_alert</td><td>&quot;Neue Anmeldung von unbekanntem Gerat&quot;</td><td>Executive, IT, Engineering</td></tr>
+<tr><td><code>calendar_invite</code></td><td>calendar_invite</td><td>&quot;Einladung: Quartalsbesprechung&quot;</td><td>General</td></tr>
+<tr><td><code>voicemail_phish</code></td><td>voicemail</td><td>&quot;Neue Sprachnachricht von +49 30 1234567&quot;</td><td>IT, Engineering</td></tr>
+<tr><td><code>dropbox_share</code></td><td>shared_doc</td><td>&quot;{Name} &ndash; Dokument fur Sie freigegeben&quot;</td><td>HR, IT Staff, Sales, General</td></tr>
+<tr><td><code>linkedin_message</code></td><td>shared_doc</td><td>&quot;{Name} &ndash; Dokument fur Sie freigegeben&quot;</td><td>Sales</td></tr>
+</tbody>
+</table>
+</div>
+</div>
+
+<h2 class="section-title">4. Production Campaign Lifecycle</h2>
+
+<div class="diagram">
+<pre>
+<span class="cm">Full lifecycle from scheduler tick to campaign completion:</span>
+
+<span class="fn">Scheduler Tick (every 300s)</span>
+    <span class="kw">|</span>
+    <span class="kw">+--</span> <span class="fn">monitor_all_active_campaigns()</span>  <span class="cm">--&gt; polls Gophish, updates results, finalizes completed</span>
+    <span class="kw">+--</span> <span class="fn">run_scheduled_campaigns()</span>      <span class="cm">--&gt; checks pacing, launches new campaigns</span>
+    <span class="kw">|</span>
+    <span class="kw">+--</span> <span class="fn">_client_needs_campaign(client)</span>
+    <span class="kw">|</span>    <span class="cm">Returns True ONLY if ALL 3 gates pass. Any gate failing = skip this client.</span>
+    <span class="kw">|</span>
+    <span class="kw">|</span>    <span class="kw">Gate 1: Annual hard cap</span>
+    <span class="kw">|</span>    <span class="fn">SELECT COUNT(*) FROM campaigns</span>
+    <span class="kw">|</span>    <span class="fn">  WHERE client_id = X AND created_at &gt;= Jan 1 this year</span>
+    <span class="kw">|</span>    <span class="kw">|</span>
+    <span class="kw">|</span>    <span class="kw">+--</span> campaigns_this_year &gt;= client.campaigns_per_year?
+    <span class="kw">|</span>    <span class="kw">|</span>     <span class="cm">Example: cpty=25, ran 25 already = True --&gt; SKIP (hard ceiling)</span>
+    <span class="kw">|</span>    <span class="kw">|</span>     <span class="cm">Example: cpty=25, ran 12 so far = False --&gt; continue to Gate 2</span>
+    <span class="kw">|</span>    <span class="kw">|</span>
+    <span class="kw">|</span>    <span class="kw">+--</span> [True] <span class="kw">--&gt;</span> return <span class="fn">False</span> (skip)
+    <span class="kw">|</span>
+    <span class="kw">|</span>    <span class="kw">Gate 2: Monthly pacing</span>
+    <span class="kw">|</span>    target_per_month = max(1, round(campaigns_per_year / 12))
+    <span class="kw">|</span>    months_elapsed  = max(1, current_month - 1)
+    <span class="kw">|</span>    expected_by_now = target_per_month * months_elapsed
+    <span class="kw">|</span>    <span class="kw">|</span>
+    <span class="kw">|</span>    <span class="kw">+--</span> campaigns_this_year &gt;= expected_by_now?
+    <span class="kw">|</span>    <span class="kw">|</span>     <span class="cm">Example: cpty=25. target=ceil(25/12)=2. July = month 7,</span>
+    <span class="kw">|</span>    <span class="kw">|</span>     <span class="cm">  months_elapsed=6. expected=2*6=12. Ran 12+? --&gt; SKIP (pacing)</span>
+    <span class="kw">|</span>    <span class="kw">|</span>     <span class="cm">  Ran only 8? --&gt; below target, continue to Gate 3</span>
+    <span class="kw">|</span>    <span class="kw">|</span>
+    <span class="kw">|</span>    <span class="kw">+--</span> [True] <span class="kw">--&gt;</span> return <span class="fn">False</span> (skip, wait for next month)
+    <span class="kw">|</span>
+    <span class="kw">|</span>    <span class="kw">Gate 3: Minimum interval</span>
+    <span class="kw">|</span>    Load most recent completed campaign date
+    <span class="kw">|</span>    min_interval = max(14, 365 // campaigns_per_year)
+    <span class="kw">|</span>    <span class="kw">|</span>
+    <span class="kw">|</span>    <span class="kw">+--</span> days_since_last &lt; min_interval?
+    <span class="kw">|</span>    <span class="kw">|</span>     <span class="cm">Example: cpty=25. min_interval=max(14, 365//25)=max(14,14)=14</span>
+    <span class="kw">|</span>    <span class="kw">|</span>     <span class="cm">  Last campaign was 6 days ago. 6 &lt; 14? --&gt; SKIP (too soon)</span>
+    <span class="kw">|</span>    <span class="kw">|</span>     <span class="cm">Example: cpty=5.  min_interval=max(14, 365//5)=max(14,73)=73</span>
+    <span class="kw">|</span>    <span class="kw">|</span>     <span class="cm">  Last campaign was 60 days ago. 60 &lt; 73? --&gt; SKIP</span>
+    <span class="kw">|</span>    <span class="kw">|</span>     <span class="cm">  Last campaign was 80 days ago. 80 &lt; 73? --&gt; False, continue</span>
+    <span class="kw">|</span>    <span class="kw">|</span>
+    <span class="kw">|</span>    <span class="kw">+--</span> [True] <span class="kw">--&gt;</span> return <span class="fn">False</span> (skip, not enough days since last)
+    <span class="kw">|</span>
+    <span class="kw">|</span>    <span class="kw">+--</span> All gates passed <span class="kw">--&gt;</span> return <span class="fn">True</span> (needs campaign!)
+    <span class="kw">|</span>
+    <span class="kw">+--</span> [True] <span class="fn">run_client_campaign(client_id)</span>
+               <span class="kw">|</span>
+               <span class="kw">+--</span> Load client + employees
+               <span class="kw">+--</span> <span class="fn">CampaignPlanner.plan_campaign()</span>
+               <span class="kw">+--</span> Save Campaign (status=scheduled)
+               <span class="kw">+--</span> <span class="fn">ExecutionAgent.execute_campaign()</span>
+               <span class="kw">|</span>     <span class="kw">|</span>
+               <span class="kw">|</span>     <span class="kw">+--</span> [ON ERROR] rollback, status back to draft
+               <span class="kw">|</span>
+               <span class="kw">+--</span> [IF vishing_enabled] <span class="fn">VishingAgent.trigger_vishing_call()</span> per employee
+               <span class="kw">+--</span> Log &quot;campaign_completed&quot; audit action
+               <span class="kw">+--</span> Commit
+
+<span class="cm">... meanwhile, on subsequent scheduler ticks ...</span>
+
+<span class="fn">monitor_all_active_campaigns()</span>
+    <span class="kw">|</span>
+    <span class="kw">+--</span> SELECT * FROM campaigns WHERE status = <span class="fn">running</span>
+    <span class="kw">+--</span> For each:
+         <span class="kw">+--</span> <span class="fn">_fetch_gophish_results()</span> <span class="cm">--&gt; GET /campaigns/{id} for each Gophish ID</span>
+         <span class="kw">+--</span> <span class="fn">_update_results()</span>
+         <span class="kw">|</span>     <span class="cm">- Match by email_hash (HMAC-SHA256 of recipient email)</span>
+         <span class="kw">|</span>     <span class="cm">- Set email_opened, link_clicked, credentials_submitted, ip_address</span>
+         <span class="kw">+--</span> <span class="fn">_detect_completion()</span>
+         <span class="kw">|</span>     <span class="cm">- All results in completed status (Sent/Opened/Clicked)?</span>
+         <span class="kw">+--</span> [IF complete] <span class="fn">_finalize_campaign()</span>
+         <span class="kw">|</span>     <span class="cm">- status = completed, completed_at = now</span>
+         <span class="kw">|</span>     <span class="cm">- Aggregate sent/clicked/fail counts</span>
+         <span class="kw">|</span>     <span class="cm">- [IF clicked &gt; 0] Log &quot;failure_alert&quot; (Slack/email integration TBD)</span>
+         <span class="kw">+--</span> Log &quot;campaign_monitored&quot; audit action
+</pre>
+</div>
+
+<div class="flow-section">
+<h4>&#x1F4CA; Quick Test vs Production &mdash; Detailed Comparison</h4>
+<div class="table-wrap">
+<table>
+<thead>
+<tr><th>Dimension</th><th>Quick Test (run_test.py)</th><th>Production (Orchestrator)</th></tr>
+</thead>
+<tbody>
+<tr>
+  <td><strong>Trigger</strong></td>
+  <td>Manual: <code>python run_test.py</code></td>
+  <td>Scheduler (every 5 min), API (<code>POST /clients/{id}/campaigns</code>), or CLI</td>
+</tr>
+<tr>
+  <td><strong>AI Pipeline</strong></td>
+  <td>Execution agent only (no LLM planning)</td>
+  <td>Full 4-agent: Planner (LLM) &rarr; Execution &rarr; Monitoring &rarr; Vishing</td>
+</tr>
+<tr>
+  <td><strong>Client data</strong></td>
+  <td>Throwaway random German company + 4 hardcoded employees</td>
+  <td>Real clients/employees from DB (imported via CSV or template xlsx)</td>
+</tr>
+<tr>
+  <td><strong>Plan source</strong></td>
+  <td>Hardcoded dict in run_test.py</td>
+  <td>CampaignPlanner.plan_campaign() using LLM + group affinity rules</td>
+</tr>
+<tr>
+  <td><strong>Campaign scheduling</strong></td>
+  <td>Immediate launch, no scheduling logic</td>
+  <td>Pacing checks (yearly cap, monthly target, min 14-day interval), scheduled_date = now+1h</td>
+</tr>
+<tr>
+  <td><strong>Gophish resources</strong></td>
+  <td>Creates page + SMTP + group(s) + template(s) + campaign(s)</td>
+  <td>Same creation flow</td>
+</tr>
+<tr>
+  <td><strong>SMTP profile</strong></td>
+  <td>Auto-created (Gmail from .env), reused on subsequent runs</td>
+  <td>Same auto-creation</td>
+</tr>
+<tr>
+  <td><strong>Landing page</strong></td>
+  <td>German login form, captures credentials + passwords, redirects to example.com</td>
+  <td>Same page template</td>
+</tr>
+<tr>
+  <td><strong>Email personalization</strong></td>
+  <td>LLM-generated via OpenRouter with company + employee context</td>
+  <td>Same email_builder.py, plus SERPAPI LinkedIn/news enrichment via personalizer.py</td>
+</tr>
+<tr>
+  <td><strong>Result tracking</strong></td>
+  <td>Creates CampaignResult records (no polling)</td>
+  <td>Creates CampaignResult + MonitoringAgent polls Gophish every 300s</td>
+</tr>
+<tr>
+  <td><strong>Completion detection</strong></td>
+  <td>None (single shot)</td>
+  <td>MonitoringAgent detects all emails sent/finalized, sets status=completed</td>
+</tr>
+<tr>
+  <td><strong>Failure alerts</strong></td>
+  <td>None</td>
+  <td>Logs &quot;failure_alert&quot; when clicks detected (Slack/email integration TBD)</td>
+</tr>
+<tr>
+  <td><strong>Vishing calls</strong></td>
+  <td>None</td>
+  <td>If client.vishing_enabled: AI voice calls via Twilio + ElevenLabs</td>
+</tr>
+<tr>
+  <td><strong>GDPR compliance</strong></td>
+  <td>PII stored in DB (email_hash = actual delivery address)</td>
+  <td>HMAC-SHA256 hashing, retention policies, DPA, consent validation</td>
+</tr>
+<tr>
+  <td><strong>Database</strong></td>
+  <td><code>phishguard_test.db</code> (SQLite)</td>
+  <td>Configurable via <code>DATABASE_URL</code> (sqlite+aiosqlite:///phishguard.db by default)</td>
+</tr>
+<tr>
+  <td><strong>Error handling</strong></td>
+  <td>Transaction rollback on exception, status back to draft</td>
+  <td>Per-client try/except in loop, rollback + log per client, continues to next client</td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
+
+<h2 class="section-title">5. Key Files Reference</h2>
+
+<div style="display:grid;grid-template-columns:1fr 1fr;gap:16px">
+
+<div class="file-box">
+<div class="file-header">run_test.py <span class="tag tag-py">Python</span></div>
+<div class="file-desc">
+  <strong>Quick Test entry point.</strong> Creates throwaway client + 4 employees, hardcodes plan, calls ExecutionAgent directly, prints results. No server needed. Gophish must be running.
+</div>
+</div>
+
+<div class="file-box">
+<div class="file-header">debug_execution2.py <span class="tag tag-py">Python</span></div>
+<div class="file-desc">
+  <strong>Single-employee debug script.</strong> Richer output: prints client/employee/campaign IDs before execution, then updated campaign fields (gophish IDs), CampaignResult count, and AuditLog entries after execution.
+</div>
+</div>
+
+<div class="file-box">
+<div class="file-header">debug_execution.py <span class="tag tag-py">Python</span></div>
+<div class="file-desc">
+  <strong>Minimal execution re-run.</strong> Finds most recent campaign in DB, calls ExecutionAgent.execute_campaign(id) <em>without</em> a plan (uses fallback: all employees get bank_transfer). Useful for re-running failed campaigns.
+</div>
+</div>
+
+<div class="file-box">
+<div class="file-header">src/agents/orchestrator.py <span class="tag tag-ai">Agent</span></div>
+<div class="file-desc">
+  <strong>Production orchestrator.</strong> Composes all 4 agents. <code>run_scheduled_campaigns()</code> iterates clients, checks pacing, launches campaigns. <code>monitor_all_active_campaigns()</code> polls Gophish. Manages vishing scheduling per client.
+</div>
+</div>
+
+<div class="file-box">
+<div class="file-header">src/agents/campaign_planner.py <span class="tag tag-ai">Agent</span></div>
+<div class="file-desc">
+  <strong>LLM-powered campaign strategy.</strong> Generates difficulty + scenario weights via LangChain/ChatOpenAI. Per-employee scenario selection uses GROUP_SCENARIO_AFFINITY weighted by LLM strategy. Falls back to equal weights if LLM fails.
+</div>
+</div>
+
+<div class="file-box">
+<div class="file-header">src/agents/execution_agent.py <span class="tag tag-ai">Agent</span></div>
+<div class="file-desc">
+  <strong>Gophish resource creator.</strong> Groups employees by scenario, generates email templates (LLM + fallback), creates Gophish groups/templates/pages/SMTP, launches campaigns. Called by both quick test and production.
+</div>
+</div>
+
+<div class="file-box">
+<div class="file-header">src/agents/monitoring_agent.py <span class="tag tag-ai">Agent</span></div>
+<div class="file-desc">
+  <strong>Campaign result poller.</strong> Fetches Gophish results, matches by email_hash, updates CampaignResult (opens/clicks/creds). Detects completion, finalizes campaigns, logs failure alerts for clicks.
+</div>
+</div>
+
+<div class="file-box">
+<div class="file-header">src/agents/vishing_agent.py <span class="tag tag-ai">Agent</span></div>
+<div class="file-desc">
+  <strong>Voice phishing caller.</strong> Generates AI scripts per scenario, synthesizes via ElevenLabs, places calls via Twilio. Simulates if Twilio not configured. Logs VishingSession records.
+</div>
+</div>
+
+<div class="file-box">
+<div class="file-header">src/engine/email_builder.py <span class="tag tag-api">Engine</span></div>
+<div class="file-desc">
+  <strong>Email generation core.</strong> Scenario prompts (German), LLM invocation with 2-provider fallback, 10 hardcoded German fallback templates. Maps planner scenario names to ScenarioType enums.
+</div>
+</div>
+
+<div class="file-box">
+<div class="file-header">src/engine/personalizer.py <span class="tag tag-api">Engine</span></div>
+<div class="file-desc">
+  <strong>Employee research tool.</strong> SerpAPI-powered LinkedIn + news search per employee. Caches results in-memory. Falls back gracefully if SERPAPI_API_KEY not set.
+</div>
+</div>
+
+<div class="file-box">
+<div class="file-header">src/engine/gophish.py <span class="tag tag-api">API</span></div>
+<div class="file-desc">
+  <strong>Low-level Gophish HTTP client.</strong> Wraps httpx with Bearer auth. Methods for groups, templates, pages, SMTP profiles, campaigns. Custom GophishClientError for API errors.
+</div>
+</div>
+
+<div class="file-box">
+<div class="file-header">src/services/gophish_service.py <span class="tag tag-api">Service</span></div>
+<div class="file-desc">
+  <strong>Service layer over GophishClient.</strong> Higher-level interface used by agents. Delegates to gophish.py for all API calls. Thin wrapper.
+</div>
+</div>
+
+<div class="file-box">
+<div class="file-header">src/database/models.py <span class="tag tag-db">DB</span></div>
+<div class="file-desc">
+  <strong>SQLAlchemy ORM models.</strong> 6 tables: Client, Employee, Campaign, CampaignResult, VishingSession, AuditLog. Campaign stores Gophish IDs as comma-separated strings (gophish_campaign_id).
+</div>
+</div>
+
+<div class="file-box">
+<div class="file-header">src/main.py <span class="tag tag-api">API</span></div>
+<div class="file-desc">
+  <strong>FastAPI server.</strong> Routes: /clients, /campaigns, /webhooks, /vishing, /health. Starts background scheduler on startup (if GOPHISH_API_KEY set). CORS enabled, request logging middleware.
+</div>
+</div>
+
+<div class="file-box">
+<div class="file-header">update_emails.py <span class="tag tag-py">Python</span></div>
+<div class="file-desc">
+  <strong>Email update utility.</strong> Bulk substring replacement or single-employee set. Direct SQLite writes to phishguard_test.db. Run once before quick test to set target delivery addresses.
+</div>
+</div>
+
+</div>
+
+<h2 class="section-title">6. Database Schema <span class="code">phishguard_test.db</span></h2>
+
+<div class="diagram">
+<pre>
+<span class="cm">SQLAlchemy ORM tables (SQLite via aiosqlite):</span>
+
+<span class="fn">clients</span>
+    id (UUID PK) | company_name | contact_email | contact_name | industry
+    employee_count | country | is_active | api_key_hash
+    campaigns_per_year (int, default 25) | vishing_enabled (bool)
+    created_at | updated_at
+    <span class="kw">|</span>
+    <span class="kw">+--&lt;</span> has many <span class="fn">employees</span>
+    <span class="kw">|</span>     id (UUID PK) | client_id (FK) | email | email_hash | name | name_hash
+    <span class="kw">|</span>     role | department | group (enum) | linkedin_url | public_data (JSON)
+    <span class="kw">|</span>     is_active | created_at
+    <span class="kw">|</span>
+    <span class="kw">+--&lt;</span> has many <span class="fn">campaigns</span>
+          id (UUID PK) | client_id (FK) | name | status (enum) | difficulty
+          template_id | scheduled_date | sent_count | click_count | fail_count
+          gophish_campaign_id (TEXT, comma-sep) | gophish_group_id (TEXT)
+          gophish_template_id (TEXT) | gophish_page_id (INT)
+          created_at | completed_at
+          <span class="kw">|</span>
+          <span class="kw">+--&lt;</span> has many <span class="fn">campaign_results</span>
+                id (UUID PK) | campaign_id (FK) | employee_id (FK)
+                email_opened | link_clicked | credentials_submitted
+                reported_phishing | opened_at | clicked_at
+                training_completed | ip_address | user_agent
+                personalization_context (JSON)
+
+<span class="fn">vishing_sessions</span>
+    id (UUID PK) | client_id (FK) | employee_id (FK) | campaign_id (FK, nullable)
+    phone_number_hash | status | twilio_sid | call_duration
+    call_recording_url | transcript | ai_used | sensitive_info_disclosed | created_at
+
+<span class="fn">audit_logs</span>
+    id (UUID PK) | client_id (FK, nullable) | action | details (JSON)
+    ip_address | created_at
+</pre>
+</div>
+
+<h2 class="section-title">7. High-Level Architecture</h2>
+
+<div class="diagram">
+<pre>
+<span class="cm">Context diagram showing all external systems and layers:</span>
+
+<span class="cm">+--------------------------+      +---------------------------+</span>
+<span class="cm">|       CLI (Click)        |      |     FastAPI REST Server    |</span>
+<span class="cm">|  python -m src.cli.main  |----&gt;|  src/main.py :8000         |</span>
+<span class="cm">+--------------------------+      +-------------+-------------+</span>
+                                                <span class="kw">|</span>
+                                                <span class="kw">|</span> asyncio scheduler
+                                                <span class="kw">v</span>
+                              <span class="cm">+-------------------------------+</span>
+                              <span class="cm">|       Orchestrator            |</span>
+                              <span class="cm">|  src/agents/orchestrator.py   |</span>
+                              <span class="cm">+-------+-------+-------+-------+</span>
+                              <span class="kw">|</span>       <span class="kw">|</span>       <span class="kw">|</span>       <span class="kw">|</span>
+                  <span class="cm">+-------+  +-------+  +-------+  +--------+</span>
+                  <span class="cm">|Planner|  |Execute|  |Monitor|  |Vishing |</span>
+                  <span class="cm">+---+---+  +---+---+  +---+---+  +---+----+</span>
+                      <span class="kw">|</span>          <span class="kw">|</span>          <span class="kw">|</span>          <span class="kw">|</span>
+                      <span class="kw">v</span>          <span class="kw">v</span>          <span class="kw">v</span>          <span class="kw">v</span>
+              <span class="fn">LLM</span>      <span class="fn">Gophish</span>    <span class="fn">Gophish</span>    <span class="fn">Twilio</span>
+              <span class="str">OpenRouter</span>  <span class="str">:3333/api</span>  <span class="str">:3333/api</span>  <span class="str">Voice API</span>
+              <span class="str">Groq</span>       <span class="str">SMTP:Gmail</span>             <span class="str">ElevenLabs</span>
+                           <span class="str">Phish:8080</span>
+
+<span class="cm">+--------------------------+      +---------------------------+</span>
+<span class="cm">|    SQLite Database       |      |     Gophish Engine        |</span>
+<span class="cm">|  phishguard_test.db      |&lt;----&gt;|  Campaigns, Groups,       |</span>
+<span class="cm">|  (SQLAlchemy ORM)        |      |  Templates, Pages, SMTP   |</span>
+<span class="cm">+--------------------------+      +---------------------------+</span>
+
+<span class="cm">External integrations:</span>
+  <span class="fn">LLM API</span>       <span class="str">OpenRouter</span> (primary) &rarr; <span class="str">Groq</span> (fallback) &rarr; hardcoded templates
+  <span class="fn">Search API</span>    <span class="str">SerpAPI</span> (LinkedIn + news enrichment, optional)
+  <span class="fn">Voice API</span>     <span class="str">Twilio</span> (outbound calls) + <span class="str">ElevenLabs</span> (TTS, optional)
+  <span class="fn">Email send</span>   <span class="str">Gmail SMTP</span> via Gophish (sends to any recipient)
+  <span class="fn">Webhooks</span>     <span class="str">/webhooks/gophish</span> (event callbacks, optional)
+               <span class="str">/webhooks/twilio</span> (call status callbacks, optional)
+</pre>
+</div>
+
+<div class="info-box">
+  <strong>Key architectural insight:</strong> The Quick Test skips the Orchestrator, Planner, Monitoring, and Vishing layers entirely. It instantiates ExecutionAgent directly with a hardcoded plan. This makes it useful for verifying that Gophish works and emails deliver, but gives zero insight into pacing, LLM strategy, result tracking, or vishing follow-up.
+</div>
+
+<h2 class="section-title">8. Debug Execution Variants</h2>
+
+<div class="flow-grid">
+
+<div class="flow-card">
+<h3><span style="color:#f59e0b">&#x1F50D;</span> debug_execution.py <span class="badge badge-test" style="background:rgba(245,158,11,0.2);color:#f59e0b;border-color:rgba(245,158,11,0.3)">re-run</span></h3>
+<div class="step-list">
+  <div class="step-row">
+    <span class="num">1</span>
+    <span class="icon">&#x1F4CB;</span>
+    <span><span class="desc">Finds the <strong>most recent</strong> campaign from DB (ordered by created_at DESC)</span></span>
+  </div>
+  <div class="arrow-down">&#x25BC;</div>
+  <div class="step-row">
+    <span class="num">2</span>
+    <span class="icon">&#x2699;</span>
+    <span><span class="desc">Calls <code>ExecutionAgent.execute_campaign(id)</code> <strong>without a plan</strong></span></span>
+  </div>
+  <div class="step-row sub">
+    <span class="icon">&#x26A0;</span>
+    <span class="desc">Without a plan, all employees get <code>ScenarioType.bank_transfer</code> (fallback)</span>
+  </div>
+  <div class="arrow-down">&#x25BC;</div>
+  <div class="step-row">
+    <span class="num">3</span>
+    <span class="icon">&#x1F4CA;</span>
+    <span><span class="desc">Prints updated campaign fields (status, all gophish IDs) + last 5 AuditLog entries</span></span>
+  </div>
+</div>
+</div>
+
+<div class="flow-card">
+<h3><span style="color:#f59e0b">&#x1F50D;</span> debug_execution2.py <span class="badge badge-test" style="background:rgba(245,158,11,0.2);color:#f59e0b;border-color:rgba(245,158,11,0.3)">single-shot</span></h3>
+<div class="step-list">
+  <div class="step-row">
+    <span class="num">1</span>
+    <span class="icon">&#x1F3DB;</span>
+    <span><span class="desc">Creates a fixed client (Thuringer Prazisionstechnik GmbH) + 1 employee (rorshopping@gmail.com)</span></span>
+  </div>
+  <div class="arrow-down">&#x25BC;</div>
+  <div class="step-row">
+    <span class="num">2</span>
+    <span class="icon">&#x2699;</span>
+    <span><span class="desc">Calls <code>ExecutionAgent.execute_campaign(id)</code> <strong>without a plan</strong></span></span>
+  </div>
+  <div class="arrow-down">&#x25BC;</div>
+  <div class="step-row">
+    <span class="num">3</span>
+    <span class="icon">&#x1F4CA;</span>
+    <span><span class="desc">Prints: updated campaign fields, CampaignResult count, all AuditLog entries</span></span>
+  </div>
+</div>
+</div>
+
+</div>
+
+</div>
+
+</body>
+</html>

@@ -1,0 +1,593 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+  <!-- Primary -->
+  <meta name="google-site-verification" content="zgqHfp-rTQun3okhTu8P1D-klEBXwik9-DKPjMAWW4s" />
+  <title>PhishDefend AI — AI-Powered Phishing Prevention für Unternehmen</title>
+  <meta name="description" content="PhishDefend AI (Phish Defend) ist die KI-gestützte Phishing-Simulation für europäische KMU. 25 Kampagnen/Jahr, DSGVO-konform, vollautomatisiert. Inkl. Vishing-Add-On. Ab €1.000/Jahr.">
+  <meta name="keywords" content="PhishDefend, Phish Defend, Phishing Simulation, Security Awareness, KI Phishing, GDPR Compliance, Vishing, Mitarbeiter Sicherheit, Deutschland">
+  <meta name="robots" content="index, follow">
+  <meta name="theme-color" content="#0a0a0f">
+  <link rel="canonical" href="https://phishdefend-ai.vercel.app/">
+  <link rel="alternate" hreflang="de" href="https://phishdefend-ai.vercel.app/">
+  <link rel="alternate" hreflang="x-default" href="https://phishdefend-ai.vercel.app/">
+
+  <!-- Open Graph -->
+  <meta property="og:title" content="PhishDefend AI (Phish Defend) — KI-Phishing-Prävention für Unternehmen">
+  <meta property="og:description" content="Vollautomatische Phishing-Simulationen mit KI-Personalisierung. Auch bekannt als Phish Defend. DSGVO-konform. 25 Kampagnen pro Jahr.">
+  <meta property="og:url" content="https://phishdefend-ai.vercel.app/">
+  <meta property="og:type" content="website">
+  <meta property="og:site_name" content="PhishDefend AI">
+  <meta property="og:locale" content="de_DE">
+
+  <!-- Twitter -->
+  <meta name="twitter:card" content="summary_large_image">
+  <meta name="twitter:title" content="PhishDefend AI (Phish Defend) — KI-Phishing-Prävention">
+  <meta name="twitter:description" content="Vollautomatische Phishing-Simulationen mit KI-Personalisierung. Auch Phish Defend genannt. DSGVO-konform.">
+
+  <!-- GEO (Generative Engine Optimization) -->
+  <meta name="generator" content="PhishDefend AI Platform">
+  <script type="application/ld+json">
+  {
+    "@context": "https://schema.org",
+    "@type": "Organization",
+    "@id": "https://phishdefend-ai.vercel.app/#organization",
+    "name": "PhishDefend AI",
+    "alternateName": ["Phish Defend AI", "PhishDefend", "Phish Defend"],
+    "url": "https://phishdefend-ai.vercel.app/",
+    "description": "AI-powered phishing simulation and security awareness training platform for European SMEs.",
+    "address": {
+      "@type": "PostalAddress",
+      "addressCountry": "DE"
+    }
+  }
+  </script>
+  <script type="application/ld+json">
+  {
+    "@context": "https://schema.org",
+    "@type": "WebSite",
+    "@id": "https://phishdefend-ai.vercel.app/#website",
+    "url": "https://phishdefend-ai.vercel.app/",
+    "name": "PhishDefend AI",
+    "alternateName": ["Phish Defend AI", "PhishDefend", "Phish Defend"],
+    "publisher": { "@id": "https://phishdefend-ai.vercel.app/#organization" },
+    "inLanguage": "de",
+    "description": "KI-gestützte Phishing-Simulation und Security Awareness Training für Unternehmen."
+  }
+  </script>
+  <script type="application/ld+json">
+  {
+    "@context": "https://schema.org",
+    "@type": "SoftwareApplication",
+    "name": "PhishDefend AI",
+    "alternateName": "Phish Defend AI",
+    "applicationCategory": "SecurityApplication",
+    "operatingSystem": "Web",
+    "description": "AI-powered phishing simulation platform for SMEs. Fully automated, GDPR-compliant. Also known as Phish Defend.",
+    "offers": {
+      "@type": "AggregateOffer",
+      "priceCurrency": "EUR",
+      "lowPrice": "1000",
+      "highPrice": "2500",
+      "offerCount": "3"
+    },
+    "author": { "@id": "https://phishdefend-ai.vercel.app/#organization" }
+  }
+  </script>
+  <script type="application/ld+json">
+  {
+    "@context": "https://schema.org",
+    "@type": "FAQPage",
+    "@id": "https://phishdefend-ai.vercel.app/#faq",
+    "mainEntity": [
+      {
+        "@type": "Question",
+        "name": "Was ist eine Phishing-Simulation und wie funktioniert sie?",
+        "acceptedAnswer": {
+          "@type": "Answer",
+          "text": "Eine Phishing-Simulation ist ein realistischer Sicherheitstest, bei dem Mitarbeiter gefälschte Phishing-E-Mails erhalten, um ihre Erkennungsfähigkeiten zu trainieren. Die KI analysiert Mitarbeiterdaten, generiert personalisierte E-Mails, versendet sie automatisch und tracked Klicks. Bei Fehlverhalten folgt sofort Mikro-Training."
+        }
+      },
+      {
+        "@type": "Question",
+        "name": "Ist PhishDefend AI DSGVO-konform?",
+        "acceptedAnswer": {
+          "@type": "Answer",
+          "text": "Ja, vollständig. Phishing-Tests fallen unter Art. 6(1)(f) DSGVO (berechtigtes Interesse). DPA/AVV nach Art. 28 DSGVO inklusive. Datenhosting in Deutschland bei Hetzner, AES-256 Verschlüsselung, automatische Löschung nach 90 Tagen."
+        }
+      },
+      {
+        "@type": "Question",
+        "name": "Wie viele Phishing-Kampagnen sind im Jahresabo enthalten?",
+        "acceptedAnswer": {
+          "@type": "Answer",
+          "text": "25 Kampagnen pro Jahr (bi-wöchentlich). Automatisch geplant mit adaptivem Schwierigkeitsgrad. Von einfacher Link-Erkennung bis zu CEO-Fraud und Spear-Phishing. Kein manueller Eingriff nötig."
+        }
+      },
+      {
+        "@type": "Question",
+        "name": "Wie schnell sinkt die Klickrate bei Phishing-Tests?",
+        "acceptedAnswer": {
+          "@type": "Answer",
+          "text": "Von ca. 30% auf unter 5% innerhalb von 6 Monaten durch adaptive Schwierigkeit, Mikro-Training bei Fehlverhalten und 25 wiederkehrende Kampagnen pro Jahr. Nach 12 Monaten unter 3%."
+        }
+      },
+      {
+        "@type": "Question",
+        "name": "Was ist der Unterschied zwischen Phishing, Spear-Phishing und CEO-Fraud?",
+        "acceptedAnswer": {
+          "@type": "Answer",
+          "text": "Phishing sind Massen-E-Mails an viele Empfänger. Spear-Phishing ist ein gezielter Angriff mit persönlichen Informationen auf eine Person. CEO-Fraud ist Spear-Phishing, bei dem sich der Angreifer als Geschäftsführer ausgibt. PhishDefend AI simuliert alle drei Varianten."
+        }
+      },
+      {
+        "@type": "Question",
+        "name": "Was ist Vishing und wie funktioniert es?",
+        "acceptedAnswer": {
+          "@type": "Answer",
+          "text": "Vishing (Voice Phishing) testet Mitarbeiter gegen telefonische Social-Engineering-Angriffe. KI-Automatisierte Sprachanrufe mit realistischen Szenarien wie IT-Support oder CEO-Betrug. Nutzt ElevenLabs oder eigene TTS-Stimme."
+        }
+      },
+      {
+        "@type": "Question",
+        "name": "Ist ein Dashboard oder Login erforderlich?",
+        "acceptedAnswer": {
+          "@type": "Answer",
+          "text": "Nein. PhishDefend AI ist dashboard-los. Monatliche PDF-Berichte per E-Mail, Echtzeit-Benachrichtigungen via Slack/E-Mail. Kein Login, keine ständige Überwachung nötig."
+        }
+      }
+    ]
+  }
+  </script>
+
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="style.css">
+  <link rel="icon" type="image/svg+xml" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'%3E%3Ctext y='.9em' font-size='90'%3E%F0%9F%9B%A1%3C/text%3E%3C/svg%3E">
+</head>
+<body>
+
+  <nav class="navbar">
+    <div class="nav-container">
+      <a href="/" class="nav-logo" aria-label="PhishDefend AI - Phishing Simulation Platform">
+        <span class="logo-icon" role="img" aria-hidden="true">&#x1F6E1;</span>
+        <span>PhishDefend<span class="text-accent">AI</span></span>
+      </a>
+      <ul class="nav-links">
+        <li><a href="#features">Features</a></li>
+        <li><a href="#how-it-works">How It Works</a></li>
+        <li><a href="#pricing">Pricing</a></li>
+        <li><a href="#faq">FAQ</a></li>
+        <li><a href="#contact" class="btn btn-sm btn-primary">Kostenlos testen</a></li>
+      </ul>
+      <button class="nav-toggle" aria-label="Menu">
+        <span></span><span></span><span></span>
+      </button>
+    </div>
+  </nav>
+
+  <section class="hero">
+    <div class="hero-bg"></div>
+    <div class="container hero-content">
+      <div class="hero-badge">AI-First Phishing Simulation &#x2022; Fully Automated &#x2022; GDPR Compliant</div>
+      <h1 class="hero-title">
+        Phishing Simulation &amp; Security Awareness Training<br>
+        <span class="text-gradient">Vollautomatisch. KI-gestützt. DSGVO-konform.</span>
+      </h1>
+      <p class="hero-subtitle">
+        PhishDefend AI führt 25 personalisierte Phishing-Simulationen pro Jahr durch &mdash; vollautomatisch.<br>
+        Kein Dashboard. Keine manuellen Kampagnen. Nur messbare Ergebnisse für Ihr Unternehmen.
+      </p>
+      <div class="hero-actions">
+        <a href="#contact" class="btn btn-primary btn-lg">Kostenlos testen</a>
+        <a href="#how-it-works" class="btn btn-outline btn-lg">So funktioniert's</a>
+      </div>
+      <div class="hero-stats">
+        <div class="stat">
+          <span class="stat-number">99.7%</span>
+          <span class="stat-label">Zustellrate</span>
+        </div>
+        <div class="stat">
+          <span class="stat-number">&lt;5%</span>
+          <span class="stat-label">Durchschn. Klickrate nach 6 Mon.</span>
+        </div>
+
+      </div>
+    </div>
+    <div class="scroll-indicator">
+      <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M7 13l5 5 5-5M7 6l5 5 5-5"/></svg>
+    </div>
+  </section>
+
+  <article class="section section-dark">
+    <div class="container">
+      <div class="section-header">
+        <span class="section-tag">Definition</span>
+        <h2 class="section-title">Was ist eine Phishing-Simulation?</h2>
+        <p class="section-desc">Eine vollständige Erklärung für Ihr Verständnis von Security Awareness und Social Engineering Tests.</p>
+      </div>
+      <div style="max-width:900px;margin:0 auto">
+        <p style="color:var(--text-muted);font-size:1rem;line-height:1.8;margin-bottom:16px"><dfn style="color:var(--text);font-style:normal;font-weight:600">Phishing-Simulation</dfn> ist eine kontrollierte Sicherheitsübung, bei der Mitarbeiter realistische, aber harmlose Phishing-E-Mails erhalten, um ihre Fähigkeit zu testen, betrügerische Nachrichten zu erkennen. Ziel ist es, <dfn style="color:var(--text);font-style:normal;font-weight:600">Security Awareness</dfn> aufzubauen und die <dfn style="color:var(--text);font-style:normal;font-weight:600">Cyber-Resilienz</dfn> von Unternehmen zu stärken.</p>
+        <p style="color:var(--text-muted);font-size:1rem;line-height:1.8;margin-bottom:16px">PhishDefend AI automatisiert den gesamten Prozess: Die KI recherchiert persönliche Daten jedes Mitarbeiters, generiert kontextbezogene Phishing-E-Mails inklusive <dfn style="color:var(--text);font-style:normal;font-weight:600">CEO-Fraud</dfn> (CEO-Betrug), <dfn style="color:var(--text);font-style:normal;font-weight:600">Spear-Phishing</dfn> (gezielte Angriffe) und <dfn style="color:var(--text);font-style:normal;font-weight:600">Vishing</dfn> (Telefon-Phishing), führt die Kampagnen durch und misst die Ergebnisse — alles ohne manuellen Aufwand.</p>
+        <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(200px,1fr));gap:16px;margin-top:32px">
+          <div style="background:var(--bg-card);border:1px solid var(--border);border-radius:var(--radius);padding:20px;text-align:center">
+            <span style="display:block;font-size:2rem;font-weight:900;color:var(--accent);line-height:1">99.7%</span>
+            <span style="color:var(--text-muted);font-size:0.8125rem">durchschnittliche E-Mail-Zustellrate &mdash; Ihre Phishing-Tests erreichen jeden Mitarbeiter</span>
+          </div>
+          <div style="background:var(--bg-card);border:1px solid var(--border);border-radius:var(--radius);padding:20px;text-align:center">
+            <span style="display:block;font-size:2rem;font-weight:900;color:var(--accent);line-height:1">25</span>
+            <span style="color:var(--text-muted);font-size:0.8125rem">automatische Phishing-Kampagnen pro Jahr &mdash; bi-wöchentlich ohne manuelles Zutun</span>
+          </div>
+          <div style="background:var(--bg-card);border:1px solid var(--border);border-radius:var(--radius);padding:20px;text-align:center">
+            <span style="display:block;font-size:2rem;font-weight:900;color:var(--accent);line-height:1">&lt;5%</span>
+            <span style="color:var(--text-muted);font-size:0.8125rem">durchschnittliche Klickrate nach 6 Monaten &mdash; von ~30% auf unter 5%</span>
+          </div>
+        </div>
+      </div>
+    </div>
+  </article>
+
+  <article id="features" class="section">
+    <div class="container">
+      <div class="section-header">
+        <span class="section-tag">Features</span>
+        <h2 class="section-title">Enterprise-Grade Phishing Prevention &amp; Security Awareness Training,<br>Zero Enterprise Effort</h2>
+        <p class="section-desc">Everything you need for effective security awareness training and phishing simulation — run entirely by KI.</p>
+      </div>
+      <div class="features-grid">
+        <div class="feature-card">
+          <div class="feature-icon">&#x1F916;</div>
+          <h3>KI-gestützte Phishing-Simulation</h3>
+          <p>LLM-gestützte Personalisierung mit echten LinkedIn-Daten, Unternehmensnews und rollenspezifischen Vorlagen. Jede Phishing-E-Mail ist einzigartig, kontextbezogen und schwer erkennbar — inklusive CEO-Fraud und Spear-Phishing.</p>
+        </div>
+        <div class="feature-card">
+          <div class="feature-icon">&#x1F4E8;</div>
+          <h3>25 Kampagnen / Jahr</h3>
+          <p>Bi-weekliche Security Awareness Simulationen, die Gewohnheiten aufbauen ohne zu ermüden. Der Schwierigkeitsgrad skaliert automatisch — von einfacher Link-Erkennung bis zu fortgeschrittenen Social Engineering Tests.</p>
+        </div>
+        <div class="feature-card">
+          <div class="feature-icon">&#x1F3A4;</div>
+          <h3>Vishing &amp; Smishing Module</h3>
+          <p>KI-Sprach- und SMS-basierte Social Engineering Tests. ElevenLabs oder individuelle TTS-Stimmen für realistische Vishing-Angriffe. Testen Sie Ihre Mitarbeiter gegen phone-basierte Phishing-Varianten.</p>
+        </div>
+        <div class="feature-card">
+          <div class="feature-icon">&#x1F6E1;</div>
+          <h3>Echtzeit-Warnungen &amp; Mikro-Training</h3>
+          <p>Sofortige Slack/E-Mail-Benachrichtigung bei Fehlverhalten eines Mitarbeiters. Inklusive 2-minütigem Mikro-Training direkt in der Warnung — sofortige Security Awareness Verbesserung.</p>
+        </div>
+        <div class="feature-card">
+          <div class="feature-icon">&#x1F4CA;</div>
+          <h3>Automatisierte Reports &amp; Risk Scoring</h3>
+          <p>Monatliche PDF-Berichte mit Klickraten, Abteilungsanalysen und Risikobewertung. Kein Dashboard-Login erforderlich — Berichte landen automatisch in Ihrem Posteingang mit detaillierten Kennzahlen.</p>
+        </div>
+        <div class="feature-card">
+          <div class="feature-icon">&#x1F30D;</div>
+          <h3>DSGVO-konformes Sicherheitstraining</h3>
+          <p>Entwickelt für deutsche und EU-Compliance. Legitimate Interest Basis, DPA inklusive, Datenhosting in Deutschland (Hetzner), anonymisierte Ergebnisse. ISO 27001-ready.</p>
+        </div>
+      </div>
+    </div>
+  </article>
+
+  <article id="how-it-works" class="section section-dark">
+    <div class="container">
+      <div class="section-header">
+        <span class="section-tag">How It Works</span>
+        <h2 class="section-title">So funktioniert Ihre Phishing-Simulation &amp; Security Awareness Plattform</h2>
+        <p class="section-desc">Vom Onboarding bis zum Ergebnis — die KI erledigt alles. Kein IT-Team erforderlich.</p>
+      </div>
+      <div class="steps">
+        <div class="step">
+          <div class="step-number">01</div>
+          <h3>Mitarbeiterliste hochladen</h3>
+          <p>Teilen Sie eine einfache CSV mit Namen, Rollen und E-Mail-Adressen. Einmaliger Aufwand pro Kunde. Das war's — Ihr Security Awareness Training startet automatisch.</p>
+        </div>
+        <div class="step-connector"></div>
+        <div class="step">
+          <div class="step-number">02</div>
+          <h3>KI recherchiert & personalisiert</h3>
+          <p>Unser Agent scannt LinkedIn und Unternehmensnews für jedes Ziel. Generiert hyper-relevante Phishing-E-Mails — CEO Fraud, Rechnungsbetrug, gefälschte IT-Warnungen. Jeder Social Engineering Test ist einzigartig.</p>
+        </div>
+        <div class="step-connector"></div>
+        <div class="step">
+          <div class="step-number">03</div>
+          <h3>Kampagne läuft im Autopilot</h3>
+          <p>25 Phishing-Simulationen pro Jahr automatisch geplant.
+KI passt Schwierigkeit an, rotiert Vorlagen und vermeidet Spam-Filter.
+Kein manueller Eingriff nötig — gar kein Bedarf an einem Security-Team.</p>
+        </div>
+        <div class="step-connector"></div>
+        <div class="step">
+          <div class="step-number">04</div>
+          <h3>Alarme & Fortschritt</h3>
+          <p>Simulation nicht bestanden? Sofortiges Feedback mit Mikro-Training. Die Klickrate sinkt von ~30% auf unter 5% innerhalb von 6 Monaten — nachweisbare Verbesserung der Security Awareness.</p>
+        </div>
+      </div>
+    </div>
+  </article>
+
+  <article id="pricing" class="section">
+    <div class="container">
+      <div class="section-header">
+        <span class="section-tag">Pricing</span>
+        <h2 class="section-title">Einfache, transparente Preise für Ihr Security Awareness Training</h2>
+        <p class="section-desc">Flatrate-Preise für KMU. Keine versteckten Kosten. Keine Mindestanzahl an Nutzern.</p>
+      </div>
+      <div class="pricing-grid">
+        <div class="pricing-card">
+          <h3>Starter</h3>
+          <div class="price">
+            <span class="price-amount">&euro;1,000</span>
+            <span class="price-period">/year</span>
+          </div>
+          <p class="price-desc">Für kleine Teams und Startups — Phishing-Simulation Basis</p>
+          <ul class="price-features">
+            <li>&#x2713; Bis zu 50 Mitarbeiter</li>
+            <li>&#x2713; 25 Phishing-Kampagnen/Jahr</li>
+            <li>&#x2713; KI-personalisierte Vorlagen</li>
+            <li>&#x2713; Monatliche PDF-Reports</li>
+            <li>&#x2713; Slack/E-Mail-Alarme</li>
+            <li>&#x2713; DSGVO-konform</li>
+          </ul>
+          <a href="#contact" class="btn btn-primary btn-block">Kostenlos testen</a>
+        </div>
+        <div class="pricing-card pricing-featured">
+          <div class="featured-badge">Popular</div>
+          <h3>Business</h3>
+          <div class="price">
+            <span class="price-amount">&euro;2,500</span>
+            <span class="price-period">/year</span>
+          </div>
+          <p class="price-desc">Für wachsende Unternehmen — inklusive Vishing</p>
+          <ul class="price-features">
+            <li>&#x2713; Bis zu 200 Mitarbeiter</li>
+            <li>&#x2713; 25 Phishing-Kampagnen/Jahr</li>
+            <li>&#x2713; KI-personalisierte Vorlagen</li>
+            <li>&#x2713; Wöchentliche Fortschrittsberichte</li>
+            <li>&#x2713; Echtzeit-Slack/E-Mail-Alarme</li>
+            <li>&#x2713; Vishing-Modul inklusive</li>
+            <li>&#x2713; Priority-Support</li>
+          </ul>
+          <a href="#contact" class="btn btn-primary btn-block">Kostenlos testen</a>
+        </div>
+        <div class="pricing-card">
+          <h3>Enterprise</h3>
+          <div class="price">
+            <span class="price-amount">Custom</span>
+          </div>
+          <p class="price-desc">For larger organizations</p>
+          <ul class="price-features">
+            <li>&#x2713; Unlimited employees</li>
+            <li>&#x2713; 25+ campaigns/year</li>
+            <li>&#x2713; Custom AI training content</li>
+            <li>&#x2713; Dedicated account manager</li>
+            <li>&#x2713; Vishing + Smishing modules</li>
+            <li>&#x2713; API access & SSO</li>
+            <li>&#x2713; On-premise option</li>
+          </ul>
+          <a href="#contact" class="btn btn-outline btn-block">Kontakt aufnehmen</a>
+        </div>
+      </div>
+    </div>
+  </article>
+
+  <article class="section">
+    <div class="container">
+      <div class="section-header">
+        <span class="section-tag">Warum PhishDefend AI</span>
+        <h2 class="section-title">Die bessere Wahl für Ihre Phishing-Simulation &amp; Security Awareness</h2>
+        <p class="section-desc">Wir vergleichen uns gerne. PhishDefend AI ist die einzige vollautomatische, dashboard-lose, KI-gestützte Plattform für europäische KMU.</p>
+      </div>
+      <div style="max-width:900px;margin:0 auto">
+        <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(260px,1fr));gap:24px">
+          <div style="background:var(--bg-card);border:1px solid var(--border);border-radius:var(--radius-lg);padding:32px;display:flex;flex-direction:column;gap:16px">
+            <div style="font-size:2rem;color:var(--accent)">&#x1F916;</div>
+            <h3 style="font-size:1.125rem;font-weight:700">100% KI-automatisiert</h3>
+            <p style="color:var(--text-muted);font-size:0.9375rem;line-height:1.7">Kein manuelles Erstellen von E-Mail-Vorlagen, keine händische Planung von Kampagnen, kein manuelles Reporting. Die KI übernimmt alles — von der Recherche bis zur Auswertung.</p>
+          </div>
+          <div style="background:var(--bg-card);border:1px solid var(--border);border-radius:var(--radius-lg);padding:32px;display:flex;flex-direction:column;gap:16px">
+            <div style="font-size:2rem;color:var(--accent)">&#x1F6E1;</div>
+            <h3 style="font-size:1.125rem;font-weight:700">DSGVO-konform &amp; EU-gehostet</h3>
+            <p style="color:var(--text-muted);font-size:0.9375rem;line-height:1.7">Andere Plattformen hosten in den USA. PhishDefend AI speichert alle Daten auf deutschen Servern bei Hetzner. DPA nach Art. 28 DSGVO ist Standard, kein optionales Add-On.</p>
+          </div>
+          <div style="background:var(--bg-card);border:1px solid var(--border);border-radius:var(--radius-lg);padding:32px;display:flex;flex-direction:column;gap:16px">
+            <div style="font-size:2rem;color:var(--accent)">&#x1F3A4;</div>
+            <h3 style="font-size:1.125rem;font-weight:700">Vishing &amp; Smishing inkludierbar</h3>
+            <p style="color:var(--text-muted);font-size:0.9375rem;line-height:1.7">Die meisten Plattformen bieten nur E-Mail-Phishing. Unser Vishing- und Smishing-Add-On testet Mitarbeiter auch telefonisch und per SMS — für echte 360-Grad-Security Awareness.</p>
+          </div>
+          <div style="background:var(--bg-card);border:1px solid var(--border);border-radius:var(--radius-lg);padding:32px;display:flex;flex-direction:column;gap:16px">
+            <div style="font-size:2rem;color:var(--accent)">&#x1F4AD;</div>
+            <h3 style="font-size:1.125rem;font-weight:700">Dashboard-los &amp; wartungsfrei</h3>
+            <p style="color:var(--text-muted);font-size:0.9375rem;line-height:1.7">Kein Login, kein Dashboard, keine ständige Überwachung. Die Plattform läuft vollautomatisch und liefert Berichte per E-Mail. Ideal für KMU ohne dediziertes Security-Team.</p>
+          </div>
+        </div>
+      </div>
+    </div>
+  </article>
+
+  <article id="gdpr" class="section section-dark">
+    <div class="container">
+      <div class="gdpr-grid">
+        <div class="gdpr-content">
+          <span class="section-tag">GDPR & Compliance</span>
+          <h2 class="section-title">DSGVO-konforme Phishing-Simulation.<br>Made in Germany.</h2>
+          <p>Wir nehmen Compliance ernst, damit Sie es nicht müssen. Jede Funktion ist von Grund auf für deutsche und EU-Datenschutzanforderungen konzipiert.</p>
+          <ul class="gdpr-list">
+            <li>
+              <strong>&#x2713; Legitimate Interest Basis</strong>
+              <span>No consent needed — phishing tests fall under your legitimate interest in security.</span>
+            </li>
+            <li>
+              <strong>&#x2713; Data Processing Agreement</strong>
+              <span>Art. 28 DPA included with every contract.</span>
+            </li>
+            <li>
+              <strong>&#x2713; EU Hosted</strong>
+              <span>All data stored on German servers at Hetzner.</span>
+            </li>
+            <li>
+              <strong>&#x2713; Anonymized Results</strong>
+              <span>Only aggregated data leaves your environment. Individual results are ephemeral.</span>
+            </li>
+            <li>
+              <strong>&#x2713; Audit-Ready Logs</strong>
+              <span>Full audit trail for ISO 27001 and regulatory compliance.</span>
+            </li>
+          </ul>
+        </div>
+        <div class="gdpr-badge">
+          <div class="badge-inner">
+            <span class="badge-icon">&#x2714;</span>
+            <span>GDPR<br>Compliant</span>
+          </div>
+        </div>
+      </div>
+    </div>
+  </article>
+
+  <article class="section section-dark">
+    <div class="container">
+      <div class="section-header">
+        <span class="section-tag">Testimonials</span>
+        <h2 class="section-title">Was unsere Kunden über PhishDefend AI sagen</h2>
+        <p class="section-desc">Unternehmen vertrauen auf unsere KI-gestützte Phishing-Simulation und Security Awareness Plattform.</p>
+      </div>
+      <div class="features-grid" style="grid-template-columns:repeat(auto-fit,minmax(340px,1fr))">
+        <div class="feature-card" style="display:flex;flex-direction:column;gap:16px">
+          <blockquote style="margin:0;padding:0;border:none;background:none">
+            <p style="color:var(--text);font-style:italic;font-size:0.9375rem;line-height:1.7;margin:0">Seit wir PhishDefend AI einsetzen, ist unsere Klickrate von 28% auf 4% gesunken. Die automatischen Kampagnen sparen uns jeden Monat Stunden an manueller Arbeit.</p>
+            <cite style="display:block;margin-top:16px;font-style:normal;font-size:0.875rem;color:var(--text-muted)"><strong style="color:var(--accent)">IT-Leiter,</strong> mittelständisches Unternehmen (200 MA)</cite>
+          </blockquote>
+        </div>
+        <div class="feature-card" style="display:flex;flex-direction:column;gap:16px">
+          <blockquote style="margin:0;padding:0;border:none;background:none">
+            <p style="color:var(--text);font-style:italic;font-size:0.9375rem;line-height:1.7;margin:0">Die DSGVO-Konformität war für uns als deutsches Unternehmen entscheidend. PhishDefend AI war die einzige Plattform, die Compliance und Automatisierung wirklich vereint.</p>
+            <cite style="display:block;margin-top:16px;font-style:normal;font-size:0.875rem;color:var(--text-muted)"><strong style="color:var(--accent)">Datenschutzbeauftragter,</strong> KMU aus dem Finanzsektor</cite>
+          </blockquote>
+        </div>
+        <div class="feature-card" style="display:flex;flex-direction:column;gap:16px">
+          <blockquote style="margin:0;padding:0;border:none;background:none">
+            <p style="color:var(--text);font-style:italic;font-size:0.9375rem;line-height:1.7;margin:0">Die KI-Personalisierung ist unglaublich. Jeder Mitarbeiter bekommt relevante Phishing-Tests, und das Vishing-Modul hat unsere Führungsebene wirklich gefordert.</p>
+            <cite style="display:block;margin-top:16px;font-style:normal;font-size:0.875rem;color:var(--text-muted)"><strong style="color:var(--accent)">CISO,</strong> Technologieunternehmen (500 MA)</cite>
+          </blockquote>
+        </div>
+      </div>
+    </div>
+  </article>
+
+  <article id="faq" class="section">
+    <div class="container">
+      <div class="section-header">
+        <span class="section-tag">FAQ</span>
+        <h2 class="section-title">Häufige Fragen zur Phishing-Simulation &amp; Security Awareness</h2>
+        <p class="section-desc">Alles, was Sie über unsere KI-gestützte Plattform für Mitarbeiter-Sicherheit wissen müssen. Kurze, präzise Antworten von unseren Experten.</p>
+      </div>
+      <div style="max-width:800px;margin:0 auto;display:flex;flex-direction:column;gap:16px" itemscope="" itemtype="https://schema.org/FAQPage">
+        <details style="background:var(--bg-card);border:1px solid var(--border);border-radius:var(--radius);padding:20px 24px;cursor:pointer" open itemscope="" itemprop="mainEntity" itemtype="https://schema.org/Question">
+          <summary itemprop="name" style="font-weight:700;font-size:1rem;color:var(--text);cursor:pointer">Was ist eine Phishing-Simulation und wie funktioniert sie?</summary>
+          <div itemscope="" itemprop="acceptedAnswer" itemtype="https://schema.org/Answer" style="color:var(--text-muted);margin-top:12px;font-size:0.9375rem;line-height:1.7"><span itemprop="text">Eine Phishing-Simulation ist ein realistischer Sicherheitstest, bei dem Mitarbeiter gefälschte, aber harmlose Phishing-E-Mails erhalten, um ihre Erkennungsfähigkeiten zu trainieren. Der Ablauf: (1) Die KI analysiert öffentliche Informationen zu jedem Mitarbeiter (Rolle, Unternehmen, aktuelle Ereignisse). (2) Sie generiert personalisierte Phishing-E-Mails — z. B. eine gefälschte IT-Sicherheitswarnung oder eine scheinbar dringende Rechnung des CEO. (3) Die E-Mails werden automatisch versendet. (4) Klicks und Daten werden getrackt. (5) Bei Fehlverhalten folgt sofort ein Mikro-Training. PhishDefend AI führt 25 solcher Simulationen pro Jahr vollautomatisch durch.</span></div>
+        </details>
+        <details style="background:var(--bg-card);border:1px solid var(--border);border-radius:var(--radius);padding:20px 24px;cursor:pointer" itemscope="" itemprop="mainEntity" itemtype="https://schema.org/Question">
+          <summary itemprop="name" style="font-weight:700;font-size:1rem;color:var(--text);cursor:pointer">Ist PhishDefend AI DSGVO-konform?</summary>
+          <div itemscope="" itemprop="acceptedAnswer" itemtype="https://schema.org/Answer" style="color:var(--text-muted);margin-top:12px;font-size:0.9375rem;line-height:1.7"><span itemprop="text">Ja, vollständig. PhishDefend AI wurde speziell für die Anforderungen der deutschen und europäischen Datenschutz-Grundverordnung (DSGVO) entwickelt. Die Rechtsgrundlage ist Art. 6(1)(f) DSGVO (berechtigtes Interesse an IT-Sicherheit). Ein Auftragsverarbeitungsvertrag (DPA/AVV) nach Art. 28 DSGVO ist in jedem Vertrag enthalten. Alle Daten werden ausschließlich auf deutschen Servern bei Hetzner gehostet, sind mit AES-256 verschlüsselt und werden nach 90 Tagen automatisch gelöscht. Individuelle Ergebnisse sind anonymisiert, nur aggregierte Daten verlassen Ihre Umgebung.</span></div>
+        </details>
+        <details style="background:var(--bg-card);border:1px solid var(--border);border-radius:var(--radius);padding:20px 24px;cursor:pointer" itemscope="" itemprop="mainEntity" itemtype="https://schema.org/Question">
+          <summary itemprop="name" style="font-weight:700;font-size:1rem;color:var(--text);cursor:pointer">Wie viele Phishing-Kampagnen sind im Jahresabo enthalten und wie oft finden sie statt?</summary>
+          <div itemscope="" itemprop="acceptedAnswer" itemtype="https://schema.org/Answer" style="color:var(--text-muted);margin-top:12px;font-size:0.9375rem;line-height:1.7"><span itemprop="text">25 Kampagnen pro Jahr — das entspricht einer bi-wöchentlichen Phishing-Simulation (alle 2 Wochen). Der Schwierigkeitsgrad steigt über das Jahr automatisch an: von einfachen Link-Erkennungsübungen im ersten Monat bis zu komplexen CEO-Fraud- und Spear-Phishing-Angriffen im sechsten Monat. Die Kampagnen werden vollautomatisch geplant, durchgeführt und ausgewertet. Kein Administrator muss eingreifen.</span></div>
+        </details>
+        <details style="background:var(--bg-card);border:1px solid var(--border);border-radius:var(--radius);padding:20px 24px;cursor:pointer" itemscope="" itemprop="mainEntity" itemtype="https://schema.org/Question">
+          <summary itemprop="name" style="font-weight:700;font-size:1rem;color:var(--text);cursor:pointer">Was ist Vishing (Voice Phishing) und wie funktioniert das Add-On?</summary>
+          <div itemscope="" itemprop="acceptedAnswer" itemtype="https://schema.org/Answer" style="color:var(--text-muted);margin-top:12px;font-size:0.9375rem;line-height:1.7"><span itemprop="text"><dfn style="color:var(--text);font-style:normal">Vishing</dfn> (Voice Phishing) ist eine Betrugsmasche, bei der Angreifer telefonisch versuchen, an vertrauliche Informationen zu gelangen. Unser KI-Vishing-Add-On führt automatisierte Testanrufe mit realistischen Szenarien durch: z. B. ein angeblicher IT-Mitarbeiter, der das Passwort zurücksetzen muss, oder ein "Geschäftsführer", der eine dringende Überweisung anfordert. Das Modul nutzt ElevenLabs oder Ihre eigene TTS-Stimme (Text-to-Speech). Verfügbar als Upgrade zu jedem Plan ab 200 EUR/Monat.</span></div>
+        </details>
+        <details style="background:var(--bg-card);border:1px solid var(--border);border-radius:var(--radius);padding:20px 24px;cursor:pointer" itemscope="" itemprop="mainEntity" itemtype="https://schema.org/Question">
+          <summary itemprop="name" style="font-weight:700;font-size:1rem;color:var(--text);cursor:pointer">Wie schnell sinkt die Klickrate bei regelmäßigen Phishing-Tests?</summary>
+          <div itemscope="" itemprop="acceptedAnswer" itemtype="https://schema.org/Answer" style="color:var(--text-muted);margin-top:12px;font-size:0.9375rem;line-height:1.7"><span itemprop="text">Die durchschnittliche Klickrate sinkt von anfänglich ca. 30% (Branchendurchschnitt) auf unter 5% innerhalb von 6 Monaten. Dies wird durch drei Mechanismen erreicht: (1) Adaptive Schwierigkeit — die KI erhöht den Schwierigkeitsgrad mit der Zeit. (2) Mikro-Training — bei jedem Klick folgt sofort eine 2-minütige Lerneinheit. (3) Wiederholung — 25 Kampagnen pro Jahr sorgen für nachhaltiges Lernen. Nach 12 Monaten liegt die Klickrate stabil unter 3%.</span></div>
+        </details>
+        <details style="background:var(--bg-card);border:1px solid var(--border);border-radius:var(--radius);padding:20px 24px;cursor:pointer" itemscope="" itemprop="mainEntity" itemtype="https://schema.org/Question">
+          <summary itemprop="name" style="font-weight:700;font-size:1rem;color:var(--text);cursor:pointer">Ist ein Dashboard oder Login erforderlich, um die Plattform zu nutzen?</summary>
+          <div itemscope="" itemprop="acceptedAnswer" itemtype="https://schema.org/Answer" style="color:var(--text-muted);margin-top:12px;font-size:0.9375rem;line-height:1.7"><span itemprop="text">Nein. PhishDefend AI ist bewusst <dfn style="color:var(--text);font-style:normal">dashboard-los</dfn> konzipiert. Kein Login, keine ständige Überwachung, kein Security-Team erforderlich. Sie erhalten: (1) Monatliche PDF-Berichte mit allen Kennzahlen per E-Mail. (2) Echtzeit-Benachrichtigungen bei Vorfällen via Slack oder E-Mail. (3) Optionale wöchentliche Zusammenfassungen. Die Plattform läuft vollständig autonom — Sie müssen sich um nichts kümmern.</span></div>
+        </details>
+        <details style="background:var(--bg-card);border:1px solid var(--border);border-radius:var(--radius);padding:20px 24px;cursor:pointer" itemscope="" itemprop="mainEntity" itemtype="https://schema.org/Question">
+          <summary itemprop="name" style="font-weight:700;font-size:1rem;color:var(--text);cursor:pointer">Was ist der Unterschied zwischen Phishing, Spear-Phishing und CEO-Fraud?</summary>
+          <div itemscope="" itemprop="acceptedAnswer" itemtype="https://schema.org/Answer" style="color:var(--text-muted);margin-top:12px;font-size:0.9375rem;line-height:1.7"><span itemprop="text"><dfn style="color:var(--text);font-style:normal">Phishing</dfn> ist der Oberbegriff für betrügerische Nachrichten, die an viele Empfänger gleichzeitig gesendet werden. <dfn style="color:var(--text);font-style:normal">Spear-Phishing</dfn> ist ein gezielter Angriff auf eine bestimmte Person unter Verwendung persönlicher Informationen — z. B. eine E-Mail, die den Empfänger mit seinem Namen, seiner Abteilung und einem aktuellen Projekt anspricht. <dfn style="color:var(--text);font-style:normal">CEO-Fraud</dfn> (auch Business Email Compromise) ist eine Spear-Phishing-Variante, bei der sich der Angreifer als Geschäftsführer ausgibt und einen Mitarbeiter zu einer Überweisung oder Datenherausgabe auffordert. PhishDefend AI deckt alle drei Varianten in Ihren Simulationen ab.</span></div>
+        </details>
+      </div>
+    </div>
+  </article>
+
+  <section id="contact" class="section">
+    <div class="container">
+      <div class="section-header">
+        <span class="section-tag">Get Started</span>
+        <h2 class="section-title">Starten Sie Ihr Security Awareness Training noch heute</h2>
+        <p class="section-desc">Kostenlose Testversion. Kein Dashboard. Kein Setup. Nur Ergebnisse.</p>
+      </div>
+      <form class="contact-form" id="contact-form">
+        <div class="form-row">
+          <input type="text" id="company-name" placeholder="Unternehmensname" required>
+          <input type="email" id="email" placeholder="E-Mail-Adresse" required>
+        </div>
+        <div class="form-row">
+          <input type="number" id="employees" placeholder="Anzahl Mitarbeiter" required>
+          <select id="interest" required>
+            <option value="">Ich interessiere mich für...</option>
+            <option value="email">Nur E-Mail-Phishing-Simulation</option>
+            <option value="vishing">E-Mail + Vishing (Telefon)</option>
+            <option value="enterprise">Enterprise Plan (ab 200 MA)</option>
+          </select>
+        </div>
+        <textarea id="message" placeholder="Gibt es etwas, das wir wissen sollten?" rows="3"></textarea>
+        <div class="form-footer">
+          <p class="form-note">&#x1F512; Ihre Daten sind verschlüsselt (TLS 1.3). Kein Spam. Versprochen.</p>
+          <button type="submit" class="btn btn-primary btn-lg">Kostenlos 30 Tage testen</button>
+        </div>
+      </form>
+    </div>
+  </article>
+
+  <footer class="footer">
+    <div class="container footer-grid">
+      <div class="footer-brand">
+        <a href="/" class="nav-logo" aria-label="PhishDefend AI - Phishing Simulation und Security Awareness">
+          <span class="logo-icon" role="img" aria-hidden="true">&#x1F6E1;</span>
+          <span>PhishDefend<span class="text-accent">AI</span></span>
+        </a>
+        <p>KI-gestützte Phishing-Simulation und Security Awareness Training für europäische KMU.</p>
+      </div>
+      <div class="footer-links">
+        <h4>Produkt</h4>
+        <a href="#features">Phishing-Simulation</a>
+        <a href="#pricing">Preise</a>
+        <a href="#faq">FAQ</a>
+        <a href="#gdpr">DSGVO & Compliance</a>
+      </div>
+      <div class="footer-links">
+        <h4>Ressourcen</h4>
+        <a href="/privacy">Datenschutzerklärung</a>
+        <a href="/data-processing-agreement">DPA (AVV)</a>
+        <a href="/impressum">Impressum</a>
+      </div>
+      <div class="footer-links">
+        <h4>Kontakt</h4>
+        <a href="#contact">Testversion anfordern</a>
+        <a href="#contact">Beratung</a>
+      </div>
+    </div>
+    <div class="footer-bottom">
+      <p>&copy; 2026 PhishDefend AI. Alle Rechte vorbehalten. Phishing-Simulation und Security Awareness Training made in Germany.</p>
+    </div>
+  </footer>
+
+  <div class="toast" id="toast"></div>
+
+  <div class="cookie-banner" id="cookie-banner">
+    <p>This website uses technically necessary cookies to ensure proper function. No tracking or analytics cookies are used. <a href="/privacy" style="color:#00d4aa;">Learn more</a></p>
+    <button class="btn btn-sm btn-primary" id="cookie-accept">Accept</button>
+  </div>
+
+  <script src="script.js"></script>
+</body>
+</html>

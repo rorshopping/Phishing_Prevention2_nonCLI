@@ -1,0 +1,17 @@
+.env
+.env.*
+venv/
+.venv/
+__pycache__/
+*.pyc
+*.pyo
+*.db
+.git/
+.gitignore
+*.log
+gophish/
+gophish.zip
+.vscode/
+.idea/
+tests/
+*.md
