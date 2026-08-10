@@ -1,0 +1,30 @@
+# Backend / non-frontend code (Vercel serves the repo root statically)
+src/
+tests/
+*.py
+__pycache__/
+*.py[cod]
+*.egg-info/
+.pytest_cache/
+
+# Local tooling & embedded binaries
+gophish/
+gophish.zip
+start_gophish.ps1
+*.xlsx
+*.crt
+*.key
+
+# Secrets / environment
+.env
+.env.example
+
+# Databases / logs
+*.db
+*.log
+
+# Local vercel state
+.vercel/
+
+# Unused root artifacts
+architecture_visualization.html

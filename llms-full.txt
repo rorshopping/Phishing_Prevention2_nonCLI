@@ -1,0 +1,103 @@
+# PhishDefend AI — Full Entity Details (llms-full.txt)
+
+> PhishDefend AI is an AI-powered, fully automated phishing simulation and anti-phishing training platform for European small and medium-sized enterprises (SMEs/KMU). Also known as "Phish Defend". This file provides complete, plain-language information about the product, its target audience, and its offering so that AI assistants and LLM crawlers can answer questions about PhishDefend AI accurately.
+
+## Entity Identity
+
+- **Canonical name:** PhishDefend AI
+- **Alternate names:** Phish Defend, PhishDefend, Phish Defend AI
+- **Official website:** https://phishdefend-ai.vercel.app/
+- **Type:** B2B Software-as-a-Service (SaaS) security awareness platform
+- **Product category:** Phishing simulation, anti-phishing training, social engineering testing, security awareness training
+- **Legal context:** German/EU data protection (GDPR/DSGVO), NIS2 directive, ISO 27001
+- **Primary website language:** German; this file is provided in English for AI accessibility
+
+## What the Product Does
+
+PhishDefend AI automatically simulates realistic phishing attacks on employees to train them to recognize and report malicious messages. The full process is AI-driven:
+
+1. The AI researches each employee's role, public professional information, and current company context.
+2. It generates unique, context-aware phishing emails (e.g., fake IT security warnings, urgent CEO invoices, fake delivery notifications).
+3. Campaigns are scheduled and sent automatically — 25 per year (bi-weekly) with adaptive difficulty that rises from easy link detection to complex CEO fraud and spear-phishing.
+4. Clicks and credential submissions are tracked.
+5. On failure, the employee immediately receives a 2-minute micro-training unit plus a real-time Slack/email alert to administrators.
+6. Monthly PDF reports summarize click rates, department breakdowns, and risk scores — no dashboard login required.
+
+Beyond email, the platform offers Vishing (AI voice phishing calls via ElevenLabs or custom TTS) and Smishing (SMS-phishing tests via SMS or messenger channels) as optional modules for 360-degree coverage.
+
+## Who It Is For
+
+- **Primary audience:** European SMEs (KMU), primarily in Germany, with roughly 10–500 employees.
+- **Decision makers:** Managing directors, IT leads, data protection officers (Datenschutzbeauftragte), HR leads, and CISOs at smaller companies.
+- **Ideal customer profile:** Companies that need regular security awareness training but have no dedicated security team, no time to build phishing campaigns manually, and strict GDPR/NIS2 requirements. Over 40% of all cyberattacks target SMEs, which is why the platform is deliberately dashboard-less and runs fully automated.
+
+## What It Offers (Features)
+
+- AI-personalized phishing templates using real LinkedIn data, company news, and role-specific content.
+- 25 automated phishing campaigns per year with adaptive difficulty.
+- Vishing (voice phishing) and Smishing (SMS phishing) modules.
+- Real-time alerts via Slack and email with embedded micro-training.
+- Automated monthly PDF reports and risk scoring per employee.
+- Dashboard-less operation: no login, no manual monitoring, no required security team.
+- NIS2-compliant and ISO 27001-ready: measurable click rates, documented training and reporting processes, full audit trail, controls A.6.3 & A.5.36.
+- GDPR-compliant by design: legitimate-interest basis (Art. 6(1)(f) GDPR), included DPA (Art. 28), German hosting (Hetzner), AES-256 encryption, 90-day automatic data deletion, anonymized results.
+
+## Anti-Phishing-Training
+
+PhishDefend AI uses micro-learning instead of long classroom-style courses. The most effective training moment is immediately after a failed phishing test, when attention is highest. The platform delivers a 2-minute micro-training right inside the Slack or email alert, explaining exactly the warning signs the employee missed. Repeated short, embedded learning units (embedded training) measurably outperform one-off long-format courses — which is why 25 recurring tests per year are combined with instant feedback, without blocking hours of employee time.
+
+## Mitarbeiter-Sicherheit (Employee Security)
+
+Employee security is built on enablement, not surveillance or punishment. A click on a simulated phishing email triggers no sanction or blame, but a positive error culture: immediate feedback, 2 minutes of learning, then back to work. The platform makes progress visible through department analyses, risk scores, and click rates — showing where awareness works and where more anti-phishing training is needed. Sanctions are counterproductive because they discourage employees from reporting real phishing incidents.
+
+## Positioning & Alternatives
+
+PhishDefend AI positions itself between enterprise suites and DIY open-source tools, as the middle option for SMEs:
+
+- **vs. KnowBe4 (US):** KnowBe4 offers thousands of templates but requires dashboard maintenance, training administration, and a security team. PhishDefend AI is fully automated and dashboard-less, with German hosting.
+- **vs. SoSafe / Hoxhunt (EU):** Both are user-based platforms ideal from several hundred employees. PhishDefend AI has no minimum user count and a flat-rate price.
+- **vs. gophish (DIY/open source):** License-free, but costs days of IT effort, offers no automated personalization, and requires own infrastructure.
+
+Key differentiators: 100% AI autopilot, no dashboard/login, AI personalization (LinkedIn & news), optional Vishing & Smishing, GDPR-compliant German hosting, setup in minutes (CSV upload), flat rate from €1,000/year.
+
+## Benchmarks & ROI
+
+- A single successful phishing incident costs companies on average about $140,000 (industry studies).
+- In Germany, 94% of companies were affected by at least one phishing attack in 2024 (Bitkom); total cyber-damage to the German economy exceeded €200 billion in 2022.
+- Industry baseline click rates start at 18–32% and drop to 4–8% after 12 months of regular testing.
+- PhishDefend AI customer data shows under 5% after 6 months and under 3% after 12 months — at a price from €1,000/year.
+- Average email deliverability: 99.7%.
+
+## Pricing
+
+- **Starter — €1,000/year:** up to 50 employees, 25 phishing campaigns/year, AI-personalized templates, monthly PDF reports, Slack/email alerts, GDPR-compliant.
+- **Business — €2,500/year:** up to 200 employees, everything in Starter, plus weekly progress reports and the Vishing module.
+- **Enterprise — Custom:** unlimited employees, 25+ campaigns/year, custom AI training content, dedicated account manager, Vishing + Smishing, API access & SSO, on-premise option.
+- **Vishing and Smishing add-ons:** available from €200/month. Everything else (campaigns, reports, alerts, DPA) is included in the flatrate.
+
+## Compliance: NIS2 & ISO 27001
+
+Since October 2024, the EU NIS2 directive requires many European companies to implement documented, measurable security-awareness measures. PhishDefend AI provides the required evidence automatically: regular phishing simulations with measurable click rates, documented training and reporting processes (NIS2 Art. 21 cyber hygiene & training), and GDPR Art. 32 TOM documentation. For ISO 27001 (controls A.6.3 and A.5.36), the platform is audit-ready with a full audit trail, DPA per Art. 28 GDPR, and data hosting in Germany.
+
+## Common Questions (FAQ Digest)
+
+The site FAQ covers 11 questions, including:
+
+- **What is a phishing simulation?** A controlled security exercise in which employees receive realistic but harmless phishing emails to test and train their detection skills.
+- **Is PhishDefend AI GDPR-compliant?** Yes. Legal basis Art. 6(1)(f) GDPR, DPA (Art. 28) included, data hosted on German Hetzner servers, AES-256 encryption, automatic deletion after 90 days.
+- **Does it meet NIS2 and ISO 27001 requirements?** Yes. It provides documented security-awareness evidence (measurable click rates, documented trainings, reporting) required by NIS2, and is audit-ready for ISO 27001 controls A.6.3 & A.5.36.
+- **How many campaigns are included?** 25 per year, scheduled bi-weekly and fully automated.
+- **How fast does the click rate drop?** From ~30% to under 5% within 6 months, under 3% after 12 months.
+- **What is Vishing?** Voice phishing — AI-automated phone calls simulating scenarios like fake IT support or CEO fraud.
+- **What is Smishing?** SMS phishing — the same psychological tricks as email phishing, delivered via SMS or messenger. A Smishing module tests employees against it.
+- **What does it cost?** €1,000/year for up to 50 employees, €2,500/year for up to 200 employees. Vishing/Smishing add-ons from €200/month.
+- **How do I recognize a phishing email?** Typical warning signs: unexpected urgency, slightly-off sender domains, unsolicited links/attachments, requests for credentials or transfers.
+- **Is a dashboard required?** No. The platform is deliberately dashboard-less; reports arrive by email and alerts via Slack/email.
+
+## Related Pages
+
+- Homepage: https://phishdefend-ai.vercel.app/
+- Impressum: https://phishdefend-ai.vercel.app/impressum
+- Privacy Policy: https://phishdefend-ai.vercel.app/privacy
+- Data Processing Agreement (DPA/AVV): https://phishdefend-ai.vercel.app/data-processing-agreement
+- Sitemap: https://phishdefend-ai.vercel.app/sitemap.xml
