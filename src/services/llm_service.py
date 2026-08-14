@@ -3,7 +3,7 @@ import logging
 from typing import Any
 
 from langchain_openai import ChatOpenAI
-from langchain_core.messages import SystemMessage, HumanMessage
+from langchain_core.messages import SystemMessage, HumanMessage, AIMessage
 
 from src.config import settings
 
@@ -45,4 +45,18 @@ class LLMService:
             return response.content.strip()
         except Exception as e:
             logger.error("LLM generation failed: %s", e)
+            raise
+
+    async def chat(self, system_prompt: str, messages: list[dict[str, str]]) -> str:
+        llm_messages = [SystemMessage(content=system_prompt)]
+        for message in messages:
+            if message.get("role") == "user":
+                llm_messages.append(HumanMessage(content=message["content"]))
+            else:
+                llm_messages.append(AIMessage(content=message["content"]))
+        try:
+            response = await self.llm.ainvoke(llm_messages)
+            return response.content.strip()
+        except Exception as e:
+            logger.error("LLM chat generation failed: %s", e)
             raise

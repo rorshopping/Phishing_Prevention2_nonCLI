@@ -1,0 +1,58 @@
+﻿email,source,verdict,note
+ssicken@it-haus.com,not-yet-probed,unknown,mx-01-eu-central-1.prod.hydra.sophos.com RCPT 554 5.7.1 Service unavailable; Client host [92.209.189.231] is blacklisted. Visit https://www.
+hulbrich@it-haus.com,not-yet-probed,unknown,mx-01-eu-central-1.prod.hydra.sophos.com RCPT 554 5.7.1 Service unavailable; Client host [92.209.189.231] is blacklisted. Visit https://www.
+tobias.hejna@orbit.de,not-yet-probed,confirmed,orbit-de.mail.protection.outlook.com RCPT 250
+sascha.collin@netplans.de,not-yet-probed,unknown,mx01.hornetsecurity.com RCPT 554 5.5.4 Your IP address 92.209.189.231 has a bad reputation. To unblock visit https://cloud-
+ralf.bender@suedvers.de,not-yet-probed,unknown,mx01.hornetsecurity.com RCPT 554 5.5.4 Your IP address 92.209.189.231 has a bad reputation. To unblock visit https://cloud-
+thomas.kalbacher@rvm.de,not-yet-probed,unknown,mx-01-eu-central-1.prod.hydra.sophos.com RCPT 554 5.7.1 Service unavailable; Client host [92.209.189.231] is blacklisted. Visit https://www.
+oliver.scholl@rvm.de,not-yet-probed,unknown,mx-01-eu-central-1.prod.hydra.sophos.com RCPT 554 5.7.1 Service unavailable; Client host [92.209.189.231] is blacklisted. Visit https://www.
+m.gick@rcu-versicherungsmakler.de,not-yet-probed,confirmed,mx01.eurodata.de RCPT 250
+c.volk@volk-partner.de,not-yet-probed,bounce,mx01.badencloud.de RCPT 550 #5.1.0 Address rejected.
+loreth@asson.de,not-yet-probed,confirmed,asson-de.mail.protection.outlook.com RCPT 250
+a.markschies@mtronline.de,not-yet-probed,confirmed,as6.custdnw.net RCPT 250
+hsoenmez@intecso.ch,not-yet-probed,confirmed,intecso-ch.mail.protection.outlook.com RCPT 250
+jonsamuel.plotke@assepro.com,not-yet-probed,confirmed,assepro-com.mail.protection.outlook.com RCPT 250
+jens.frank@artus-gruppe.com,not-yet-probed,confirmed,artusgruppe-com01c.mail.protection.outlook.com RCPT 250
+d.schneeberger@sumec.ch,not-yet-probed,confirmed,sumec-ch.mail.protection.outlook.com RCPT 250
+m.erhard@noesse.de,not-yet-probed,unknown,mx01.hornetsecurity.com RCPT 554 5.5.4 Your IP address 92.209.189.231 has a bad reputation. To unblock visit https://cloud-
+florian.karle@suedvers.de,not-yet-probed,unknown,mx01.hornetsecurity.com RCPT 554 5.5.4 Your IP address 92.209.189.231 has a bad reputation. To unblock visit https://cloud-
+manfred.karle@suedvers.de,not-yet-probed,unknown,mx01.hornetsecurity.com RCPT 554 5.5.4 Your IP address 92.209.189.231 has a bad reputation. To unblock visit https://cloud-
+t.rafetseder@sysco.at,not-yet-probed,confirmed,safeguard1.sycloud.at RCPT 250
+w.abels@rcu-versicherungsmakler.de,not-yet-probed,confirmed,mx01.eurodata.de RCPT 250
+m.liewehr@mtronline.de,not-yet-probed,confirmed,as6.custdnw.net RCPT 250
+dieter.schaeublin@artus-gruppe.com,not-yet-probed,confirmed,artusgruppe-com01c.mail.protection.outlook.com RCPT 250
+ralph.nyffeler@artus-gruppe.com,not-yet-probed,confirmed,artusgruppe-com01c.mail.protection.outlook.com RCPT 250
+gunsser@oppenlaender.de,not-yet-probed,confirmed,oppenlaender-de.mail.protection.outlook.com RCPT 250
+Stephan.Brandes@sza.de,not-yet-probed,confirmed,mail1.sza.de RCPT 250
+n.siebertz@cbh.de,not-yet-probed,unknown,mx-01-eu-central-1.prod.hydra.sophos.com RCPT 554 5.7.1 Service unavailable; Client host [92.209.189.231] is blacklisted. Visit https://www.
+j.ristelhuber@cbh.de,not-yet-probed,unknown,mx-01-eu-central-1.prod.hydra.sophos.com RCPT 554 5.7.1 Service unavailable; Client host [92.209.189.231] is blacklisted. Visit https://www.
+i.jung@cbh.de,not-yet-probed,unknown,mx-01-eu-central-1.prod.hydra.sophos.com RCPT 554 5.7.1 Service unavailable; Client host [92.209.189.231] is blacklisted. Visit https://www.
+n.pitkowitz@pitkowitz.com,not-yet-probed,unknown,serv48621726.secure-node.at RCPT 554 5.7.1 <n.pitkowitz@pitkowitz.com>: Recipient address rejected: Rejected by SPF: 92.209.189
+laura.metzler@metzler.law,not-yet-probed,confirmed,metzler-law.mail.protection.outlook.com RCPT 250
+matthaeus.metzler@metzler.law,not-yet-probed,confirmed,metzler-law.mail.protection.outlook.com RCPT 250
+fabian.hanz@metzler.law,not-yet-probed,confirmed,metzler-law.mail.protection.outlook.com RCPT 250
+albiez@bindergroesswang.at,not-yet-probed,confirmed,bindergroesswang-at.mail.protection.outlook.com RCPT 250
+m.hommel@juettner.de,not-yet-probed,unknown,all MX unreachable/timeout
+claudia.leonhardt@meditech-sachsen.de,not-yet-probed,unknown,mx01.hornetsecurity.com RCPT 554 5.5.4 Your IP address 92.209.189.231 has a bad reputation. To unblock visit https://cloud-
+inreiter@rvm.at,not-yet-probed,unknown,grzmail1.grz.co.at RCPT 554 5.7.1 <verify@rvm.at>: Sender address rejected: you are not on my networks
+christoph.moser@baseit.at,not-yet-probed,confirmed,baseit-at.mail.protection.outlook.com RCPT 250
+nicklas.haglund@basalt.se,not-yet-probed,confirmed,basalt-se.mail.protection.outlook.com RCPT 250
+cs@kollab.dk,not-yet-probed,confirmed,kollab-dk.mail.protection.outlook.com RCPT 250
+fhj@daniaconnect.dk,not-yet-probed,confirmed,daniaconnect-dk.mail.protection.outlook.com RCPT 250
+mjh@daniaconnect.dk,not-yet-probed,confirmed,daniaconnect-dk.mail.protection.outlook.com RCPT 250
+oom@daniaconnect.dk,not-yet-probed,confirmed,daniaconnect-dk.mail.protection.outlook.com RCPT 250
+mail@willo.se,wayback,confirmed,willo-se.mail.protection.outlook.com RCPT 250
+henrik.wolf@willo.se,wayback,bounce,willo-se.mail.protection.outlook.com RCPT 550 5.4.1 Recipient address rejected: Access denied. For more information see https://aka.ms/E
+jenny.kejder@willo.se,wayback,confirmed,willo-se.mail.protection.outlook.com RCPT 250
+johan.backgard@willo.se,wayback,confirmed,willo-se.mail.protection.outlook.com RCPT 250
+johan.blomster@willo.se,wayback,confirmed,willo-se.mail.protection.outlook.com RCPT 250
+johan.skandevall@willo.se,wayback,bounce,willo-se.mail.protection.outlook.com RCPT 550 5.4.1 Recipient address rejected: Access denied. For more information see https://aka.ms/E
+marcus.johansson@willo.se,wayback,confirmed,willo-se.mail.protection.outlook.com RCPT 250
+marcus.magnusson@willo.se,wayback,bounce,willo-se.mail.protection.outlook.com RCPT 550 5.4.1 Recipient address rejected: Access denied. For more information see https://aka.ms/E
+peter.grahn@willo.se,wayback,bounce,willo-se.mail.protection.outlook.com RCPT 550 5.4.1 Recipient address rejected: Access denied. For more information see https://aka.ms/E
+peter.hultkvist@willo.se,wayback,confirmed,willo-se.mail.protection.outlook.com RCPT 250
+petra.kjellsson@willo.se,wayback,confirmed,willo-se.mail.protection.outlook.com RCPT 250
+roland.engnell@willo.se,wayback,bounce,willo-se.mail.protection.outlook.com RCPT 550 5.4.1 Recipient address rejected: Access denied. For more information see https://aka.ms/E
+sofia.gustavsson@willo.se,wayback,confirmed,willo-se.mail.protection.outlook.com RCPT 250
+svante.johansson@willo.se,wayback,bounce,willo-se.mail.protection.outlook.com RCPT 550 5.4.1 Recipient address rejected: Access denied. For more information see https://aka.ms/E
+hr@sterke.dk,wayback,confirmed,sterke-dk.mail.protection.outlook.com RCPT 250

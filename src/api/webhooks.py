@@ -1,9 +1,11 @@
 import hashlib
 import hmac
 import logging
+import uuid
 from typing import Any
 
 from fastapi import APIRouter, Depends, Form, HTTPException, Request
+from fastapi.responses import PlainTextResponse
 from pydantic import BaseModel
 from sqlalchemy import or_, select
 from sqlalchemy.ext.asyncio import AsyncSession
@@ -11,6 +13,7 @@ from sqlalchemy.ext.asyncio import AsyncSession
 from src.config import settings
 from src.database.session import get_db
 from src.database import models as m
+from src.agents.vishing_agent import VishingAgent, VISHING_DISCLOSE_KEY
 
 logger = logging.getLogger("phishguard.webhooks")
 
@@ -118,3 +121,47 @@ async def receive_twilio_status(
     await db.commit()
     logger.info("Processed Twilio status: %s for session %s", CallStatus, CallSid)
     return {"status": "processed"}
+
+
+@router.post("/vishing/gather")
+async def receive_vishing_gather(
+    CallSid: str = Form(...),
+    Digits: str = Form(""),
+    db: AsyncSession = Depends(get_db),
+):
+    session = await db.execute(
+        select(m.VishingSession).where(m.VishingSession.twilio_sid == CallSid)
+    )
+    session = session.scalar_one_or_none()
+    if not session:
+        logger.warning("Vishing gather event for unknown CallSid=%s", CallSid)
+        return PlainTextResponse("<Response></Response>", media_type="text/xml")
+
+    disclosed = Digits.strip() == VISHING_DISCLOSE_KEY
+    await VishingAgent().record_outcome(session.id, disclosed)
+
+    thanks = (
+        "Danke." if disclosed else "Vielen Dank für Ihre Mithilfe."
+    )
+    return PlainTextResponse(
+        f"<Response><Say voice='Polly.Hans' language='de-DE'>{thanks}</Say></Response>",
+        media_type="text/xml",
+    )
+
+
+@router.get("/vishing/twiml")
+@router.post("/vishing/twiml")
+async def serve_vishing_twiml(
+    session_id: str = "",
+    db: AsyncSession = Depends(get_db),
+):
+    try:
+        session_uuid = uuid.UUID(session_id)
+    except (ValueError, AttributeError):
+        return PlainTextResponse("<Response></Response>", media_type="text/xml")
+
+    session = await db.get(m.VishingSession, session_uuid)
+    if not session or not session.twiml:
+        return PlainTextResponse("<Response></Response>", media_type="text/xml")
+
+    return PlainTextResponse(session.twiml, media_type="text/xml")

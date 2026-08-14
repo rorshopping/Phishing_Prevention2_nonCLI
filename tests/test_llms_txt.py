@@ -42,8 +42,13 @@ def test_sitemap_discloses_llms_urls():
 
 
 def test_root_mirrors_static_serving_files():
-    for name in ("robots.txt", "sitemap.xml"):
+    for name in ("robots.txt", "sitemap.xml", "llms.txt", "llms-full.txt"):
         assert _read(name) == _read(f"static/{name}")
+
+
+def test_served_llms_matches_root():
+    assert get_llms_txt() == _read("llms.txt")
+    assert get_llms_full_txt() == _read("llms-full.txt")
 
 
 def test_sitemap_llms_entries_valid_xml():
@@ -83,6 +88,13 @@ def test_llms_txt_reflects_new_sections():
     assert "no sanctions" in content and "security culture" in content
 
 
+def test_llms_txt_reflects_trust_section():
+    content = _read("llms.txt")
+    assert "TLS 1.3" in content
+    assert "90 days" in content and "7 days" in content
+    assert "Frankfurt" in content
+
+
 def test_llms_full_txt_exists_in_repo_root():
     content = _read("llms-full.txt")
     assert content.startswith("# PhishDefend AI")
@@ -105,6 +117,14 @@ def test_llms_full_txt_reflects_new_sections():
     assert "Benchmarks" in content and "140,000" in content
 
 
+def test_llms_full_txt_reflects_trust_section():
+    content = _read("llms-full.txt")
+    assert "Trust & Security" in content
+    assert "TLS 1.3" in content and "Frankfurt" in content
+    assert "90 days" in content and "7 days" in content
+    assert "A.6.3" in content and "A.5.36" in content
+
+
 def test_index_contains_new_sections():
     index = _read("static/index.html")
     for tag in [
@@ -113,9 +133,12 @@ def test_index_contains_new_sections():
         "Vergleich &amp; Alternativen",
         "Mitarbeiter-Sicherheit",
         "Benchmarks &amp; ROI",
+        "Vertrauen &amp; Sicherheit",
     ]:
         assert tag in index, f"missing section tag: {tag}"
     assert "KnowBe4" in index and "SoSafe" in index and "Hoxhunt" in index
+    assert "trust-badge" in index
+    assert "DPA / AVV nach Art. 28 DSGVO" in index
 
 
 def test_index_faq_count_matches_site():
@@ -127,6 +150,51 @@ def test_index_faq_count_matches_site():
 def test_llms_txt_links_to_llms_full():
     content = _read("llms.txt")
     assert "llms-full.txt" in content
+
+
+_PLACEHOLDER_RE = r"YOUR_COMPANY_NAME_HERE|\[your@[^\]]*\]|\[dpo@[^\]]*\]|\[Street[^\]]*\]|\[Postal[^\]]*\]|\[Name[^\]]*\]|\[DE[^\]]*\]|\[[^\]]*(XXX|xxxxx|placeholder|company|email)[^\]]*\]|lorem|TODO|FIXME|REPLACE_WITH"
+
+
+@pytest.mark.parametrize("name", ["llms.txt", "llms-full.txt"])
+def test_llms_files_placeholder_free(name):
+    import re
+
+    content = _read(name)
+    matches = re.findall(_PLACEHOLDER_RE, content, re.IGNORECASE)
+    assert not matches, f"placeholder tokens found in {name}: {matches}"
+
+
+@pytest.mark.parametrize("name", ["llms.txt", "llms-full.txt"])
+def test_llms_files_no_h3_or_deeper_headings(name):
+    import re
+
+    content = _read(name)
+    deep = [ln for ln in content.splitlines() if re.match(r"^#{3,}\s", ln)]
+    assert not deep, f"H3+ headings found in {name}: {deep}"
+
+
+def test_llms_links_resolve_to_existing_static_files():
+    import re
+    from urllib.parse import urlparse
+
+    base = BASE_URL + "/"
+    for name in ("llms.txt", "llms-full.txt"):
+        content = _read(name)
+        for url in re.findall(r"\]\((https?://[^)\s]+)\)", content):
+            assert url.startswith(base), f"{name} links outside canonical domain: {url}"
+            path = url[len(base):]
+            candidates = [
+                path or "index.html",
+                f"{path}.html",
+                path,
+            ]
+            if path.startswith("fonts/"):
+                candidates.append(f"static/{path}")
+            resolved = any(
+                p and Path(__file__).resolve().parent.parent.joinpath(p).exists()
+                for p in candidates
+            )
+            assert resolved, f"{name} link target does not exist in repo: {url}"
 
 
 def test_robots_txt_has_ai_crawler_directives():
@@ -227,6 +295,11 @@ _LLM_QUESTIONS = {
     "Does it support NIS2 and ISO 27001?": [
         "NIS2",
         "ISO 27001",
+    ],
+    "What security standards and trust measures does it meet?": [
+        "TLS",
+        "90 days",
+        "A.6.3",
     ],
     "How does anti-phishing training work?": [
         "2-minute",

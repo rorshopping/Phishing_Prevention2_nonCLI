@@ -1,0 +1,12 @@
+﻿email,priority,verdict,note
+uwe.bretzinger@netplans.de,1,unknown,MX up (hornetsecurity) but 554 IP-reputation block (92.209.189.231) - need API verifier
+p.wurm@sysco.at,1,confirmed,SMTP RCPT 250 (safeguard1.sycloud.at)
+groessmann@rvm.at,1,unknown,MX up but 554 sender-rejected (not on networks) - need API verifier
+schoder@lbua.at,1,bounce,Outlook 550 5.4.1 Recipient address rejected (Access denied)
+alexander.kerkoc@kerkoc.at,1,confirmed,SMTP RCPT 250 (kerkoc-at.mail.protection.outlook.com)
+arash.tehrani@anandic.com,1,confirmed,SMTP RCPT 250 (anandic-com.mail.protection.outlook.com)
+r.ott@robertottag.ch,1,unknown,MX up (hli.ch) but 554 zen.spamhaus block on probe IP - need API verifier
+tiefenthaler@bindergroesswang.at,1,confirmed,SMTP RCPT 250 (bindergroesswang-at.mail.protection.outlook.com)
+khol@bindergroesswang.at,1,confirmed,SMTP RCPT 250 (bindergroesswang-at.mail.protection.outlook.com)
+p.machherndl@pitkowitz.com,1,unknown,MX up (secure-node.at) but 554 SPF reject of probe - need API verifier
+stefantop@avr.be,1,confirmed,SMTP RCPT 250 (avr-be.mail.protection.outlook.com)

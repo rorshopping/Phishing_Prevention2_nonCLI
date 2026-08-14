@@ -13,8 +13,9 @@ from starlette.exceptions import HTTPException as StarletteHTTPException
 from src.config import settings
 from src.database.session import engine
 from src.database.session import Base
-from src.api import clients, campaigns, webhooks, vishing, risk, training, reports, templates, contact
+from src.api import clients, campaigns, webhooks, vishing, risk, training, reports, templates, contact, ops
 from src.agents.orchestrator import Orchestrator
+from src.llms_txt import get_llms_txt, get_llms_full_txt, get_robots_txt
 
 logging.basicConfig(
     level=getattr(logging, settings.log_level.upper(), logging.INFO),
@@ -41,6 +42,8 @@ app.include_router(training.router)
 app.include_router(reports.router)
 app.include_router(templates.router)
 app.include_router(contact.router)
+app.include_router(ops.public_router)
+app.include_router(ops.router)
 
 _orchestrator: Orchestrator | None = None
 _scheduler_task: asyncio.Task | None = None
@@ -72,6 +75,7 @@ async def on_startup():
     if settings.gophish_api_key:
         global _scheduler_task
         _scheduler_task = asyncio.create_task(_scheduler_loop())
+        ops.scheduler_task = _scheduler_task
         logger.info("Background scheduler started")
     else:
         logger.warning("No GOPHISH_API_KEY set — scheduler disabled")
@@ -85,6 +89,7 @@ async def on_shutdown():
             await _scheduler_task
         except asyncio.CancelledError:
             pass
+    ops.scheduler_task = None
     await engine.dispose()
     logger.info("Engine disposed")
 
@@ -118,7 +123,7 @@ async def health():
     }
 
 
-STATIC_DIR = Path(__file__).resolve().parent.parent.parent / "static"
+STATIC_DIR = Path(__file__).resolve().parent.parent / "static"
 STATIC_DIR.mkdir(exist_ok=True)
 
 
@@ -164,27 +169,34 @@ async def dpa_page():
 
 @app.get("/robots.txt", response_class=PlainTextResponse)
 async def robots_txt():
-    return """User-agent: *
-Allow: /
-Sitemap: https://phishdefend-ai.vercel.app/sitemap.xml
-"""
+    return get_robots_txt()
+
+
+@app.get("/llms.txt", response_class=PlainTextResponse)
+async def llms_txt():
+    return get_llms_txt()
+
+
+@app.get("/llms-full.txt", response_class=PlainTextResponse)
+async def llms_full_txt():
+    return get_llms_full_txt()
 
 
 @app.get("/sitemap.xml", response_class=PlainTextResponse)
 async def sitemap_xml():
-    now = "2026-07-30"
-    return f"""<?xml version="1.0" encoding="UTF-8"?>
-<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9"
-        xmlns:xhtml="http://www.w3.org/1999/xhtml">
-  <url><loc>https://phishdefend-ai.vercel.app/</loc><lastmod>{now}</lastmod><changefreq>weekly</changefreq><priority>1.0</priority></url>
-  <url><loc>https://phishdefend-ai.vercel.app/impressum</loc><lastmod>{now}</lastmod><changefreq>monthly</changefreq><priority>0.3</priority></url>
-  <url><loc>https://phishdefend-ai.vercel.app/privacy</loc><lastmod>{now}</lastmod><changefreq>monthly</changefreq><priority>0.5</priority></url>
-  <url><loc>https://phishdefend-ai.vercel.app/data-processing-agreement</loc><lastmod>{now}</lastmod><changefreq>monthly</changefreq><priority>0.4</priority></url>
-</urlset>
-"""
+    sitemap = _read_static("sitemap.xml")
+    return sitemap or "<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n<urlset xmlns=\"http://www.sitemaps.org/schemas/sitemap/0.9\"></urlset>\n"
 
 
 # ---------- static frontend ----------
+
+@app.get("/console", response_class=HTMLResponse)
+async def console_page():
+    html = _read_static("console.html")
+    if not html:
+        return HTMLResponse("<h1>Operations console not found</h1>", status_code=404)
+    return HTMLResponse(html)
+
 
 app.mount("/", StaticFiles(directory=str(STATIC_DIR), html=True), name="static")
 
@@ -203,11 +215,35 @@ async def custom_404_handler(request: Request, exc):
 
 # ---------- middleware ----------
 
+_CACHE_CONTROL_BY_SUFFIX = {
+    ".css": "public, max-age=86400",
+    ".js": "public, max-age=86400",
+    ".svg": "public, max-age=86400",
+    ".png": "public, max-age=86400",
+    ".jpg": "public, max-age=86400",
+    ".jpeg": "public, max-age=86400",
+    ".webp": "public, max-age=86400",
+    ".avif": "public, max-age=86400",
+    ".ico": "public, max-age=86400",
+    ".woff": "public, max-age=31536000, immutable",
+    ".woff2": "public, max-age=31536000, immutable",
+    ".txt": "public, max-age=3600",
+    ".xml": "public, max-age=3600",
+}
+
+
 @app.middleware("http")
 async def log_requests(request: Request, call_next):
     start = time.perf_counter()
     response = await call_next(request)
     elapsed = time.perf_counter() - start
+
+    if response.status_code == 200 and "Cache-Control" not in response.headers:
+        path = request.url.path.lower()
+        suffix = Path(path).suffix
+        if suffix in _CACHE_CONTROL_BY_SUFFIX:
+            response.headers["Cache-Control"] = _CACHE_CONTROL_BY_SUFFIX[suffix]
+
     logger.info(
         "%s %s -> %s (%.3fs)",
         request.method,

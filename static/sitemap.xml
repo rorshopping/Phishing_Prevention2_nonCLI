@@ -3,26 +3,46 @@
         xmlns:xhtml="http://www.w3.org/1999/xhtml">
   <url>
     <loc>https://phishdefend-ai.vercel.app/</loc>
-    <lastmod>2026-07-30</lastmod>
+    <lastmod>2026-08-10</lastmod>
     <changefreq>weekly</changefreq>
     <priority>1.0</priority>
+    <xhtml:link rel="alternate" hreflang="de" href="https://phishdefend-ai.vercel.app/" />
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://phishdefend-ai.vercel.app/" />
   </url>
   <url>
     <loc>https://phishdefend-ai.vercel.app/impressum</loc>
-    <lastmod>2026-07-30</lastmod>
+    <lastmod>2026-08-10</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.3</priority>
+    <xhtml:link rel="alternate" hreflang="de" href="https://phishdefend-ai.vercel.app/impressum" />
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://phishdefend-ai.vercel.app/impressum" />
   </url>
   <url>
     <loc>https://phishdefend-ai.vercel.app/privacy</loc>
-    <lastmod>2026-07-30</lastmod>
+    <lastmod>2026-08-10</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.5</priority>
+    <xhtml:link rel="alternate" hreflang="de" href="https://phishdefend-ai.vercel.app/privacy" />
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://phishdefend-ai.vercel.app/privacy" />
   </url>
   <url>
     <loc>https://phishdefend-ai.vercel.app/data-processing-agreement</loc>
-    <lastmod>2026-07-30</lastmod>
+    <lastmod>2026-08-10</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.4</priority>
+    <xhtml:link rel="alternate" hreflang="de" href="https://phishdefend-ai.vercel.app/data-processing-agreement" />
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://phishdefend-ai.vercel.app/data-processing-agreement" />
+  </url>
+  <url>
+    <loc>https://phishdefend-ai.vercel.app/llms.txt</loc>
+    <lastmod>2026-08-10</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.2</priority>
+  </url>
+  <url>
+    <loc>https://phishdefend-ai.vercel.app/llms-full.txt</loc>
+    <lastmod>2026-08-10</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.2</priority>
   </url>
 </urlset>

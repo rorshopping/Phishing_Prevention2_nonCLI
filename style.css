@@ -22,13 +22,55 @@
   --radius-lg: 20px;
 }
 
+/* Self-hosted variable fonts (Latin) — covers Inter 400–900 & JetBrains Mono 400–500 */
+@font-face {
+  font-family: 'Inter';
+  font-style: normal;
+  font-weight: 400 900;
+  font-display: swap;
+  src: url('/fonts/inter-variable.woff2') format('woff2');
+  unicode-range: U+0000-00FF, U+0131, U+0152-0153, U+02BB-02BC, U+02C6, U+02DA, U+02DC, U+0304, U+0308, U+0329, U+2000-206F, U+20AC, U+2122, U+2191, U+2193, U+2212, U+2215, U+FEFF, U+FFFD;
+}
+
+@font-face {
+  font-family: 'JetBrains Mono';
+  font-style: normal;
+  font-weight: 400 500;
+  font-display: swap;
+  src: url('/fonts/jetbrains-mono-variable.woff2') format('woff2');
+  unicode-range: U+0000-00FF, U+0131, U+0152-0153, U+02BB-02BC, U+02C6, U+02DA, U+02DC, U+0304, U+0308, U+0329, U+2000-206F, U+20AC, U+2122, U+2191, U+2193, U+2212, U+2215, U+FEFF, U+FFFD;
+}
+
+/* Fallback font metrics: match web-font metrics to prevent font-swap CLS */
+@font-face {
+  font-family: 'Inter Fallback';
+  font-style: normal;
+  font-weight: 400 900;
+  src: local('Arial');
+  size-adjust: 108%;
+  ascent-override: 90%;
+  descent-override: 22%;
+  line-gap-override: 0%;
+}
+
+@font-face {
+  font-family: 'JetBrains Mono Fallback';
+  font-style: normal;
+  font-weight: 400 500;
+  src: local('Courier New');
+  size-adjust: 115%;
+  ascent-override: 82%;
+  descent-override: 24%;
+  line-gap-override: 0%;
+}
+
 html {
   scroll-behavior: smooth;
   scroll-padding-top: 80px;
 }
 
 body {
-  font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+  font-family: 'Inter', 'Inter Fallback', system-ui, -apple-system, BlinkMacSystemFont, sans-serif;
   background: var(--bg);
   color: var(--text);
   line-height: 1.6;
@@ -262,7 +304,7 @@ body {
   font-size: 1.75rem;
   font-weight: 800;
   color: var(--accent);
-  font-family: 'JetBrains Mono', monospace;
+  font-family: 'JetBrains Mono', 'JetBrains Mono Fallback', monospace;
 }
 
 .stat-label {
@@ -392,7 +434,7 @@ body {
 }
 
 .step-number {
-  font-family: 'JetBrains Mono', monospace;
+  font-family: 'JetBrains Mono', 'JetBrains Mono Fallback', monospace;
   font-size: 0.75rem;
   font-weight: 700;
   color: var(--accent);
@@ -681,6 +723,47 @@ body {
   opacity: 1;
 }
 
+/* Trust Badges */
+.trust-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+  gap: 16px;
+}
+
+.trust-badge {
+  background: var(--bg-card);
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  padding: 24px 20px;
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  align-items: center;
+  text-align: center;
+  transition: border-color 0.2s, transform 0.2s;
+}
+
+.trust-badge:hover {
+  border-color: var(--accent);
+  transform: translateY(-2px);
+}
+
+.trust-badge-icon {
+  font-size: 1.75rem;
+  line-height: 1;
+}
+
+.trust-badge strong {
+  font-size: 0.9375rem;
+  color: var(--text);
+}
+
+.trust-badge span {
+  font-size: 0.8125rem;
+  color: var(--text-muted);
+  line-height: 1.5;
+}
+
 /* Footer */
 .footer {
   border-top: 1px solid var(--border);
@@ -700,7 +783,8 @@ body {
   margin-top: 12px;
 }
 
-.footer-links h4 {
+.footer-links h4,
+.footer-links h3 {
   font-size: 0.8125rem;
   font-weight: 700;
   text-transform: uppercase;

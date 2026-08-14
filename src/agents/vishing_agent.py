@@ -2,6 +2,7 @@ import uuid
 import logging
 from datetime import datetime
 from typing import Any
+from xml.sax.saxutils import escape as xml_escape
 
 from sqlalchemy import select
 
@@ -23,6 +24,8 @@ VISHING_SCENARIOS = {
     "vendor_call": "Posing as vendor requesting invoice payment",
     "ceo_urgence": "Posing as CEO requesting urgent wire transfer",
 }
+
+VISHING_DISCLOSE_KEY = "1"
 
 
 class VishingAgent(BaseAgent):
@@ -59,24 +62,30 @@ class VishingAgent(BaseAgent):
                 logger.warning("Twilio not configured — simulating vishing call for employee %s", employee_id)
                 return await self._simulate_call(db, employee, campaign, scenario, client_id)
 
+            if settings.vishing_live and settings.app_base_url and settings.azure_speech_key:
+                return await self._trigger_live_call(db, employee, campaign, scenario, client_id)
+
             try:
                 script = await self._generate_script(employee, scenario)
 
                 voice_url = await self._synthesize_script(script.get("text", ""))
 
-                call_sid = await self._place_call(employee, script, voice_url)
+                twiml = self._build_twiml(script, voice_url)
 
                 session = VishingSession(
                     client_id=client_id,
                     employee_id=employee.id,
                     campaign_id=campaign.id if campaign else None,
                     status="in_progress",
-                    twilio_sid=call_sid,
                     ai_used=True,
                     transcript=script.get("text", ""),
+                    twiml=twiml,
                 )
                 db.add(session)
                 await db.flush()
+
+                call_sid = await self._place_call(employee, twiml, session.id)
+                session.twilio_sid = call_sid
 
                 await self._log_action(
                     db,
@@ -154,11 +163,13 @@ class VishingAgent(BaseAgent):
 
     async def _generate_script(self, employee: Employee, scenario: str) -> dict[str, Any]:
         scenario_desc = VISHING_SCENARIOS.get(scenario, "General phishing simulation call")
+        language = settings.language or "de"
         context = {
             "name": employee.name_hash or "valued employee",
             "role": employee.role or "team member",
             "department": employee.department or "our company",
             "scenario": scenario_desc,
+            "language": language,
         }
 
         try:
@@ -166,6 +177,16 @@ class VishingAgent(BaseAgent):
             return script
         except Exception:
             logger.warning("Script generation failed, using fallback")
+            if language == "de":
+                return {
+                    "text": (
+                        f"Hallo {context['name']}, hier ist {context['department']} IT-Sicherheit. "
+                        f"Wir haben ungewöhnliche Aktivitäten auf Ihrem Konto festgestellt. "
+                        f"Bitte verifizieren Sie Ihre Zugangsdaten, indem Sie die 1 auf Ihrer Tastatur drücken. "
+                        f"Dies ist eine automatisierte Sicherheitsprüfung."
+                    ),
+                    "scenario": scenario,
+                }
             return {
                 "text": (
                     f"Hello {context['name']}, this is {context['department']} IT security. "
@@ -184,24 +205,105 @@ class VishingAgent(BaseAgent):
             logger.warning("Voice synthesis failed, using Twilio TTS fallback")
             return None
 
-    async def _place_call(self, employee: Employee, script: dict[str, Any], voice_url: str | None) -> str:
+    async def _place_call(self, employee: Employee, twiml: str, session_id: uuid.UUID | None = None) -> str:
         phone = employee.phone_number
         if not phone:
             logger.error("No phone number set for employee %s; cannot place call", employee.id)
             return ""
 
-        twiml = (
-            f'<Response><Say voice="alice" language="en-US">'
-            f"{script.get('text', '')}"
-            f"</Say></Response>"
-        )
+        url = None
+        base = (settings.app_base_url or "").rstrip("/")
+        if base and session_id:
+            url = f"{base}/webhooks/vishing/twiml?session_id={session_id}"
 
         result = await self.twilio.make_call(
             to=phone,
             twiml=twiml,
-            recording_enabled=True,
+            url=url,
         )
         return result.get("sid", "")
+
+    async def _trigger_live_call(
+        self,
+        db: AsyncSession,
+        employee: Employee,
+        campaign: Campaign | None,
+        scenario: str,
+        client_id: uuid.UUID,
+    ) -> dict[str, Any]:
+        session = VishingSession(
+            client_id=client_id,
+            employee_id=employee.id,
+            campaign_id=campaign.id if campaign else None,
+            status="in_progress",
+            ai_used=True,
+        )
+        db.add(session)
+        await db.flush()
+
+        wss = (
+            settings.app_base_url.replace("https://", "wss://", 1).replace("http://", "ws://", 1)
+        ).rstrip("/")
+        stream_url = f"{wss}/vishing/ws/vishing/{session.id}"
+        twiml = (
+            '<Response><Connect><Stream url="{url}">'
+            '<Parameter name="sessionId" value="{sid}"/>'
+            '<Parameter name="scenario" value="{scenario}"/>'
+            "</Stream></Connect></Response>"
+        ).format(
+            url=xml_escape(stream_url),
+            sid=str(session.id),
+            scenario=xml_escape(scenario),
+        )
+        session.twiml = twiml
+
+        call_sid = await self._place_call(employee, twiml, session.id)
+        session.twilio_sid = call_sid
+
+        await self._log_action(
+            db,
+            client_id,
+            "vishing_call_triggered",
+            {
+                "session_id": str(session.id),
+                "employee_id": str(employee.id),
+                "scenario": scenario,
+                "twilio_sid": call_sid,
+                "live": True,
+            },
+        )
+        await db.commit()
+
+        return {
+            "session_id": str(session.id),
+            "twilio_sid": call_sid,
+            "status": "in_progress",
+            "scenario": scenario,
+            "live": True,
+        }
+
+    def _build_twiml(self, script: dict[str, Any], voice_url: str | None) -> str:
+        if voice_url:
+            content = f"<Play>{xml_escape(voice_url)}</Play>"
+        else:
+            content = (
+                '<Say voice="Polly.Hans" language="de-DE">'
+                f"{xml_escape(script.get('text', ''))}"
+                "</Say>"
+            )
+
+        base = (settings.app_base_url or "").rstrip("/")
+        if not base:
+            logger.warning("APP_BASE_URL not set — no DTMF outcome capture for this call")
+            return f"<Response>{content}</Response>"
+
+        action = f"{base}/webhooks/vishing/gather"
+        return (
+            '<Response><Gather input="dtmf" numDigits="1" timeout="5" '
+            f'action="{xml_escape(action)}" method="POST">'
+            f"{content}"
+            "</Gather></Response>"
+        )
 
     async def _simulate_call(
         self,

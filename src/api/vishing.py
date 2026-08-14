@@ -2,13 +2,14 @@ import uuid
 import logging
 from typing import Optional
 
-from fastapi import APIRouter, Depends, HTTPException
+from fastapi import APIRouter, Depends, HTTPException, WebSocket
 from pydantic import BaseModel
 from sqlalchemy.ext.asyncio import AsyncSession
 
-from src.database.session import get_db
+from src.database.session import get_db, async_session
 from src.database import models as m
 from src.agents.vishing_agent import VishingAgent
+from src.services.live_voice import LiveVishingCaller
 
 logger = logging.getLogger(__name__)
 
@@ -36,3 +37,22 @@ async def trigger_vishing(body: VishingTrigger, db: AsyncSession = Depends(get_d
     if "error" in result:
         raise HTTPException(status_code=500, detail=result["error"])
     return result
+
+
+@router.websocket("/ws/vishing/{session_id}")
+async def vishing_stream(websocket: WebSocket, session_id: str):
+    await websocket.accept()
+    try:
+        session_uuid = uuid.UUID(session_id)
+    except ValueError:
+        await websocket.close(code=1008)
+        return
+
+    async with async_session() as db:
+        session = await db.get(m.VishingSession, session_uuid)
+    if not session:
+        await websocket.close(code=1008)
+        return
+
+    caller = LiveVishingCaller(str(session_uuid))
+    await caller.run(websocket)

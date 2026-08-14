@@ -17,23 +17,42 @@ class TwilioService:
             self.client = TwilioRestClient(settings.twilio_account_sid, settings.twilio_auth_token)
 
     async def make_call(
-        self, to: str, twiml: str, recording_enabled: bool = False
+        self,
+        to: str,
+        twiml: str | None = None,
+        url: str | None = None,
+        recording_enabled: bool = False,
     ) -> dict[str, Any]:
         if not self.client:
             logger.warning("Twilio not configured; returning mock call result")
             return {"sid": "mock-sid", "status": "queued"}
 
         try:
-            call = await asyncio.to_thread(
-                self.client.calls.create,
-                to=to,
-                from_=settings.twilio_phone_number,
-                twiml=twiml,
-                record=recording_enabled,
-            )
+            kwargs: dict[str, Any] = {
+                "to": to,
+                "from_": settings.twilio_phone_number,
+            }
+            if recording_enabled:
+                kwargs["record"] = True
+            if url:
+                kwargs["url"] = url
+            else:
+                kwargs["twiml"] = twiml or "<Response/>"
+            call = await asyncio.to_thread(self.client.calls.create, **kwargs)
             return {"sid": call.sid, "status": call.status}
         except TwilioRestException as e:
             logger.error("Twilio call failed: %s", e)
+            raise
+
+    async def hang_up(self, call_sid: str) -> None:
+        if not self.client:
+            return
+        try:
+            await asyncio.to_thread(
+                lambda: self.client.calls(call_sid).update(status="completed")
+            )
+        except TwilioRestException as e:
+            logger.error("Twilio hangup failed: %s", e)
             raise
 
     async def get_call_status(self, call_sid: str) -> dict[str, Any]:

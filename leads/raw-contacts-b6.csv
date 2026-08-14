@@ -1,0 +1,35 @@
+company,website,contact_role,email,source_url,status
+IT-Total Sweden AB,https://it-total.se/,role: General/Contact,info@it-total.se,https://www.it-total.se/kontakt/,collected
+IT-Total Sweden AB,https://it-total.se/,role: Servicedesk,servicedesk@it-total.se,https://www.it-total.se/kontakt/,collected
+IT-Total Sweden AB,https://it-total.se/,role: Order & Sales Management,order@it-total.se,https://www.it-total.se/kontakt/,collected
+IT-Total Sweden AB,https://it-total.se/,role: Ekonomi (Finance),ekonomi@it-total.se,https://www.it-total.se/kontakt/,collected
+Basalt AB,https://basalt.se/,role: Press (media),press@basalt.se,https://basalt.se/kontakt/,collected
+Basalt AB,https://basalt.se/,role: Dataskydd (GDPR),dataskydd@basalt.se,https://basalt.se/integritetspolicy/,collected
+immeo,https://immeo.dk/,role: General/Contact,info@immeo.dk,https://immeo.dk/kontakt-os/,collected
+immeo,https://immeo.dk/,"person: Ivan Beltoft, Partner Forretningsudvikling",ibe@immeo.dk,https://immeo.dk/om-os/,collected
+immeo,https://immeo.dk/,"person: Simon Aisen, Partner Strategisk rådgivning",sai@immeo.dk,https://immeo.dk/om-os/,collected
+immeo,https://immeo.dk/,"person: Daniel Nørgaard, Partner Strategisk rådgivning",dno@immeo.dk,https://immeo.dk/om-os/,collected
+immeo,https://immeo.dk/,"person: Dennis Kristensen, Partner CEO",dek@immeo.dk,https://immeo.dk/om-os/,collected
+immeo,https://immeo.dk/,"person: Lene Court-Payen, Director Corporate Services & Operation",lpa@immeo.dk,https://immeo.dk/om-os/,collected
+immeo,https://immeo.dk/,"person: Peter Plauborg, Partner Aarhus",ppl@immeo.dk,https://immeo.dk/om-os/,collected
+immeo,https://immeo.dk/,"person: Christina Sophie Worsøe, Director Digital Strategy & Experiences",cwo@immeo.dk,https://immeo.dk/om-os/,collected
+immeo,https://immeo.dk/,"person: Peter Wind, Partner Core Systems & Integrations",pwi@immeo.dk,https://immeo.dk/om-os/,collected
+immeo,https://immeo.dk/,"person: Rasmus Corlin, Director Technology & Architecture",rco@immeo.dk,https://immeo.dk/om-os/,collected
+immeo,https://immeo.dk/,"person: Niels Ferdinand Karstensen, Partner Business Applications & CRM",nfk@immeo.dk,https://immeo.dk/om-os/,collected
+immeo,https://immeo.dk/,"person: Michael Krogh-Schlichter, Director Customer Engagement & Commerce",mik@immeo.dk,https://immeo.dk/om-os/,collected
+KOLLAB,https://kollab.dk/,role: General/Contact,kontakt@kollab.dk,https://kollab.dk/kontakt/,collected
+KOLLAB,https://kollab.dk/,person: Carsten Sixhøi CEO,cs@kollab.dk,https://kollab.dk/kontakt/,collected
+KOLLAB,https://kollab.dk/,person: Michael Lehd Deputy CEO,ml@kollab.dk,https://kollab.dk/kontakt/,collected
+KOLLAB,https://kollab.dk/,person: Lisbeth Rækby Jepsen COO,lrj@kollab.dk,https://kollab.dk/kontakt/,collected
+KOLLAB,https://kollab.dk/,person: Thomas Blak VP Application,tb@kollab.dk,https://kollab.dk/kontakt/,collected
+KOLLAB,https://kollab.dk/,person: Michael Toft Director Application,mt@kollab.dk,https://kollab.dk/kontakt/,collected
+KOLLAB,https://kollab.dk/,person: Johannes Tange Jørgensen Sales Director Application,jtj@kollab.dk,https://kollab.dk/kontakt/,collected
+KOLLAB,https://kollab.dk/,person: Peter Tolstrup Holm Sales Manager Food & Beverage,pth@kollab.dk,https://kollab.dk/kontakt/,collected
+KOLLAB,https://kollab.dk/,person: Steffen Zwicki Meulengracht Director Services,szm@kollab.dk,https://kollab.dk/kontakt/,collected
+KOLLAB,https://kollab.dk/,person: Camilla Boymler Sønderup Business Advisor,cbs@kollab.dk,https://kollab.dk/kontakt/,collected
+KOLLAB,https://kollab.dk/,person: Henrik Thorn Director Innovation,hth@kollab.dk,https://kollab.dk/kontakt/,collected
+KOLLAB,https://kollab.dk/,person: René Giese Sales Director Innovation,rg@kollab.dk,https://kollab.dk/kontakt/,collected
+KOLLAB,https://kollab.dk/,person: Sandra Hoffmann Senior Sales Specialist,sho@kollab.dk,https://kollab.dk/kontakt/,collected
+KOLLAB,https://kollab.dk/,person: Julie Ravn-Nielsen Creative Director,jrn@kollab.dk,https://kollab.dk/kontakt/,collected
+KOLLAB,https://kollab.dk/,person: Helle Førgaard Director Matching,hf@kollab.dk,https://kollab.dk/kontakt/,collected
+KOLLAB,https://kollab.dk/,person: Kathrine Lomholt Bahnsen Client Success Manager,klb@kollab.dk,https://kollab.dk/kontakt/,collected

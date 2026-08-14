@@ -1,0 +1,124 @@
+﻿id,company,lead_name,email,persona,touch,cadence_day,scheduled_date,window_start,window_end,timezone,template
+1,ARTUS Unicon AG,Dieter Schaeublin,dieter.schaeublin@artus-gruppe.com,SMB owner,Day 0,D+0,2026-08-11,09:30,09:45,CEST,Template 1 - SMB Owner (initial email)
+2,ARTUS Unicon AG,Dieter Schaeublin,dieter.schaeublin@artus-gruppe.com,SMB owner,Day 3,D+3,2026-08-18,09:30,09:45,CEST,Template 1 - SMB Owner Follow-Up 1
+3,ARTUS Unicon AG,Dieter Schaeublin,dieter.schaeublin@artus-gruppe.com,SMB owner,Day 7,D+7,2026-08-19,09:30,09:45,CEST,Template 1 - SMB Owner Follow-Up 2
+4,ARTUS Unicon AG,Jens Frank,jens.frank@artus-gruppe.com,SMB owner,Day 0,D+0,2026-08-12,09:30,09:45,CEST,Template 1 - SMB Owner (initial email)
+5,ARTUS Unicon AG,Jens Frank,jens.frank@artus-gruppe.com,SMB owner,Day 3,D+3,2026-08-18,09:50,10:05,CEST,Template 1 - SMB Owner Follow-Up 1
+6,ARTUS Unicon AG,Jens Frank,jens.frank@artus-gruppe.com,SMB owner,Day 7,D+7,2026-08-19,09:50,10:05,CEST,Template 1 - SMB Owner Follow-Up 2
+7,ASSEPRO Brokerage AG,Christoph Wirz,christoph.wirz@assepro.com,SMB owner,Day 0,D+0,2026-08-13,09:30,09:45,CEST,Template 1 - SMB Owner (initial email)
+8,ASSEPRO Brokerage AG,Christoph Wirz,christoph.wirz@assepro.com,SMB owner,Day 3,D+3,2026-08-18,10:10,10:25,CEST,Template 1 - SMB Owner Follow-Up 1
+9,ASSEPRO Brokerage AG,Christoph Wirz,christoph.wirz@assepro.com,SMB owner,Day 7,D+7,2026-08-20,09:30,09:45,CEST,Template 1 - SMB Owner Follow-Up 2
+10,ASSEPRO Brokerage AG,Daniela Buettiker,daniela.buettiker@assepro.com,SMB owner,Day 0,D+0,2026-08-18,10:30,10:45,CEST,Template 1 - SMB Owner (initial email)
+11,ASSEPRO Brokerage AG,Daniela Buettiker,daniela.buettiker@assepro.com,SMB owner,Day 3,D+3,2026-08-25,09:30,09:45,CEST,Template 1 - SMB Owner Follow-Up 1
+12,ASSEPRO Brokerage AG,Daniela Buettiker,daniela.buettiker@assepro.com,SMB owner,Day 7,D+7,2026-08-26,09:30,09:45,CEST,Template 1 - SMB Owner Follow-Up 2
+13,ASSEPRO Brokerage AG,Delia Steinbrueck,delia.steinbrueck@assepro.com,SMB owner,Day 0,D+0,2026-08-19,10:10,10:25,CEST,Template 1 - SMB Owner (initial email)
+14,ASSEPRO Brokerage AG,Delia Steinbrueck,delia.steinbrueck@assepro.com,SMB owner,Day 3,D+3,2026-08-25,09:50,10:05,CEST,Template 1 - SMB Owner Follow-Up 1
+15,ASSEPRO Brokerage AG,Delia Steinbrueck,delia.steinbrueck@assepro.com,SMB owner,Day 7,D+7,2026-08-26,09:50,10:05,CEST,Template 1 - SMB Owner Follow-Up 2
+16,ASSEPRO Brokerage AG,Eduardt Latifi,eduardt.latifi@assepro.com,SMB owner,Day 0,D+0,2026-08-20,09:50,10:05,CEST,Template 1 - SMB Owner (initial email)
+17,ASSEPRO Brokerage AG,Eduardt Latifi,eduardt.latifi@assepro.com,SMB owner,Day 3,D+3,2026-08-25,10:10,10:25,CEST,Template 1 - SMB Owner Follow-Up 1
+18,ASSEPRO Brokerage AG,Eduardt Latifi,eduardt.latifi@assepro.com,SMB owner,Day 7,D+7,2026-08-27,09:30,09:45,CEST,Template 1 - SMB Owner Follow-Up 2
+19,ASSEPRO Brokerage AG,Patricia Peyer,patricia.peyer@assepro.com,SMB owner,Day 0,D+0,2026-08-11,09:50,10:05,CEST,Template 1 - SMB Owner (initial email)
+20,ASSEPRO Brokerage AG,Patricia Peyer,patricia.peyer@assepro.com,SMB owner,Day 3,D+3,2026-08-18,10:50,11:05,CEST,Template 1 - SMB Owner Follow-Up 1
+21,ASSEPRO Brokerage AG,Patricia Peyer,patricia.peyer@assepro.com,SMB owner,Day 7,D+7,2026-08-19,10:30,10:45,CEST,Template 1 - SMB Owner Follow-Up 2
+22,ASSEPRO Brokerage AG,Peter Stehrenberger,peter.stehrenberger@assepro.com,SMB owner,Day 0,D+0,2026-08-12,09:50,10:05,CEST,Template 1 - SMB Owner (initial email)
+23,ASSEPRO Brokerage AG,Peter Stehrenberger,peter.stehrenberger@assepro.com,SMB owner,Day 3,D+3,2026-08-18,11:10,11:25,CEST,Template 1 - SMB Owner Follow-Up 1
+24,ASSEPRO Brokerage AG,Peter Stehrenberger,peter.stehrenberger@assepro.com,SMB owner,Day 7,D+7,2026-08-19,10:50,11:05,CEST,Template 1 - SMB Owner Follow-Up 2
+25,ASSEPRO Brokerage AG,Philipp Forster,philipp.forster@assepro.com,SMB owner,Day 0,D+0,2026-08-13,09:50,10:05,CEST,Template 1 - SMB Owner (initial email)
+26,ASSEPRO Brokerage AG,Philipp Forster,philipp.forster@assepro.com,SMB owner,Day 3,D+3,2026-08-18,13:30,13:45,CEST,Template 1 - SMB Owner Follow-Up 1
+27,ASSEPRO Brokerage AG,Philipp Forster,philipp.forster@assepro.com,SMB owner,Day 7,D+7,2026-08-20,10:10,10:25,CEST,Template 1 - SMB Owner Follow-Up 2
+28,ASSEPRO Brokerage AG,Sandra Hunold,sandra.hunold@assepro.com,SMB owner,Day 0,D+0,2026-08-18,13:50,14:05,CEST,Template 1 - SMB Owner (initial email)
+29,ASSEPRO Brokerage AG,Sandra Hunold,sandra.hunold@assepro.com,SMB owner,Day 3,D+3,2026-08-25,10:30,10:45,CEST,Template 1 - SMB Owner Follow-Up 1
+30,ASSEPRO Brokerage AG,Sandra Hunold,sandra.hunold@assepro.com,SMB owner,Day 7,D+7,2026-08-26,10:10,10:25,CEST,Template 1 - SMB Owner Follow-Up 2
+31,ASSEPRO Brokerage AG,Thomas Mezera,thomas.mezera@assepro.com,SMB owner,Day 0,D+0,2026-08-19,11:10,11:25,CEST,Template 1 - SMB Owner (initial email)
+32,ASSEPRO Brokerage AG,Thomas Mezera,thomas.mezera@assepro.com,SMB owner,Day 3,D+3,2026-08-25,10:50,11:05,CEST,Template 1 - SMB Owner Follow-Up 1
+33,ASSEPRO Brokerage AG,Thomas Mezera,thomas.mezera@assepro.com,SMB owner,Day 7,D+7,2026-08-26,10:30,10:45,CEST,Template 1 - SMB Owner Follow-Up 2
+34,ASSEPRO Brokerage AG,Vera Blum,vera.blum@assepro.com,SMB owner,Day 0,D+0,2026-08-20,10:30,10:45,CEST,Template 1 - SMB Owner (initial email)
+35,ASSEPRO Brokerage AG,Vera Blum,vera.blum@assepro.com,SMB owner,Day 3,D+3,2026-08-25,11:10,11:25,CEST,Template 1 - SMB Owner Follow-Up 1
+36,ASSEPRO Brokerage AG,Vera Blum,vera.blum@assepro.com,SMB owner,Day 7,D+7,2026-08-27,09:50,10:05,CEST,Template 1 - SMB Owner Follow-Up 2
+37,ASSON Versicherungs- und Finanzmakler GmbH,Marc Loreth,loreth@asson.de,SMB owner,Day 0,D+0,2026-08-11,10:10,10:25,CEST,Template 1 - SMB Owner (initial email)
+38,ASSON Versicherungs- und Finanzmakler GmbH,Marc Loreth,loreth@asson.de,SMB owner,Day 3,D+3,2026-08-18,14:10,14:25,CEST,Template 1 - SMB Owner Follow-Up 1
+39,ASSON Versicherungs- und Finanzmakler GmbH,Marc Loreth,loreth@asson.de,SMB owner,Day 7,D+7,2026-08-19,13:30,13:45,CEST,Template 1 - SMB Owner Follow-Up 2
+40,Eggers Spedition GmbH,Christoph Eggers,cheggers@eggers-spedition.de,SMB owner,Day 0,D+0,2026-08-12,10:10,10:25,CEST,Template 1 - SMB Owner (initial email)
+41,Eggers Spedition GmbH,Christoph Eggers,cheggers@eggers-spedition.de,SMB owner,Day 3,D+3,2026-08-18,14:30,14:45,CEST,Template 1 - SMB Owner Follow-Up 1
+42,Eggers Spedition GmbH,Christoph Eggers,cheggers@eggers-spedition.de,SMB owner,Day 7,D+7,2026-08-19,13:50,14:05,CEST,Template 1 - SMB Owner Follow-Up 2
+43,IT-HAUS GmbH,Tim Holste,tholste@it-haus.com,IT manager,Day 0,D+0,2026-08-13,10:10,10:25,CEST,Template 2 - IT Manager (initial email)
+44,IT-HAUS GmbH,Tim Holste,tholste@it-haus.com,IT manager,Day 3,D+3,2026-08-18,14:50,15:05,CEST,Template 2 - IT Manager Follow-Up 1
+45,IT-HAUS GmbH,Tim Holste,tholste@it-haus.com,IT manager,Day 7,D+7,2026-08-20,10:50,11:05,CEST,Template 2 - IT Manager Follow-Up 2
+46,Medizintechnik Rostock GmbH,Andreas Markschies,a.markschies@mtronline.de,SMB owner,Day 0,D+0,2026-08-18,15:10,15:25,CEST,Template 1 - SMB Owner (initial email)
+47,Medizintechnik Rostock GmbH,Andreas Markschies,a.markschies@mtronline.de,SMB owner,Day 3,D+3,2026-08-25,13:30,13:45,CEST,Template 1 - SMB Owner Follow-Up 1
+48,Medizintechnik Rostock GmbH,Andreas Markschies,a.markschies@mtronline.de,SMB owner,Day 7,D+7,2026-08-26,10:50,11:05,CEST,Template 1 - SMB Owner Follow-Up 2
+49,Medizintechnik Rostock GmbH,Matthias Liewehr,m.liewehr@mtronline.de,SMB owner,Day 0,D+0,2026-08-19,14:10,14:25,CEST,Template 1 - SMB Owner (initial email)
+50,Medizintechnik Rostock GmbH,Matthias Liewehr,m.liewehr@mtronline.de,SMB owner,Day 3,D+3,2026-08-25,13:50,14:05,CEST,Template 1 - SMB Owner Follow-Up 1
+51,Medizintechnik Rostock GmbH,Matthias Liewehr,m.liewehr@mtronline.de,SMB owner,Day 7,D+7,2026-08-26,11:10,11:25,CEST,Template 1 - SMB Owner Follow-Up 2
+52,NetPlans GmbH,Sascha Collin,sascha.collin@netplans.de,SMB owner,Day 0,D+0,2026-08-20,11:10,11:25,CEST,Template 1 - SMB Owner (initial email)
+53,NetPlans GmbH,Sascha Collin,sascha.collin@netplans.de,SMB owner,Day 3,D+3,2026-08-25,14:10,14:25,CEST,Template 1 - SMB Owner Follow-Up 1
+54,NetPlans GmbH,Sascha Collin,sascha.collin@netplans.de,SMB owner,Day 7,D+7,2026-08-27,10:10,10:25,CEST,Template 1 - SMB Owner Follow-Up 2
+55,Nösse Datentechnik GmbH & Co. KG,Matthias Erhard,m.erhard@noesse.de,SMB owner,Day 0,D+0,2026-08-11,10:30,10:45,CEST,Template 1 - SMB Owner (initial email)
+56,Nösse Datentechnik GmbH & Co. KG,Matthias Erhard,m.erhard@noesse.de,SMB owner,Day 3,D+3,2026-08-18,15:30,15:45,CEST,Template 1 - SMB Owner Follow-Up 1
+57,Nösse Datentechnik GmbH & Co. KG,Matthias Erhard,m.erhard@noesse.de,SMB owner,Day 7,D+7,2026-08-19,14:30,14:45,CEST,Template 1 - SMB Owner Follow-Up 2
+58,ORBIT IT-Solutions GmbH,Tobias Hejna,tobias.hejna@orbit.de,SMB owner,Day 0,D+0,2026-08-12,10:30,10:45,CEST,Template 1 - SMB Owner (initial email)
+59,ORBIT IT-Solutions GmbH,Tobias Hejna,tobias.hejna@orbit.de,SMB owner,Day 3,D+3,2026-08-18,09:30,09:45,CEST,Template 1 - SMB Owner Follow-Up 1
+60,ORBIT IT-Solutions GmbH,Tobias Hejna,tobias.hejna@orbit.de,SMB owner,Day 7,D+7,2026-08-19,14:50,15:05,CEST,Template 1 - SMB Owner Follow-Up 2
+61,RCU Versicherungsmakler GmbH,Michael Gick,m.gick@rcu-versicherungsmakler.de,SMB owner,Day 0,D+0,2026-08-13,10:30,10:45,CEST,Template 1 - SMB Owner (initial email)
+62,RCU Versicherungsmakler GmbH,Michael Gick,m.gick@rcu-versicherungsmakler.de,SMB owner,Day 3,D+3,2026-08-18,09:50,10:05,CEST,Template 1 - SMB Owner Follow-Up 1
+63,RCU Versicherungsmakler GmbH,Michael Gick,m.gick@rcu-versicherungsmakler.de,SMB owner,Day 7,D+7,2026-08-20,13:30,13:45,CEST,Template 1 - SMB Owner Follow-Up 2
+64,RCU Versicherungsmakler GmbH,Wolfgang Abels,w.abels@rcu-versicherungsmakler.de,SMB owner,Day 0,D+0,2026-08-18,10:10,10:25,CEST,Template 1 - SMB Owner (initial email)
+65,RCU Versicherungsmakler GmbH,Wolfgang Abels,w.abels@rcu-versicherungsmakler.de,SMB owner,Day 3,D+3,2026-08-25,14:30,14:45,CEST,Template 1 - SMB Owner Follow-Up 1
+66,RCU Versicherungsmakler GmbH,Wolfgang Abels,w.abels@rcu-versicherungsmakler.de,SMB owner,Day 7,D+7,2026-08-26,13:30,13:45,CEST,Template 1 - SMB Owner Follow-Up 2
+67,RVM Versicherungsmakler GmbH,Andreas Haberstock,andreas.haberstock@rvm.de,SMB owner,Day 0,D+0,2026-08-19,15:10,15:25,CEST,Template 1 - SMB Owner (initial email)
+68,RVM Versicherungsmakler GmbH,Andreas Haberstock,andreas.haberstock@rvm.de,SMB owner,Day 3,D+3,2026-08-25,14:50,15:05,CEST,Template 1 - SMB Owner Follow-Up 1
+69,RVM Versicherungsmakler GmbH,Andreas Haberstock,andreas.haberstock@rvm.de,SMB owner,Day 7,D+7,2026-08-26,13:50,14:05,CEST,Template 1 - SMB Owner Follow-Up 2
+70,RVM Versicherungsmakler GmbH,Katharina Bastians,katharina.bastians@rvm.de,SMB owner,Day 0,D+0,2026-08-20,13:50,14:05,CEST,Template 1 - SMB Owner (initial email)
+71,RVM Versicherungsmakler GmbH,Katharina Bastians,katharina.bastians@rvm.de,SMB owner,Day 3,D+3,2026-08-25,15:10,15:25,CEST,Template 1 - SMB Owner Follow-Up 1
+72,RVM Versicherungsmakler GmbH,Katharina Bastians,katharina.bastians@rvm.de,SMB owner,Day 7,D+7,2026-08-27,10:30,10:45,CEST,Template 1 - SMB Owner Follow-Up 2
+73,RVM Versicherungsmakler GmbH,Manuel Soares,manuel.soares@rvm.de,SMB owner,Day 0,D+0,2026-08-11,10:50,11:05,CEST,Template 1 - SMB Owner (initial email)
+74,RVM Versicherungsmakler GmbH,Manuel Soares,manuel.soares@rvm.de,SMB owner,Day 3,D+3,2026-08-18,10:30,10:45,CEST,Template 1 - SMB Owner Follow-Up 1
+75,RVM Versicherungsmakler GmbH,Manuel Soares,manuel.soares@rvm.de,SMB owner,Day 7,D+7,2026-08-19,15:30,15:45,CEST,Template 1 - SMB Owner Follow-Up 2
+76,RVM Versicherungsmakler GmbH,Oliver Scholl,oliver.scholl@rvm.de,SMB owner,Day 0,D+0,2026-08-12,10:50,11:05,CEST,Template 1 - SMB Owner (initial email)
+77,RVM Versicherungsmakler GmbH,Oliver Scholl,oliver.scholl@rvm.de,SMB owner,Day 3,D+3,2026-08-18,10:50,11:05,CEST,Template 1 - SMB Owner Follow-Up 1
+78,RVM Versicherungsmakler GmbH,Oliver Scholl,oliver.scholl@rvm.de,SMB owner,Day 7,D+7,2026-08-19,09:30,09:45,CEST,Template 1 - SMB Owner Follow-Up 2
+79,RVM Versicherungsmakler GmbH,Joachim Roth,roth@rvm.de,SMB owner,Day 0,D+0,2026-08-13,10:50,11:05,CEST,Template 1 - SMB Owner (initial email)
+80,RVM Versicherungsmakler GmbH,Joachim Roth,roth@rvm.de,SMB owner,Day 3,D+3,2026-08-18,11:10,11:25,CEST,Template 1 - SMB Owner Follow-Up 1
+81,RVM Versicherungsmakler GmbH,Joachim Roth,roth@rvm.de,SMB owner,Day 7,D+7,2026-08-20,14:10,14:25,CEST,Template 1 - SMB Owner Follow-Up 2
+82,RVM Versicherungsmakler GmbH,Thomas Kalbacher,thomas.kalbacher@rvm.de,SMB owner,Day 0,D+0,2026-08-18,13:30,13:45,CEST,Template 1 - SMB Owner (initial email)
+83,RVM Versicherungsmakler GmbH,Thomas Kalbacher,thomas.kalbacher@rvm.de,SMB owner,Day 3,D+3,2026-08-25,15:30,15:45,CEST,Template 1 - SMB Owner Follow-Up 1
+84,RVM Versicherungsmakler GmbH,Thomas Kalbacher,thomas.kalbacher@rvm.de,SMB owner,Day 7,D+7,2026-08-26,14:10,14:25,CEST,Template 1 - SMB Owner Follow-Up 2
+85,RVM Versicherungsmakler GmbH,Uwe Janicki,uwe.janicki@rvm.de,SMB owner,Day 0,D+0,2026-08-19,09:50,10:05,CEST,Template 1 - SMB Owner (initial email)
+86,RVM Versicherungsmakler GmbH,Uwe Janicki,uwe.janicki@rvm.de,SMB owner,Day 3,D+3,2026-08-25,09:30,09:45,CEST,Template 1 - SMB Owner Follow-Up 1
+87,RVM Versicherungsmakler GmbH,Uwe Janicki,uwe.janicki@rvm.de,SMB owner,Day 7,D+7,2026-08-26,14:30,14:45,CEST,Template 1 - SMB Owner Follow-Up 2
+88,Sumec AG,Dominik Schneeberger,d.schneeberger@sumec.ch,SMB owner,Day 0,D+0,2026-08-20,14:30,14:45,CEST,Template 1 - SMB Owner (initial email)
+89,Sumec AG,Dominik Schneeberger,d.schneeberger@sumec.ch,SMB owner,Day 3,D+3,2026-08-25,09:50,10:05,CEST,Template 1 - SMB Owner Follow-Up 1
+90,Sumec AG,Dominik Schneeberger,d.schneeberger@sumec.ch,SMB owner,Day 7,D+7,2026-08-27,10:50,11:05,CEST,Template 1 - SMB Owner Follow-Up 2
+91,Sumec AG,Tobias Schenk,t.schenk@sumec.ch,SMB owner,Day 0,D+0,2026-08-11,11:10,11:25,CEST,Template 1 - SMB Owner (initial email)
+92,Sumec AG,Tobias Schenk,t.schenk@sumec.ch,SMB owner,Day 3,D+3,2026-08-18,13:50,14:05,CEST,Template 1 - SMB Owner Follow-Up 1
+93,Sumec AG,Tobias Schenk,t.schenk@sumec.ch,SMB owner,Day 7,D+7,2026-08-19,10:10,10:25,CEST,Template 1 - SMB Owner Follow-Up 2
+94,SÜDVERS GmbH,Florian Karle,florian.karle@suedvers.de,SMB owner,Day 0,D+0,2026-08-12,11:10,11:25,CEST,Template 1 - SMB Owner (initial email)
+95,SÜDVERS GmbH,Florian Karle,florian.karle@suedvers.de,SMB owner,Day 3,D+3,2026-08-18,14:10,14:25,CEST,Template 1 - SMB Owner Follow-Up 1
+96,SÜDVERS GmbH,Florian Karle,florian.karle@suedvers.de,SMB owner,Day 7,D+7,2026-08-19,10:30,10:45,CEST,Template 1 - SMB Owner Follow-Up 2
+97,SÜDVERS GmbH,Manfred Karle,manfred.karle@suedvers.de,SMB owner,Day 0,D+0,2026-08-13,11:10,11:25,CEST,Template 1 - SMB Owner (initial email)
+98,SÜDVERS GmbH,Manfred Karle,manfred.karle@suedvers.de,SMB owner,Day 3,D+3,2026-08-18,14:30,14:45,CEST,Template 1 - SMB Owner Follow-Up 1
+99,SÜDVERS GmbH,Manfred Karle,manfred.karle@suedvers.de,SMB owner,Day 7,D+7,2026-08-20,14:50,15:05,CEST,Template 1 - SMB Owner Follow-Up 2
+100,SÜDVERS GmbH,Ralf Bender,ralf.bender@suedvers.de,SMB owner,Day 0,D+0,2026-08-18,14:50,15:05,CEST,Template 1 - SMB Owner (initial email)
+101,SÜDVERS GmbH,Ralf Bender,ralf.bender@suedvers.de,SMB owner,Day 3,D+3,2026-08-25,10:10,10:25,CEST,Template 1 - SMB Owner Follow-Up 1
+102,SÜDVERS GmbH,Ralf Bender,ralf.bender@suedvers.de,SMB owner,Day 7,D+7,2026-08-26,14:50,15:05,CEST,Template 1 - SMB Owner Follow-Up 2
+103,TISA Speditions AG,Markus Schrott,markus.schrott@tisa-logistik.de,SMB owner,Day 0,D+0,2026-08-19,10:50,11:05,CEST,Template 1 - SMB Owner (initial email)
+104,TISA Speditions AG,Markus Schrott,markus.schrott@tisa-logistik.de,SMB owner,Day 3,D+3,2026-08-25,10:30,10:45,CEST,Template 1 - SMB Owner Follow-Up 1
+105,TISA Speditions AG,Markus Schrott,markus.schrott@tisa-logistik.de,SMB owner,Day 7,D+7,2026-08-26,15:10,15:25,CEST,Template 1 - SMB Owner Follow-Up 2
+106,TISA Speditions AG,Markus Schrott,markus.schrott@tisa.at,SMB owner,Day 0,D+0,2026-08-20,15:10,15:25,CEST,Template 1 - SMB Owner (initial email)
+107,TISA Speditions AG,Markus Schrott,markus.schrott@tisa.at,SMB owner,Day 3,D+3,2026-08-25,10:50,11:05,CEST,Template 1 - SMB Owner Follow-Up 1
+108,TISA Speditions AG,Markus Schrott,markus.schrott@tisa.at,SMB owner,Day 7,D+7,2026-08-27,11:10,11:25,CEST,Template 1 - SMB Owner Follow-Up 2
+109,TISA Speditions AG,Michaela Adami-Schrott,michaela.adami-schrott@tisa.ch,SMB owner,Day 0,D+0,2026-08-11,13:30,13:45,CEST,Template 1 - SMB Owner (initial email)
+110,TISA Speditions AG,Michaela Adami-Schrott,michaela.adami-schrott@tisa.ch,SMB owner,Day 3,D+3,2026-08-18,15:10,15:25,CEST,Template 1 - SMB Owner Follow-Up 1
+111,TISA Speditions AG,Michaela Adami-Schrott,michaela.adami-schrott@tisa.ch,SMB owner,Day 7,D+7,2026-08-19,11:10,11:25,CEST,Template 1 - SMB Owner Follow-Up 2
+112,Volk & Partner,Claus Volk,c.volk@volk-partner.de,SMB owner,Day 0,D+0,2026-08-12,13:30,13:45,CEST,Template 1 - SMB Owner (initial email)
+113,Volk & Partner,Claus Volk,c.volk@volk-partner.de,SMB owner,Day 3,D+3,2026-08-18,15:30,15:45,CEST,Template 1 - SMB Owner Follow-Up 1
+114,Volk & Partner,Claus Volk,c.volk@volk-partner.de,SMB owner,Day 7,D+7,2026-08-19,13:30,13:45,CEST,Template 1 - SMB Owner Follow-Up 2
+115,sysco.at,Peter Wurm,p.wurm@sysco.at,IT manager,Day 0,D+0,2026-08-13,13:30,13:45,CEST,Template 2 - IT Manager (initial email)
+116,sysco.at,Peter Wurm,p.wurm@sysco.at,IT manager,Day 3,D+3,2026-08-18,09:30,09:45,CEST,Template 2 - IT Manager Follow-Up 1
+117,sysco.at,Peter Wurm,p.wurm@sysco.at,IT manager,Day 7,D+7,2026-08-20,15:30,15:45,CEST,Template 2 - IT Manager Follow-Up 2
+118,CBH Rechtsanwälte,Nadja Siebertz,n.siebertz@cbh.de,SMB owner,Day 0,D+0,2026-08-25,09:30,09:45,CEST,Template 1 - SMB Owner (initial email)
+119,CBH Rechtsanwälte,Nadja Siebertz,n.siebertz@cbh.de,SMB owner,Day 3,D+3,2026-09-01,09:30,09:45,CEST,Template 1 - SMB Owner Follow-Up 1
+120,CBH Rechtsanwälte,Nadja Siebertz,n.siebertz@cbh.de,SMB owner,Day 7,D+7,2026-09-02,09:30,09:45,CEST,Template 1 - SMB Owner Follow-Up 2
+121,CBH Rechtsanwälte,Johannes Ristelhuber,j.ristelhuber@cbh.de,SMB owner,Day 0,D+0,2026-08-26,09:50,10:05,CEST,Template 1 - SMB Owner (initial email)
+122,CBH Rechtsanwälte,Johannes Ristelhuber,j.ristelhuber@cbh.de,SMB owner,Day 3,D+3,2026-09-01,09:50,10:05,CEST,Template 1 - SMB Owner Follow-Up 1
+123,CBH Rechtsanwälte,Johannes Ristelhuber,j.ristelhuber@cbh.de,SMB owner,Day 7,D+7,2026-09-02,09:50,10:05,CEST,Template 1 - SMB Owner Follow-Up 2

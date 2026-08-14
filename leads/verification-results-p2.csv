@@ -1,0 +1,13 @@
+﻿email,priority,verdict,note
+tobias.lang@netplans.de,2,unknown,mx01.hornetsecurity.com RCPT 554 5.5.4 Your IP address 92.209.189.231 has a bad reputation. To unblock visit https://cloud-
+roland.froebel@assepro.com,2,confirmed,assepro-com.mail.protection.outlook.com RCPT 250
+lautner@rvm.at,2,bounce,grzmail2.grz.co.at RCPT 550 5.1.1 <lautner@rvm.at>: Recipient address rejected: User unknown in relay recipient table
+kohl@lbua.at,2,bounce,lbua-at.mail.protection.outlook.com RCPT 550 5.4.1 Recipient address rejected: Access denied. For more information see https://aka.ms/E
+maximilian.kerkoc@kerkoc.at,2,confirmed,kerkoc-at.mail.protection.outlook.com RCPT 250
+uwe.alkemper@orbit.de,2,confirmed,orbit-de.mail.protection.outlook.com RCPT 250
+rolf.stoerr@suedvers.de,2,unknown,mx01.hornetsecurity.com RCPT 554 5.5.4 Your IP address 92.209.189.231 has a bad reputation. To unblock visit https://cloud-
+schmidt-volkmar@oppenlaender.de,2,confirmed,oppenlaender-de.mail.protection.outlook.com RCPT 250
+uitz@bindergroesswang.at,2,confirmed,bindergroesswang-at.mail.protection.outlook.com RCPT 250
+matthaeus.schmied@metzler.law,2,confirmed,metzler-law.mail.protection.outlook.com RCPT 250
+michel.jutzeler@lclaw.ch,2,confirmed,lclaw-ch.mail.protection.outlook.com RCPT 250
+Eric.Dobbe@dobbetransport.nl,2,confirmed,dobbetransport-nl.w-v1.mx.microsoft RCPT 250

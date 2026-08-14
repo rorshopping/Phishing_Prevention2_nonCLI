@@ -2,10 +2,6 @@
   'use strict';
   var MEASUREMENT_ID = 'G-XXXXXXXXXX';
 
-  if (!MEASUREMENT_ID || MEASUREMENT_ID.indexOf('G-') !== 0 || MEASUREMENT_ID === 'G-XXXXXXXXXX') {
-    return;
-  }
-
   function isConsented() {
     return window.localStorage && localStorage.getItem('gdpr_cookie_consent') === 'accepted';
   }
@@ -31,9 +27,28 @@
     window.dataLayer['gtag.done'] = true;
   }
 
+  function loadVercelAnalytics() {
+    if (document.getElementById('vercel-insights-script')) {
+      return;
+    }
+    window.va = window.va || function () { (window.vaq = window.vaq || []).push(arguments); };
+    var s = document.createElement('script');
+    s.id = 'vercel-insights-script';
+    s.defer = true;
+    s.src = '/_vercel/insights/script.js';
+    document.head.appendChild(s);
+  }
+
+  function loadAnalytics() {
+    if (MEASUREMENT_ID && MEASUREMENT_ID.indexOf('G-') === 0 && MEASUREMENT_ID !== 'G-XXXXXXXXXX') {
+      loadGA();
+    }
+    loadVercelAnalytics();
+  }
+
   if (isConsented()) {
-    loadGA();
+    loadAnalytics();
   } else {
-    document.addEventListener('gdpr-consent-granted', loadGA, { once: true });
+    document.addEventListener('gdpr-consent-granted', loadAnalytics, { once: true });
   }
 })();

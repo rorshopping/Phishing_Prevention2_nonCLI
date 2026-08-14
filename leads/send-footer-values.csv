@@ -1,0 +1,2 @@
+LegalEntityName,StreetAddress,PostalCode,City,Country,RegisterCourt,RegisterNo,VATId,ManagingDirector,ImpressumURL,PrivacyURL,UnsubscribeURL,ConsentSource
+,,,,"Germany",,,,,"https://phishdefend-ai.vercel.app/impressum","https://phishdefend-ai.vercel.app/privacy",,

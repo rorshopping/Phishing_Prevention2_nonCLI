@@ -127,6 +127,7 @@ class VishingSession(Base):
     twilio_sid: Mapped[str] = mapped_column(String(255), nullable=True)
     call_duration: Mapped[int] = mapped_column(Integer, default=0)
     call_recording_url: Mapped[str] = mapped_column(String(500), nullable=True)
+    twiml: Mapped[str] = mapped_column(Text, nullable=True)
     transcript: Mapped[str] = mapped_column(Text, nullable=True)
     ai_used: Mapped[bool] = mapped_column(Boolean, default=True)
     sensitive_info_disclosed: Mapped[bool] = mapped_column(Boolean, default=False)

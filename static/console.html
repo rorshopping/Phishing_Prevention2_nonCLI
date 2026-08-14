@@ -1,0 +1,62 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="robots" content="noindex, nofollow">
+<title>PhishDefend AI · Operations Console</title>
+<link rel="stylesheet" href="/console.css">
+</head>
+<body>
+
+<header class="topbar">
+  <div class="brand">
+    <span class="logo-dot"></span>
+    <div>
+      <h1>PhishDefend AI <span class="sub">Operations Console</span></h1>
+      <p class="tagline">Monitor everything · trigger everything</p>
+    </div>
+  </div>
+  <div class="top-actions">
+    <div class="status-pills" id="status-pills">
+      <span class="pill pending">…</span>
+    </div>
+    <label class="autorefresh" title="Auto-refresh current view every 10s">
+      <input type="checkbox" id="auto-refresh" checked> Live
+    </label>
+    <div class="token-wrap" id="token-wrap" hidden>
+      <input type="password" id="token-input" placeholder="Ops token" autocomplete="off">
+      <button class="btn btn-sm" id="token-apply">Save</button>
+    </div>
+    <button class="btn btn-sm" id="btn-refresh">Refresh</button>
+  </div>
+</header>
+
+<section class="stat-cards" id="stat-cards"></section>
+
+<section class="action-bar">
+  <button class="btn btn-primary" id="btn-monitor">Monitor running</button>
+  <button class="btn" id="btn-scheduler">Run scheduler now</button>
+  <span class="spacer"></span>
+  <button class="btn btn-launch" id="btn-setup">+ Setup new client</button>
+</section>
+
+<nav class="tabs" id="tabs">
+  <button class="tab active" data-tab="dashboard">Dashboard</button>
+  <button class="tab" data-tab="clients">Clients</button>
+  <button class="tab" data-tab="setup">Setup</button>
+  <button class="tab" data-tab="more">More</button>
+</nav>
+
+<main id="content" class="content"></main>
+
+<footer class="console-footer">
+  <span id="last-updated">Not connected yet</span>
+</footer>
+
+<div id="modal-root"></div>
+<div id="toast" class="toast"></div>
+
+<script src="/console.js"></script>
+</body>
+</html>

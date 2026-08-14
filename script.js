@@ -94,6 +94,7 @@ document.addEventListener('DOMContentLoaded', () => {
   cookieAccept?.addEventListener('click', () => {
     localStorage.setItem('gdpr_cookie_consent', 'accepted');
     cookieBanner.classList.remove('show');
+    document.dispatchEvent(new CustomEvent('gdpr-consent-granted'));
   });
 
   // Smooth reveal for hero stats

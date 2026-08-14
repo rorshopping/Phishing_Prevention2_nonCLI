@@ -58,7 +58,13 @@ class Orchestrator(BaseAgent):
 
         return results
 
-    async def run_client_campaign(self, client_id: uuid.UUID) -> dict[str, Any]:
+    async def run_client_campaign(
+        self,
+        client_id: uuid.UUID,
+        email_mode: str = "prod",
+        difficulty: str | None = None,
+        vishing_enabled: bool | None = None,
+    ) -> dict[str, Any]:
         async with async_session() as db:
             client = await self._get_client(db, client_id)
             if not client:
@@ -73,6 +79,10 @@ class Orchestrator(BaseAgent):
 
             try:
                 plan = await self.planner.plan_campaign(client, employees, db=db)
+
+                if difficulty:
+                    plan["difficulty"] = difficulty
+                plan["email_mode"] = email_mode
 
                 campaign = Campaign(
                     client_id=client.id,
@@ -92,6 +102,7 @@ class Orchestrator(BaseAgent):
                         "campaign_id": str(campaign.id),
                         "employee_count": len(employees),
                         "difficulty": plan.get("difficulty"),
+                        "email_mode": email_mode,
                     },
                 )
                 await db.commit()
@@ -104,7 +115,7 @@ class Orchestrator(BaseAgent):
                         "status": "execution_failed",
                     }
 
-                if client.vishing_enabled:
+                if client.vishing_enabled and vishing_enabled is not False:
                     await self._schedule_vishing_calls(db, campaign, employees, plan)
 
                 await self._log_action(

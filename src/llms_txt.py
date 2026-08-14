@@ -2,10 +2,15 @@
 
 Pure file-reading helpers so the content can be tested without importing
 the full FastAPI application. The FastAPI routes in src/main.py delegate here.
+
+All files are read from ``static/`` — the single source of truth that is
+mirrored byte-for-byte to the repo root (served by Vercel), so the FastAPI
+routes and the deployed root expose identical content.
 """
 from pathlib import Path
 
 REPO_ROOT = Path(__file__).resolve().parent.parent
+STATIC_DIR = REPO_ROOT / "static"
 
 _FALLBACK_ROBOTS = """User-agent: *
 Allow: /
@@ -13,7 +18,7 @@ Allow: /
 
 
 def _read(name: str) -> str:
-    path = REPO_ROOT / name
+    path = STATIC_DIR / name
     return path.read_text(encoding="utf-8") if path.exists() else ""
 
 
@@ -26,5 +31,4 @@ def get_llms_full_txt() -> str:
 
 
 def get_robots_txt() -> str:
-    robots = REPO_ROOT / "static" / "robots.txt"
-    return robots.read_text(encoding="utf-8") if robots.exists() else _FALLBACK_ROBOTS
+    return _read("robots.txt") or _FALLBACK_ROBOTS

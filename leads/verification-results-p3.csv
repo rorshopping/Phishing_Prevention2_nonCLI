@@ -1,0 +1,5 @@
+﻿email,priority,verdict,note
+soubusta@comito-solutions.de,3,confirmed,comitosolutions-de01e.mail.protection.outlook.com RCPT 250
+kircher@comito-solutions.de,3,confirmed,comitosolutions-de01e.mail.protection.outlook.com RCPT 250
+tina.teubert@teubert.de,3,unknown,mx12a.antispameurope.com RCPT 554 5.5.4 Your IP address 92.209.189.231 has a bad reputation. To unblock visit https://cloud-
+a.noesse@noesse.de,3,unknown,mx01.hornetsecurity.com RCPT 554 5.5.4 Your IP address 92.209.189.231 has a bad reputation. To unblock visit https://cloud-

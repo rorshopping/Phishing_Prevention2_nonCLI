@@ -5,12 +5,13 @@ When asked to work on this project, explore ONLY the relevant files. Do not expl
 
 | Task Type | Relevant Files |
 |---|---|
-| **Website / SEO / frontend** | `static/index.html`, `static/impressum.html`, `static/privacy.html`, `static/dpa.html`, `static/404.html`, `static/style.css`, `static/script.js`, `static/robots.txt`, `static/sitemap.xml`, `src/main.py` (routes for legal/SEO pages only) |
+| **Website / SEO / frontend** | `static/index.html`, `static/impressum.html`, `static/privacy.html`, `static/dpa.html`, `static/404.html`, `static/style.css`, `static/script.js`, `static/analytics.js`, `static/robots.txt`, `static/sitemap.xml`, `src/main.py` (routes for legal/SEO pages only) |
+| **Operations console** | `static/console.html`, `static/console.css`, `static/console.js`, `src/api/ops.py` (`/ops/*`), `src/agents/orchestrator.py`, `src/config.py` (`OPS_TOKEN`) |
 | **API / backend** | `src/api/*.py`, `src/engine/*.py`, `src/database/*.py`, `src/services/*.py`, `src/config.py` |
 | **Agents / pipeline** | `src/agents/*.py`, `src/engine/email_builder.py`, `src/engine/personalizer.py` |
 | **Tests** | `tests/` |
 | **Gophish binary** `gophish/` | **Do not explore** — separate embedded Go app, irrelevant to Python code |
-| **Root HTML files** (`index.html`, `404.html`, etc.) | **Do not explore** — duplicates of `static/` files, not served by the app |
+| **Root mirror files** | **Vercel serves the repo root** (verified live 2026-08-10: deployed bytes == root index.html). Root must mirror `static/` byte-for-byte. Sync list (**21 files**): `index.html`, `privacy.html`, `impressum.html`, `data-processing-agreement.html`←`static/dpa.html`, `404.html`, `robots.txt`, `sitemap.xml`, `llms.txt`, `llms-full.txt`, `style.css`, `style.min.css`, `script.js`, `script.min.js`, `analytics.js`, `og-image.png`, `logo.svg`, `fonts/inter-variable.woff2`←`static/fonts/`, `fonts/jetbrains-mono-variable.woff2`←`static/fonts/`, `console.html`, `console.css`, `console.js`. After any `static/` edit, copy the affected file(s) to root before `vercel --prod` (see `docs/seo-audit.md` §Root-Duplicate Fix). |
 
 ## Quick Start
 
@@ -76,6 +77,23 @@ python debug_execution.py
 | `POST /training/{id}/complete` | Mark training as completed |
 | `GET /training/pending?client_id=` | List pending training assignments |
 | `GET /training/content/{type}` | Training HTML content |
+
+### Operations Console (`/console`)
+Web console for demos/control: system health, global stats, running campaigns, per-client dashboards, training, vishing, audit log + manual triggers. Auto-refreshes every 10s ("Live" toggle).
+- Protected by `OPS_TOKEN` in `.env` (sent as `Authorization: Bearer <token>`). Empty = open (dev only).
+- Console trigger endpoints require the orchestrator flow: `POST /ops/clients/{id}/campaign` with `{difficulty, email_mode: test|prod, vishing_enabled}` — **default email_mode is `test`** (aliases).
+- Background scheduler task status is reported via `src/api/ops.py::scheduler_task` (set in `main.py` startup).
+
+| Endpoint | Description |
+|---|---|
+| `GET /ops/config` | Public: `{auth_required, version}` — console uses this before auth |
+| `GET /ops/status` | System health + global counts + risk distribution + running campaigns + recent activity |
+| `GET /ops/campaigns` / `GET /ops/vishing` / `GET /ops/training` | Cross-client lists (filter by `status`, `client_id`) |
+| `GET /ops/activity?limit=` | Audit log feed with client names |
+| `POST /ops/monitor` | Manually run `monitor_all_active_campaigns()` (pull results from Gophish now) |
+| `POST /ops/campaigns/{id}/monitor` | Force-monitor a single campaign |
+| `POST /ops/run-scheduler` | Manually run `run_scheduled_campaigns()` (launches any due campaigns) |
+| `POST /ops/clients/{id}/campaign` | Manually trigger a full campaign via the orchestrator |
 
 ## Risk Scoring Model
 - `credentials_submitted` = +100, `link_clicked` = +60, `email_opened` = +20, `reported_phishing` = -30

@@ -1,0 +1,24 @@
+﻿email,first_verdict,reprobe_verdict,note
+ssicken@it-haus.com,unknown,unknown,mx-01-eu-central-1.prod.hydra.sophos.com RCPT 554 5.7.1 Service unavailable; Client host [92.209.189.231] is blacklisted. Visit https://www.
+hulbrich@it-haus.com,unknown,unknown,mx-01-eu-central-1.prod.hydra.sophos.com RCPT 554 5.7.1 Service unavailable; Client host [92.209.189.231] is blacklisted. Visit https://www.
+sascha.collin@netplans.de,unknown,unknown,mx01.hornetsecurity.com RCPT 554 5.5.4 Your IP address 92.209.189.231 has a bad reputation. To unblock visit https://cloud-
+ralf.bender@suedvers.de,unknown,unknown,mx01.hornetsecurity.com RCPT 554 5.5.4 Your IP address 92.209.189.231 has a bad reputation. To unblock visit https://cloud-
+thomas.kalbacher@rvm.de,unknown,unknown,mx-01-eu-central-1.prod.hydra.sophos.com RCPT 554 5.7.1 Service unavailable; Client host [92.209.189.231] is blacklisted. Visit https://www.
+oliver.scholl@rvm.de,unknown,unknown,mx-01-eu-central-1.prod.hydra.sophos.com RCPT 554 5.7.1 Service unavailable; Client host [92.209.189.231] is blacklisted. Visit https://www.
+c.volk@volk-partner.de,bounce,bounce,mx01.badencloud.de RCPT 550 #5.1.0 Address rejected.
+m.erhard@noesse.de,unknown,unknown,mx01.hornetsecurity.com RCPT 554 5.5.4 Your IP address 92.209.189.231 has a bad reputation. To unblock visit https://cloud-
+florian.karle@suedvers.de,unknown,unknown,mx01.hornetsecurity.com RCPT 554 5.5.4 Your IP address 92.209.189.231 has a bad reputation. To unblock visit https://cloud-
+manfred.karle@suedvers.de,unknown,unknown,mx01.hornetsecurity.com RCPT 554 5.5.4 Your IP address 92.209.189.231 has a bad reputation. To unblock visit https://cloud-
+n.siebertz@cbh.de,unknown,unknown,mx-01-eu-central-1.prod.hydra.sophos.com RCPT 554 5.7.1 Service unavailable; Client host [92.209.189.231] is blacklisted. Visit https://www.
+j.ristelhuber@cbh.de,unknown,unknown,mx-01-eu-central-1.prod.hydra.sophos.com RCPT 554 5.7.1 Service unavailable; Client host [92.209.189.231] is blacklisted. Visit https://www.
+i.jung@cbh.de,unknown,unknown,mx-01-eu-central-1.prod.hydra.sophos.com RCPT 554 5.7.1 Service unavailable; Client host [92.209.189.231] is blacklisted. Visit https://www.
+n.pitkowitz@pitkowitz.com,unknown,unknown,serv48621726.secure-node.at RCPT 554 5.7.1 <n.pitkowitz@pitkowitz.com>: Recipient address rejected: Rejected by SPF: 92.209.189
+m.hommel@juettner.de,unknown,unknown,all MX unreachable/timeout
+claudia.leonhardt@meditech-sachsen.de,unknown,unknown,mx01.hornetsecurity.com RCPT 554 5.5.4 Your IP address 92.209.189.231 has a bad reputation. To unblock visit https://cloud-
+inreiter@rvm.at,unknown,unknown,grzmail1.grz.co.at RCPT 554 5.7.1 <inreiter@rvm.at>: Sender address rejected: you are not on my networks
+henrik.wolf@willo.se,bounce,bounce,willo-se.mail.protection.outlook.com RCPT 550 5.4.1 Recipient address rejected: Access denied. For more information see https://aka.ms/E
+johan.skandevall@willo.se,bounce,bounce,willo-se.mail.protection.outlook.com RCPT 550 5.4.1 Recipient address rejected: Access denied. For more information see https://aka.ms/E
+marcus.magnusson@willo.se,bounce,bounce,willo-se.mail.protection.outlook.com RCPT 550 5.4.1 Recipient address rejected: Access denied. For more information see https://aka.ms/E
+peter.grahn@willo.se,bounce,bounce,willo-se.mail.protection.outlook.com RCPT 550 5.4.1 Recipient address rejected: Access denied. For more information see https://aka.ms/E
+roland.engnell@willo.se,bounce,bounce,willo-se.mail.protection.outlook.com RCPT 550 5.4.1 Recipient address rejected: Access denied. For more information see https://aka.ms/E
+svante.johansson@willo.se,bounce,bounce,willo-se.mail.protection.outlook.com RCPT 550 5.4.1 Recipient address rejected: Access denied. For more information see https://aka.ms/E

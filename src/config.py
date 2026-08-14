@@ -23,6 +23,11 @@ class Settings(BaseSettings):
     twilio_account_sid: str = ""
     twilio_auth_token: str = ""
     twilio_phone_number: str = ""
+    azure_speech_key: str = Field(default="", description="Azure Speech (STT/TTS) subscription key for vishing calls")
+    azure_speech_region: str = Field(default="germanywestcentral", description="Azure Speech region for STT/TTS")
+    azure_speech_voice: str = Field(default="de-DE-ConradNeural", description="Azure neural voice for German TTS")
+    app_base_url: str = Field(default="", description="Public base URL of this app, used to expose TTS audio and the live vishing WebSocket to Twilio")
+    vishing_live: bool = Field(default=True, description="Use live conversational AI vishing (requires AZURE_SPEECH_KEY + APP_BASE_URL); falls back to IVR")
     serpapi_api_key: str = ""
     gdpr_hash_salt: str = Field(default="", min_length=16, description="Secret salt for PII hashing (min 16 chars)")
     log_level: str = "INFO"
@@ -33,6 +38,7 @@ class Settings(BaseSettings):
     openai_api_key: str = Field(default="", description="Separate OpenAI API key for TTS (falls back to LLM_API_KEY)")
     alert_webhook_url: str = Field(default="", description="Webhook URL for campaign completion alerts (Slack, Teams, etc.)")
     alert_webhook_threshold: int = Field(default=0, ge=0, description="Minimum click count to trigger webhook alert (0 = always)")
+    ops_token: str = Field(default="", description="Bearer token required by the /ops operations console endpoints (empty = no auth)")
 
     fallback_llm_api_key: str = ""
     fallback_llm_base_url: str = "https://api.groq.com/openai/v1"
