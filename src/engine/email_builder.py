@@ -4,8 +4,7 @@ from enum import Enum
 from typing import Any
 
 from jinja2 import Environment, BaseLoader
-from langchain_openai import ChatOpenAI
-from langchain_core.messages import SystemMessage, HumanMessage
+from openai import AsyncOpenAI
 
 from src.config import settings
 
@@ -113,19 +112,18 @@ def _build_llm(
     model: str = "",
     api_key: str = "",
     base_url: str = "",
-) -> ChatOpenAI:
-    return ChatOpenAI(
-        model=model or settings.llm_model,
+) -> AsyncOpenAI:
+    return AsyncOpenAI(
         api_key=api_key or settings.llm_api_key,
         base_url=base_url or settings.llm_base_url,
-        temperature=0.9,
-        max_tokens=1024,
+        timeout=60.0,
+        max_retries=0,  # _try_provider does its own 2-attempt loop
     )
 
 
 async def _try_provider(
-    system: SystemMessage,
-    user: HumanMessage,
+    system: str,
+    user: str,
     label: str,
     model: str = "",
     api_key: str = "",
@@ -134,8 +132,16 @@ async def _try_provider(
     llm = _build_llm(model=model, api_key=api_key, base_url=base_url)
     for attempt in range(2):
         try:
-            response = await llm.ainvoke([system, user])
-            raw = response.content.strip()
+            response = await llm.chat.completions.create(
+                model=model or settings.llm_model,
+                messages=[
+                    {"role": "system", "content": system},
+                    {"role": "user", "content": user},
+                ],
+                temperature=0.9,
+                max_tokens=1024,
+            )
+            raw = (response.choices[0].message.content or "").strip()
             if raw:
                 return raw
             logger.warning("%s empty response on attempt %d/2", label, attempt + 1)
@@ -188,10 +194,8 @@ async def generate_email(
     employee_context: dict[str, Any],
     company_context: dict[str, Any],
 ) -> dict[str, str]:
-    system = SystemMessage(content=_build_system_prompt())
-    user = HumanMessage(
-        content=_build_user_prompt(scenario_type, employee_context, company_context)
-    )
+    system = _build_system_prompt()
+    user = _build_user_prompt(scenario_type, employee_context, company_context)
 
     raw = await _try_provider(system, user, "OpenRouter")
 
