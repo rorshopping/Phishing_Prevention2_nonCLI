@@ -7,6 +7,7 @@ from pydantic import BaseModel, EmailStr, Field
 from sqlalchemy import select, func
 from sqlalchemy.ext.asyncio import AsyncSession
 
+from src.api.ops import require_ops_auth
 from src.database.session import get_db
 from src.database import models as m
 from src.database.models import EmployeeGroup, TrainingAssignment, VishingSession
@@ -15,7 +16,9 @@ from src.agents.campaign_planner import CampaignPlanner
 from src.utils.gdpr import hash_pii
 from src.engine.risk_engine import get_client_risk_summary, get_client_risk_trend
 
-router = APIRouter(prefix="/clients", tags=["clients"])
+# Client data includes employee PII and write operations — guarded by the same
+# ops token as /ops/* (no-op when OPS_TOKEN is unset, e.g. local dev/tests).
+router = APIRouter(prefix="/clients", tags=["clients"], dependencies=[Depends(require_ops_auth)])
 
 
 class ClientCreate(BaseModel):
@@ -25,6 +28,7 @@ class ClientCreate(BaseModel):
     industry: Optional[str] = None
     employee_count: int = Field(default=0, ge=0)
     country: str = Field(default="DE", min_length=2, max_length=2)
+    campaigns_per_year: int = Field(default=25, ge=1, le=365)
     vishing_enabled: bool = False
 
 
@@ -35,6 +39,7 @@ class ClientUpdate(BaseModel):
     industry: Optional[str] = None
     employee_count: Optional[int] = None
     country: Optional[str] = None
+    campaigns_per_year: Optional[int] = Field(default=None, ge=1, le=365)
     is_active: Optional[bool] = None
     vishing_enabled: Optional[bool] = None
 

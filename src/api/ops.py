@@ -370,6 +370,13 @@ async def ops_monitor_campaign(campaign_id: uuid.UUID):
 async def ops_run_scheduler():
     from src.agents.orchestrator import Orchestrator
 
+    health = await _health_check()
+    if health.get("gophish") != "reachable":
+        raise HTTPException(
+            status_code=503,
+            detail="Gophish is unreachable — scheduler pass skipped so no zombie campaigns are created. Start Gophish and try again.",
+        )
+
     orchestrator = Orchestrator()
     results = await orchestrator.run_scheduled_campaigns()
     return {"campaigns": len(results), "results": results}

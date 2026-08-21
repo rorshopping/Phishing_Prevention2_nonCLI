@@ -315,7 +315,7 @@ _LLM_QUESTIONS = {
         "Hoxhunt",
     ],
     "What is it also known as?": [
-        "Phish Defend",
+        "PhishDefend",
     ],
 }
 

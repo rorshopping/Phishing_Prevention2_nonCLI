@@ -54,13 +54,22 @@ async def _scheduler_loop():
     _orchestrator = Orchestrator()
     interval = settings.scheduler_interval_seconds
     logger.info("Background scheduler started (interval=%ds)", interval)
+    from src.api.ops import _health_check
+
     while True:
         try:
             await _orchestrator.monitor_all_active_campaigns()
         except Exception:
             logger.exception("Scheduler monitoring error")
         try:
-            await _orchestrator.run_scheduled_campaigns()
+            # Only auto-create campaigns when Gophish can actually execute them.
+            # Without this guard, every tick burns LLM calls and piles up
+            # 'scheduled' zombie campaigns while Gophish is down.
+            health = await _health_check()
+            if health.get("gophish") == "reachable":
+                await _orchestrator.run_scheduled_campaigns()
+            else:
+                logger.warning("Skipping scheduled-campaign pass: Gophish unreachable")
         except Exception:
             logger.exception("Scheduler campaign launch error")
         await asyncio.sleep(interval)

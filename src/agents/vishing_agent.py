@@ -5,6 +5,7 @@ from typing import Any
 from xml.sax.saxutils import escape as xml_escape
 
 from sqlalchemy import select
+from sqlalchemy.ext.asyncio import AsyncSession
 
 from src.database.session import async_session
 from src.database.models import VishingSession, Employee, Campaign

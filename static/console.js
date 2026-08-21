@@ -18,6 +18,7 @@ const state = {
   vishing: [],
   activity: [],
   setup: { step: 1, client: {}, employees: [], launched: null },
+  campaignFilter: '',
   refreshTimer: null,
 };
 
@@ -302,6 +303,7 @@ function renderClients() {
         <div class="client-actions">
           <button class="btn btn-primary btn-sm" onclick="openTriggerModal('${c.id}')">Trigger campaign</button>
           <button class="btn btn-sm" onclick="openAddEmployees('${c.id}')">Add employees</button>
+          <button class="btn btn-sm" onclick="openEditClient('${c.id}')">Edit</button>
           <a class="btn btn-sm" href="/reports/client/${c.id}" target="_blank">Report</a>
           <a class="btn btn-sm" href="/reports/client/${c.id}/csv" target="_blank">CSV</a>
         </div>
@@ -316,13 +318,16 @@ function renderSetup() {
   const st = state.setup;
 
   if (st.launched) {
+    const launchedCampaign = st.launched.campaign_id;
     content.innerHTML = `
       <div class="panel">
         <div class="panel-body">
           <div class="success-panel">
             <div class="big">🎉</div>
-            <h3>${esc(st.launched.client_name)} is set up and running</h3>
-            <div class="sub">Campaign <span class="mono">${esc(st.launched.campaign_id)}</span> launched · ${st.launched.employees} employees · ${st.launched.email_mode} mode</div>
+            <h3>${esc(st.launched.client_name)} is set up${launchedCampaign ? ' and running' : ''}</h3>
+            ${launchedCampaign
+              ? `<div class="sub">Campaign <span class="mono">${esc(st.launched.campaign_id)}</span> launched · ${st.launched.employees} employees · ${st.launched.email_mode} mode</div>`
+              : `<div class="sub">Client created · no employees yet — add them from the Clients tab, then trigger the first campaign.</div>`}
             <div class="flex" style="justify-content:center">
               <button class="btn btn-primary" onclick="switchTab('dashboard')">Go to dashboard</button>
               <button class="btn" onclick="resetSetup()">Setup another client</button>
@@ -375,7 +380,8 @@ function renderSetup() {
         <label>Employee emails (one per line)</label>
         <textarea id="s-employees" placeholder="max.mustermann@acme.de&#10;erika.muster@acme.de">${esc(st.employees.join('\n'))}</textarea>
       </div>
-      <div class="emp-chips" id="s-emp-preview"></div>`;
+      <div class="emp-chips" id="s-emp-preview"></div>
+      <div class="faint small mt">Optional — you can also skip this and add employees later from the Clients tab.</div>`;
     footer = `
       <div class="right">
         <button class="btn" id="s-back">← Back</button>
@@ -383,7 +389,7 @@ function renderSetup() {
       </div>`;
   } else if (step === 3) {
     const emps = st.employees;
-    const clickHint = 'First campaign will be launched automatically.';
+    const hasEmps = emps.length > 0;
     body = `
       <div class="setup-summary">
         <div class="row"><span class="k">Client</span><span class="v">${esc(st.client.name)}</span></div>
@@ -393,6 +399,8 @@ function renderSetup() {
         <div class="row"><span class="k">Vishing</span><span class="v">${st.client.vishing ? 'enabled' : 'disabled'}</span></div>
         <div class="row"><span class="k">Employees</span><span class="v">${emps.length}</span></div>
       </div>
+      <div class="result-box" style="display:none" id="s-result"></div>
+      ${hasEmps ? `
       <div class="hr"></div>
       <div class="form-row inline">
         <div>
@@ -412,12 +420,12 @@ function renderSetup() {
         </div>
       </div>
       <div class="check-row"><input type="checkbox" id="s-vishing-on" checked><label for="s-vishing-on">Trigger vishing calls after launch (if enabled for client)</label></div>
-      <div class="result-box" style="display:none" id="s-result"></div>
-      <div class="faint small mt">${clickHint}</div>`;
+      <div class="faint small mt">First campaign will be launched automatically.</div>` : `
+      <div class="faint small mt">No employees yet — the client will be created without a campaign. Add employees and trigger the first campaign from the Clients tab.</div>`}`;
     footer = `
       <div class="right">
         <button class="btn" id="s-back">← Back</button>
-        <button class="btn btn-launch" id="s-launch">Create client & launch →</button>
+        <button class="btn btn-launch" id="s-launch">${hasEmps ? 'Create client & launch →' : 'Create client'}</button>
       </div>`;
   }
 
@@ -465,17 +473,20 @@ function bindWizard(step) {
     });
   } else if (step === 2) {
     const ta = $('#s-employees');
+    const EMAIL_RE = /^[^@\s]+@[^@\s]+\.[^@\s]+$/;
     const preview = () => {
       state.setup.employees = ta.value.split(/\r?\n/).map((l) => l.trim()).filter(Boolean);
+      const invalid = state.setup.employees.filter((e) => !EMAIL_RE.test(e));
       $('#s-emp-preview').innerHTML = state.setup.employees.length
-        ? state.setup.employees.map((e) => `<span class="emp-chip">${esc(e)}</span>`).join('')
-        : '<span class="faint small">No emails yet</span>';
+        ? state.setup.employees.map((e) => `<span class="emp-chip"${EMAIL_RE.test(e) ? '' : ' style="border-color:rgba(239,68,68,.6);color:#f87171" title="Invalid email format"'}>${esc(e)}</span>`).join('')
+        : '<span class="faint small">No emails yet — you can continue without employees</span>';
     };
     ta.addEventListener('input', preview);
     preview();
     $('#s-next').addEventListener('click', () => {
       captureSetup(2);
-      if (!state.setup.employees.length) { toast('Add at least one employee email', true); return; }
+      const invalid = state.setup.employees.filter((e) => !EMAIL_RE.test(e));
+      if (invalid.length) { toast('Invalid email: ' + invalid[0], true); return; }
       state.setup.step = 3;
       renderSetup();
     });
@@ -518,38 +529,39 @@ async function launchSetup() {
         vishing_enabled: c.vishing,
       }),
     });
-    result.textContent = `Client created (${client.id}). Adding employees…`;
-    await api('/clients/' + client.id + '/employees', {
-      method: 'POST',
-      body: JSON.stringify(state.setup.employees.map((email) => ({ email }))),
-    });
-    result.textContent = `${state.setup.employees.length} employees added. Launching campaign…`;
-    const launch = await api('/ops/clients/' + client.id + '/campaign', {
-      method: 'POST',
-      body: JSON.stringify({
-        difficulty: $('#s-difficulty').value,
-        email_mode: $('#s-mode').value,
-        vishing_enabled: $('#s-vishing-on').checked,
-      }),
-    });
-    state.setup.launched = {
-      client_name: c.name,
-      client_id: client.id,
-      campaign_id: launch.campaign_id,
-      employees: state.setup.employees.length,
-      email_mode: $('#s-mode').value,
-    };
-    toast('Client created and campaign launched');
+    result.textContent = `Client created (${client.id}).` + (state.setup.employees.length ? ' Adding employees…' : '');
+    state.setup.launched = { client_name: c.name, client_id: client.id, campaign_id: null, employees: 0, email_mode: null };
+    if (state.setup.employees.length) {
+      await api('/clients/' + client.id + '/employees', {
+        method: 'POST',
+        body: JSON.stringify(state.setup.employees.map((email) => ({ email }))),
+      });
+      result.textContent = `${state.setup.employees.length} employees added. Launching campaign…`;
+      const launch = await api('/ops/clients/' + client.id + '/campaign', {
+        method: 'POST',
+        body: JSON.stringify({
+          difficulty: $('#s-difficulty').value,
+          email_mode: $('#s-mode').value,
+          vishing_enabled: $('#s-vishing-on').checked,
+        }),
+      });
+      state.setup.launched.campaign_id = launch.campaign_id;
+      state.setup.launched.email_mode = $('#s-mode').value;
+    }
+    state.setup.launched.employees = state.setup.employees.length;
+    toast('Client created' + (state.setup.launched.campaign_id ? ' and campaign launched' : ''));
     state.clients = [];
     await loadStatus();
     await loadClients();
     renderSetup();
   } catch (e) {
     result.className = 'result-box err';
-    result.textContent = 'Setup failed: ' + e.message + '\n\nClient may have been partially created — check the Clients tab.';
+    result.textContent = 'Setup failed: ' + e.message +
+      '\n\nIf the client was already created you will find it on the Clients tab (a duplicate name is rejected). ' +
+      'Campaign launches need Gophish running — check the status pills at the top.';
   } finally {
     btn.disabled = false;
-    btn.textContent = 'Create client & launch →';
+    btn.textContent = state.setup.employees.length ? 'Create client & launch →' : 'Create client';
   }
 }
 
@@ -599,10 +611,12 @@ async function loadMoreTab() {
 /* ----- campaigns (more) ----- */
 
 async function loadCampaignsInto(container) {
-  const campaigns = await guarded(() => api('/ops/campaigns'));
+  const filter = state.campaignFilter || '';
+  const qs = filter ? '?status=' + encodeURIComponent(filter) : '';
+  const campaigns = await guarded(() => api('/ops/campaigns' + qs));
   if (!campaigns) { container.innerHTML = '<div class="empty">Failed to load</div>'; return; }
   state.campaigns = campaigns;
-  if (!campaigns.length) { container.innerHTML = '<div class="panel"><div class="panel-body"><div class="empty">No campaigns yet.</div></div></div>'; return; }
+  if (!campaigns.length && !filter) { container.innerHTML = '<div class="panel"><div class="panel-body"><div class="empty">No campaigns yet.</div></div></div>'; return; }
   const rows = campaigns.map((c) => {
     const total = c.sent_count || 0;
     const progress = `
@@ -629,9 +643,16 @@ async function loadCampaignsInto(container) {
         </td>
       </tr>`;
   }).join('');
+  const filterOpts = ['', 'running', 'scheduled', 'completed', 'draft', 'cancelled']
+    .map((s) => `<option value="${s}" ${filter === s ? 'selected' : ''}>${s || 'All statuses'}</option>`).join('');
   container.innerHTML = `
     <div class="panel">
-      <div class="panel-header"><span class="panel-title">All campaigns</span><span class="muted small">${campaigns.length} total</span></div>
+      <div class="panel-header">
+        <span class="panel-title">All campaigns</span>
+        <span class="muted small">${campaigns.length} shown</span>
+        <span class="spacer" style="flex:1"></span>
+        <select id="camp-filter" title="Filter by status" style="background:var(--bg-elev,#111);color:inherit;border:1px solid var(--border,#333);border-radius:6px;padding:4px 8px;font-size:12px">${filterOpts}</select>
+      </div>
       <div class="panel-body">
         <table>
           <thead><tr><th>Campaign</th><th>Client</th><th>Status</th><th>Difficulty</th><th>Gophish</th><th>Sent</th><th>Click %</th><th>Creds</th><th>Progress</th><th>Created</th><th></th></tr></thead>
@@ -639,6 +660,11 @@ async function loadCampaignsInto(container) {
         </table>
       </div>
     </div>`;
+  const filterSel = container.querySelector('#camp-filter');
+  if (filterSel) filterSel.addEventListener('change', () => {
+    state.campaignFilter = filterSel.value;
+    loadCampaignsInto(container);
+  });
 }
 
 /* ----- training (more) ----- */
@@ -923,6 +949,71 @@ function openAddEmployees(clientId) {
     } finally {
       btn.disabled = false;
       btn.textContent = 'Add employees';
+    }
+  });
+}
+
+/* ---------------- edit / deactivate client ---------------- */
+
+function openEditClient(clientId) {
+  const c = state.clients.find((x) => x.id === clientId);
+  if (!c) return;
+  openModal(`Edit client · ${c.company_name}`, `
+    <div class="form-row"><label>Company name</label><input id="ed-name" value="${esc(c.company_name)}"></div>
+    <div class="form-row"><label>Contact email</label><input id="ed-email" type="email" value="${esc(c.contact_email)}"></div>
+    <div class="form-row inline">
+      <div><label>Campaigns / year</label><input id="ed-cpy" type="number" min="1" max="365" value="${c.campaigns_per_year || 25}"></div>
+      <div><label>Vishing calls</label>
+        <select id="ed-vishing">
+          <option value="false" ${!c.vishing_enabled ? 'selected' : ''}>disabled</option>
+          <option value="true" ${c.vishing_enabled ? 'selected' : ''}>enabled</option>
+        </select>
+      </div>
+    </div>
+    <div class="result-box" style="display:none" id="ed-result"></div>`, `
+    <button class="btn btn-danger" id="ed-deactivate" style="margin-right:auto">Deactivate</button>
+    <button class="btn" onclick="closeModal()">Cancel</button>
+    <button class="btn btn-primary" data-submit="Save changes" id="ed-save">Save changes</button>`);
+
+  $('#ed-save').addEventListener('click', async () => {
+    const btn = $('#ed-save');
+    const name = $('#ed-name').value.trim();
+    const email = $('#ed-email').value.trim();
+    if (!name) { toast('Company name is required', true); return; }
+    if (!/^[^@\s]+@[^@\s]+\.[^@\s]+$/.test(email)) { toast('Enter a valid contact email', true); return; }
+    setSubmitBusy(btn, 'Saving…');
+    try {
+      await api('/clients/' + clientId, {
+        method: 'PUT',
+        body: JSON.stringify({
+          company_name: name,
+          contact_email: email,
+          campaigns_per_year: Number($('#ed-cpy').value) || 25,
+          vishing_enabled: $('#ed-vishing').value === 'true',
+        }),
+      });
+      closeModal();
+      toast('Client updated');
+      refreshCurrent();
+    } catch (e) {
+      const result = $('#ed-result');
+      result.style.display = 'block';
+      result.className = 'result-box err';
+      result.textContent = 'Failed: ' + e.message;
+      btn.disabled = false;
+      btn.textContent = 'Save changes';
+    }
+  });
+
+  $('#ed-deactivate').addEventListener('click', async () => {
+    if (!confirm(`Deactivate "${c.company_name}"? Existing data is kept, but no new campaigns can be triggered.`)) return;
+    try {
+      await api('/clients/' + clientId, { method: 'DELETE' });
+      closeModal();
+      toast('Client deactivated');
+      refreshCurrent();
+    } catch (e) {
+      toast('Deactivate failed: ' + e.message, true);
     }
   });
 }
