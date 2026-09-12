@@ -3,57 +3,49 @@
 Vercel serves the repo root (verified live 2026-08-10: deployed bytes ==
 root index.html), so after any static/ edit the affected file must be
 copied to the root before `vercel --prod` (docs/seo-audit.md §Root-Duplicate
-Fix). This test fails loudly when a mirror is missing or stale.
+Fix). The mapping lives in src/root_mirror.py; this test fails loudly when
+a mirror is missing or stale, or when the sync list itself drifts from
+static/ contents.
 """
-from pathlib import Path
-
 import pytest
 
-REPO_ROOT = Path(__file__).resolve().parents[1]
-STATIC_DIR = REPO_ROOT / "static"
-
-# Only renames need listing; everything else mirrors 1:1 by name.
-RENAMES = {
-    "dpa.html": "data-processing-agreement.html",
-}
+from src.root_mirror import EXPECTED_SYNC_LIST, RENAMES, diff, mirror_map, static_files
 
 
-def _mirror_map() -> dict[str, str]:
-    static_files = {
-        p.relative_to(STATIC_DIR).as_posix()
-        for p in STATIC_DIR.rglob("*")
-        if p.is_file()
-    }
-    return {rel: RENAMES.get(rel, rel) for rel in static_files}
+def test_sync_list_matches_static_contents():
+    """Every file in static/ must be in EXPECTED_SYNC_LIST, and vice versa.
 
-
-def test_mirror_map_is_complete():
-    """Every public file in static/ must be covered by the sync list.
-
-    If this fails, a new file was added to static/ without deciding its
-    root-mirror name — extend RENAMES or copy it to the root 1:1.
+    A new static/ file must be added to the list (and mirrored); a removed
+    one must be dropped from the list and its root mirror deleted.
     """
-    static_files = {
-        p.relative_to(STATIC_DIR).as_posix()
-        for p in STATIC_DIR.rglob("*")
-        if p.is_file()
-    }
-    unmapped = static_files - set(RENAMES) - set(_mirror_map().keys())
-    assert not unmapped, (
-        f"new static/ file(s) without a root mirror decision: {sorted(unmapped)}"
+    actual = set(static_files())
+    assert actual == set(EXPECTED_SYNC_LIST), (
+        f"static/ contents diverged from the sync list: "
+        f"unlisted={sorted(actual - set(EXPECTED_SYNC_LIST))} "
+        f"stale-entries={sorted(set(EXPECTED_SYNC_LIST) - actual)}"
     )
+
+
+def test_renames_point_at_sync_list():
+    assert set(RENAMES) <= set(EXPECTED_SYNC_LIST)
+
+
+def test_dpa_rename():
+    assert mirror_map()["dpa.html"] == "data-processing-agreement.html"
 
 
 @pytest.mark.parametrize(
-    "static_rel,root_rel", sorted(_mirror_map().items()), ids=lambda v: v
+    "static_rel,root_rel,state", sorted(diff()), ids=lambda v: v
 )
-def test_root_mirror_is_byte_identical(static_rel, root_rel):
-    src = STATIC_DIR / static_rel
-    dst = REPO_ROOT / root_rel
-    assert dst.exists(), (
-        f"missing root mirror: {root_rel} — copy static/{static_rel} to root"
+def test_root_mirror_is_byte_identical(static_rel, root_rel, state):
+    assert state != "missing-src", (
+        f"static/{static_rel} is in the sync list but does not exist"
     )
-    assert dst.read_bytes() == src.read_bytes(), (
+    assert state != "missing", (
+        f"missing root mirror: {root_rel} — copy static/{static_rel} to root "
+        "(python scripts/sync_mirror.py)"
+    )
+    assert state == "in-sync", (
         f"root/{root_rel} differs from static/{static_rel} — "
-        "re-sync the mirror before vercel --prod"
+        "re-sync the mirror before vercel --prod (python scripts/sync_mirror.py)"
     )

@@ -34,7 +34,7 @@ vercel --prod --token "<your_vercel_token>"
 
 ## 3. Sync `static/` → root (Vercel serves the REPO ROOT)
 
-`static/` is the source of truth; the repo root is what Vercel deploys. **After any `static/` edit, mirror the affected files to root byte-for-byte before deploying.** All **18 mirrored files** must be identical (SHA-256 match).
+`static/` is the source of truth; the repo root is what Vercel deploys. **After any `static/` edit, mirror the affected files to root byte-for-byte before deploying.** All **21 mirrored files** must be identical.
 
 | # | Root file | Source (`static/`) |
 |---|-----------|--------------------|
@@ -56,36 +56,19 @@ vercel --prod --token "<your_vercel_token>"
 | 16 | `logo.svg` | `static/logo.svg` |
 | 17 | `fonts/inter-variable.woff2` | `static/fonts/inter-variable.woff2` |
 | 18 | `fonts/jetbrains-mono-variable.woff2` | `static/fonts/jetbrains-mono-variable.woff2` |
+| 19 | `console.html` | `static/console.html` |
+| 20 | `console.css` | `static/console.css` |
+| 21 | `console.js` | `static/console.js` |
 
-Sync command (run from repo root):
-
-```powershell
-Copy-Item static\index.html index.html -Force
-Copy-Item static\privacy.html privacy.html -Force
-Copy-Item static\impressum.html impressum.html -Force
-Copy-Item static\dpa.html data-processing-agreement.html -Force
-Copy-Item static\404.html 404.html -Force
-Copy-Item static\robots.txt robots.txt -Force
-Copy-Item static\sitemap.xml sitemap.xml -Force
-Copy-Item static\llms.txt llms.txt -Force
-Copy-Item static\llms-full.txt llms-full.txt -Force
-Copy-Item static\style.css style.css -Force
-Copy-Item static\style.min.css style.min.css -Force
-Copy-Item static\script.js script.js -Force
-Copy-Item static\script.min.js script.min.js -Force
-Copy-Item static\analytics.js analytics.js -Force
-Copy-Item static\og-image.png og-image.png -Force
-Copy-Item static\logo.svg logo.svg -Force
-Copy-Item static\fonts\inter-variable.woff2 fonts\inter-variable.woff2 -Force
-Copy-Item static\fonts\jetbrains-mono-variable.woff2 fonts\jetbrains-mono-variable.woff2 -Force
-```
-
-Verify zero drift before deploying:
+Sync and verify with the automation (the list lives once in `src/root_mirror.py`
+and is enforced by `tests/test_root_mirror.py`):
 
 ```powershell
-$a=(Get-FileHash index.html -Algorithm SHA256).Hash; $b=(Get-FileHash static\index.html -Algorithm SHA256).Hash; "index.html: $(if($a -eq $b){'MATCH'}else{'DIFF'})"
-# (repeat for each of the 18 pairs; or use a loop over the table above)
+python scripts/sync_mirror.py          # copy stale/missing mirrors to root
+python scripts/sync_mirror.py --check  # verify only; exit 1 on drift
 ```
+
+Run `--check` as the last step before `vercel --prod`.
 
 ## 4. Deploy
 
