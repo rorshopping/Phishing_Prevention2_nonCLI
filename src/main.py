@@ -217,10 +217,17 @@ app.mount("/", StaticFiles(directory=str(STATIC_DIR), html=True), name="static")
 
 _404_HTML = _read_static("404.html") or "<h1>404 Not Found</h1>"
 
+# API consumers (console JS, CLI) need machine-readable 404s; only the
+# website surface gets the marketing 404 page.
+_API_PREFIXES = (
+    "/clients", "/campaigns", "/reports", "/risk", "/training",
+    "/templates", "/ops", "/vishing", "/webhooks", "/api",
+)
+
 
 @app.exception_handler(StarletteHTTPException)
 async def custom_404_handler(request: Request, exc):
-    if exc.status_code == 404:
+    if exc.status_code == 404 and not request.url.path.startswith(_API_PREFIXES):
         return HTMLResponse(_404_HTML, status_code=404)
     return await http_exception_handler(request, exc)
 

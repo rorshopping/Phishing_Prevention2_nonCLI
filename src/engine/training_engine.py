@@ -1,6 +1,6 @@
 import uuid
 import logging
-from datetime import datetime, timedelta
+from datetime import datetime, timedelta, timezone
 from typing import Any
 
 from sqlalchemy import select, func
@@ -215,7 +215,7 @@ async def complete_training(
     result_q = await db.execute(
         select(CampaignResult).where(
             CampaignResult.employee_id == assignment.employee_id,
-        ).order_by(CampaignResult.created_at.desc()).limit(1)
+        ).order_by(func.coalesce(CampaignResult.clicked_at, CampaignResult.opened_at).desc()).limit(1)
     )
     latest_result = result_q.scalar_one_or_none()
     if latest_result:

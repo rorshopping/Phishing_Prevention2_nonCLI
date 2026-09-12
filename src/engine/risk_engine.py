@@ -224,6 +224,8 @@ async def get_client_risk_summary(
             "average_risk_score": 0.0,
             "risk_distribution": {"low": 0, "medium": 0, "high": 0, "critical": 0},
             "total_employees_scored": 0,
+            "total_employees": len(employees),
+            "highest_risk_employees": [],
         }
 
     avg = sum(s.score for s in latest_scores) / len(latest_scores)
