@@ -55,7 +55,10 @@ app = FastAPI(title="PhishDefend AI", version="1.0.0", lifespan=lifespan)
 
 app.add_middleware(
     CORSMiddleware,
-    allow_origins=["*"],
+    # The console and marketing site are served same-origin; only allow the
+    # configured public origin (if any). Twilio webhooks and the CLI are
+    # server-to-server and unaffected by CORS.
+    allow_origins=[settings.app_base_url.rstrip("/")] if settings.app_base_url else [],
     allow_credentials=False,
     allow_methods=["*"],
     allow_headers=["*"],
@@ -224,6 +227,29 @@ async def custom_404_handler(request: Request, exc):
 
 # ---------- middleware ----------
 
+# CSP tuned to the static pages: self-hosted assets + consent-gated GA4 only.
+# JSON-LD blocks are non-executable data, and no page has inline <script>,
+# so no 'unsafe-inline' is needed for scripts. Inline styles are used
+# extensively by the templates, hence style-src 'unsafe-inline'.
+_CONTENT_SECURITY_POLICY = (
+    "default-src 'self'; "
+    "script-src 'self' https://www.googletagmanager.com; "
+    "style-src 'self' 'unsafe-inline'; "
+    "font-src 'self'; "
+    "img-src 'self' data:; "
+    "connect-src 'self' https://*.google-analytics.com https://*.analytics.google.com; "
+    "frame-ancestors 'none'; "
+    "base-uri 'self'; "
+    "form-action 'self'; "
+    "object-src 'none'"
+)
+_SECURITY_HEADERS = {
+    "X-Content-Type-Options": "nosniff",
+    "X-Frame-Options": "DENY",
+    "Referrer-Policy": "strict-origin-when-cross-origin",
+    "Permissions-Policy": "camera=(), microphone=(), geolocation=()",
+}
+
 _CACHE_CONTROL_BY_SUFFIX = {
     ".css": "public, max-age=86400",
     ".js": "public, max-age=86400",
@@ -252,6 +278,16 @@ async def log_requests(request: Request, call_next):
         suffix = Path(path).suffix
         if suffix in _CACHE_CONTROL_BY_SUFFIX:
             response.headers["Cache-Control"] = _CACHE_CONTROL_BY_SUFFIX[suffix]
+
+    for name, value in _SECURITY_HEADERS.items():
+        response.headers.setdefault(name, value)
+    content_type = response.headers.get("content-type", "")
+    if content_type.startswith("text/html"):
+        response.headers.setdefault("Content-Security-Policy", _CONTENT_SECURITY_POLICY)
+    if settings.app_base_url.startswith("https://"):
+        response.headers.setdefault(
+            "Strict-Transport-Security", "max-age=31536000; includeSubDomains"
+        )
 
     logger.info(
         "%s %s -> %s (%.3fs)",

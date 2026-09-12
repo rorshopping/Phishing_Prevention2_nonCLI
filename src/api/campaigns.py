@@ -3,6 +3,8 @@ from datetime import datetime, timezone
 from typing import Optional
 
 from fastapi import APIRouter, Depends, HTTPException, Query
+
+from src.api.ops import require_ops_auth
 from pydantic import BaseModel
 from sqlalchemy import select
 from sqlalchemy.ext.asyncio import AsyncSession
@@ -10,7 +12,11 @@ from sqlalchemy.ext.asyncio import AsyncSession
 from src.database.session import get_db
 from src.database import models as m
 
-router = APIRouter(prefix="/campaigns", tags=["campaigns"])
+router = APIRouter(
+    prefix="/campaigns",
+    tags=["campaigns"],
+    dependencies=[Depends(require_ops_auth)],
+)
 
 
 class CampaignDetail(BaseModel):

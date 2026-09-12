@@ -2,6 +2,8 @@ import uuid
 from typing import Optional
 
 from fastapi import APIRouter, Depends, HTTPException, Query
+
+from src.api.ops import require_ops_auth
 from pydantic import BaseModel
 from sqlalchemy import select
 from sqlalchemy.ext.asyncio import AsyncSession
@@ -18,7 +20,11 @@ from src.engine.training_engine import (
 )
 from src.engine.feedback_engine import get_employee_feedback
 
-router = APIRouter(prefix="/training", tags=["training"])
+router = APIRouter(
+    prefix="/training",
+    tags=["training"],
+    dependencies=[Depends(require_ops_auth)],
+)
 
 
 class TrainingAssignResponse(BaseModel):

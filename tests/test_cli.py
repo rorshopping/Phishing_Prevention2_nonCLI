@@ -803,7 +803,7 @@ class TestApiHelper:
         monkeypatch.setattr(cli_mod, "httpx", fake_httpx)
         out = cli_mod._api("GET", "/x", params={"a": 1})
         assert out is resp
-        fake_httpx.get.assert_called_once_with(f"{cli_mod.API_BASE}/x", params={"a": 1}, timeout=30)
+        fake_httpx.get.assert_called_once_with(f"{cli_mod.API_BASE}/x", params={"a": 1}, headers={}, timeout=30)
 
     def test_post_dispatch(self, monkeypatch):
         resp = Response(200, json={})
@@ -811,7 +811,7 @@ class TestApiHelper:
         fake_httpx.post.return_value = resp
         monkeypatch.setattr(cli_mod, "httpx", fake_httpx)
         cli_mod._api("POST", "/x", json={"a": 1})
-        fake_httpx.post.assert_called_once_with(f"{cli_mod.API_BASE}/x", json={"a": 1}, params=None, timeout=30)
+        fake_httpx.post.assert_called_once_with(f"{cli_mod.API_BASE}/x", json={"a": 1}, params=None, headers={}, timeout=30)
 
     def test_put_dispatch(self, monkeypatch):
         resp = Response(200, json={})
@@ -819,7 +819,7 @@ class TestApiHelper:
         fake_httpx.put.return_value = resp
         monkeypatch.setattr(cli_mod, "httpx", fake_httpx)
         cli_mod._api("PUT", "/x", json={"a": 1})
-        fake_httpx.put.assert_called_once_with(f"{cli_mod.API_BASE}/x", json={"a": 1}, params=None, timeout=30)
+        fake_httpx.put.assert_called_once_with(f"{cli_mod.API_BASE}/x", json={"a": 1}, params=None, headers={}, timeout=30)
 
     def test_delete_dispatch(self, monkeypatch):
         resp = Response(200, json={})
@@ -827,7 +827,7 @@ class TestApiHelper:
         fake_httpx.delete.return_value = resp
         monkeypatch.setattr(cli_mod, "httpx", fake_httpx)
         cli_mod._api("DELETE", "/x", params={"a": 1})
-        fake_httpx.delete.assert_called_once_with(f"{cli_mod.API_BASE}/x", params={"a": 1}, timeout=30)
+        fake_httpx.delete.assert_called_once_with(f"{cli_mod.API_BASE}/x", params={"a": 1}, headers={}, timeout=30)
 
     def test_unsupported_method(self, monkeypatch):
         fake_httpx = MagicMock()

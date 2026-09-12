@@ -20,15 +20,19 @@ def cli():
 
 def _api(method: str, path: str, **kwargs) -> httpx.Response:
     url = f"{API_BASE}{path}"
+    # The API requires the ops token on all data endpoints (set OPS_TOKEN in
+    # the environment; an empty token only works against a local dev server).
+    token = os.environ.get("OPS_TOKEN", "")
+    headers = {"Authorization": f"Bearer {token}"} if token else {}
     try:
         if method == "GET":
-            return httpx.get(url, params=kwargs.get("params"), timeout=30)
+            return httpx.get(url, params=kwargs.get("params"), headers=headers, timeout=30)
         elif method == "POST":
-            return httpx.post(url, json=kwargs.get("json"), params=kwargs.get("params"), timeout=30)
+            return httpx.post(url, json=kwargs.get("json"), params=kwargs.get("params"), headers=headers, timeout=30)
         elif method == "PUT":
-            return httpx.put(url, json=kwargs.get("json"), params=kwargs.get("params"), timeout=30)
+            return httpx.put(url, json=kwargs.get("json"), params=kwargs.get("params"), headers=headers, timeout=30)
         elif method == "DELETE":
-            return httpx.delete(url, params=kwargs.get("params"), timeout=30)
+            return httpx.delete(url, params=kwargs.get("params"), headers=headers, timeout=30)
     except httpx.ConnectError:
         console.print("[red]Could not connect to API at {}. Is the server running?[/]".format(API_BASE))
         raise SystemExit(1)

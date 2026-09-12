@@ -3,6 +3,8 @@ from datetime import datetime, timedelta, timezone
 from typing import Optional
 
 from fastapi import APIRouter, Depends, HTTPException, Query
+
+from src.api.ops import require_ops_auth
 from fastapi.responses import HTMLResponse, PlainTextResponse
 from sqlalchemy import select
 from sqlalchemy.ext.asyncio import AsyncSession
@@ -11,7 +13,11 @@ from src.database.session import get_db
 from src.database import models as m
 from src.engine.report_engine import generate_client_report, generate_campaign_report, generate_campaign_report_csv, generate_client_report_csv
 
-router = APIRouter(prefix="/reports", tags=["reports"])
+router = APIRouter(
+    prefix="/reports",
+    tags=["reports"],
+    dependencies=[Depends(require_ops_auth)],
+)
 
 
 @router.get("/client/{client_id}", response_class=HTMLResponse)

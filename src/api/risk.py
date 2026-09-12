@@ -2,6 +2,8 @@ import uuid
 from typing import Optional
 
 from fastapi import APIRouter, Depends, HTTPException, Query
+
+from src.api.ops import require_ops_auth
 from pydantic import BaseModel
 from sqlalchemy import select
 from sqlalchemy.ext.asyncio import AsyncSession
@@ -18,7 +20,11 @@ from src.engine.risk_engine import (
     get_client_click_heatmap,
 )
 
-router = APIRouter(prefix="/risk", tags=["risk"])
+router = APIRouter(
+    prefix="/risk",
+    tags=["risk"],
+    dependencies=[Depends(require_ops_auth)],
+)
 
 
 class RiskScoreResponse(BaseModel):

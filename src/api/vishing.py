@@ -6,6 +6,7 @@ from fastapi import APIRouter, Depends, HTTPException, WebSocket
 from pydantic import BaseModel
 from sqlalchemy.ext.asyncio import AsyncSession
 
+from src.api.ops import require_ops_auth
 from src.database.session import get_db, async_session
 from src.database import models as m
 from src.agents.vishing_agent import VishingAgent
@@ -22,7 +23,7 @@ class VishingTrigger(BaseModel):
     scenario: str = "tech_support"
 
 
-@router.post("/trigger", status_code=201)
+@router.post("/trigger", status_code=201, dependencies=[Depends(require_ops_auth)])
 async def trigger_vishing(body: VishingTrigger, db: AsyncSession = Depends(get_db)):
     employee = await db.get(m.Employee, body.employee_id)
     if not employee:

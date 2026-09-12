@@ -52,6 +52,13 @@ python scripts/debug_execution.py
 
 ## API Endpoints
 
+**Security model** (enforced by `tests/test_security.py`):
+- **All data endpoints** (`/clients`, `/campaigns`, `/reports`, `/risk`, `/training`, `/templates`, `/ops/*` except `GET /ops/config`, `POST /vishing/trigger`) require `Authorization: Bearer <OPS_TOKEN>`. The CLI sends it from the `OPS_TOKEN` env var; the console attaches it automatically.
+- **Production guard:** with `ENVIRONMENT=production` and an empty `OPS_TOKEN`, protected endpoints return `503` (console/API disabled instead of wide open).
+- **Rate limits** (in-memory, per instance): `POST /api/contact` 5/hour/IP; failed ops-token attempts 10 per 5 min/IP → `429`.
+- **Security headers** on every response (nosniff, DENY framing, Referrer-Policy); CSP on HTML only; HSTS when `APP_BASE_URL` starts with `https://`. CORS only allows `APP_BASE_URL` (no wildcard).
+- Public by design: static pages, SEO files, the contact form, and `/webhooks/*` (Twilio, HMAC-validated) + the vishing WebSocket (Twilio Media Streams; session-validated).
+
 ### Risk Scoring (`/risk`)
 | Endpoint | Description |
 |---|---|

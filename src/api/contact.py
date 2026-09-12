@@ -2,10 +2,11 @@ import logging
 import smtplib
 from email.message import EmailMessage
 
-from fastapi import APIRouter, HTTPException
+from fastapi import APIRouter, HTTPException, Request
 from pydantic import BaseModel
 
 from src.config import settings
+from src.utils.rate_limit import client_ip, contact_limiter
 
 logger = logging.getLogger(__name__)
 router = APIRouter(tags=["contact"])
@@ -20,7 +21,10 @@ class ContactForm(BaseModel):
 
 
 @router.post("/api/contact")
-async def contact_submit(form: ContactForm):
+async def contact_submit(request: Request, form: ContactForm):
+    # Public form relaying through Gmail SMTP — throttle per client IP.
+    contact_limiter.check(client_ip(request))
+
     if not settings.gmail_user or not settings.gmail_app_password:
         logger.error("Gmail SMTP not configured")
         raise HTTPException(status_code=500, detail="Contact form not available")

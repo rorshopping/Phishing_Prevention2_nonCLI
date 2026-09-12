@@ -10,6 +10,7 @@ from sqlalchemy.ext.asyncio import AsyncSession
 from src.config import settings
 from src.database.session import get_db
 from src.database import models as m
+from src.utils.rate_limit import client_ip, ops_failure_limiter
 
 logger = logging.getLogger(__name__)
 
@@ -19,11 +20,24 @@ scheduler_task: Any | None = None
 
 
 def require_ops_auth(request: Request) -> None:
+    ip = client_ip(request)
+    if ops_failure_limiter.blocked(ip):
+        raise HTTPException(
+            status_code=429,
+            detail="Too many failed auth attempts. Please try again later.",
+        )
     token = settings.ops_token
     if not token:
+        if settings.environment == "production":
+            logger.error("Rejecting ops request: OPS_TOKEN is not set in production")
+            raise HTTPException(
+                status_code=503,
+                detail="Ops interface disabled: OPS_TOKEN is not configured",
+            )
         return
     auth = request.headers.get("Authorization", "")
     if auth != f"Bearer {token}":
+        ops_failure_limiter.record(ip)
         raise HTTPException(status_code=401, detail="Invalid or missing ops token")
 
 

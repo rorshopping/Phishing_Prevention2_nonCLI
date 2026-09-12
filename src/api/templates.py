@@ -3,6 +3,8 @@ from datetime import datetime
 from typing import Any, Optional
 
 from fastapi import APIRouter, Depends, HTTPException, Query
+
+from src.api.ops import require_ops_auth
 from pydantic import BaseModel
 from sqlalchemy.ext.asyncio import AsyncSession
 
@@ -13,7 +15,11 @@ from src.engine.template_engine import (
     update_template, delete_template,
 )
 
-router = APIRouter(prefix="/templates", tags=["templates"])
+router = APIRouter(
+    prefix="/templates",
+    tags=["templates"],
+    dependencies=[Depends(require_ops_auth)],
+)
 
 
 class TemplateCreate(BaseModel):
