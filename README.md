@@ -8,11 +8,11 @@ Send 4 test emails with different phishing scenarios:
 
 ```bash
 # 1. Set target emails (one-time)
-python update_emails.py --old @gmail.com --new @yourdomain.com
-python update_emails.py --old rorshopping --new bob
+python scripts/update_emails.py --old @gmail.com --new @yourdomain.com
+python scripts/update_emails.py --old rorshopping --new bob
 
 # 2. Launch test campaign (repeatable)
-python run_test.py
+python scripts/run_test.py
 ```
 
 Step 1 changes the delivery address for all employees. Step 2 creates a throwaway client with 4 employees (alice/bob/carol/dave), assigns each a different scenario (`bank_transfer`, `security_alert`, `shared_doc`, `password_reset`), creates all Gophish resources, and launches the campaigns. Check your inboxes for results.
@@ -21,7 +21,7 @@ Step 1 changes the delivery address for all employees. Step 2 creates a throwawa
 
 | | Quick Test | Production |
 |---|---|---|
-| Trigger | Manual `python run_test.py` | Scheduler (every 5 min), API, or CLI |
+| Trigger | Manual `python scripts/run_test.py` | Scheduler (every 5 min), API, or CLI |
 | AI | Execution agent only | Full 4-agent pipeline (planner + execution + monitoring + vishing) |
 | Data | Throwaway client + 4 hardcoded employees | Real clients/employees from DB or template import |
 | Setup | Auto-creates Gophish page, SMTP profile, resources | Same auto-creation, plus webhook listeners |
@@ -365,21 +365,21 @@ To receive test phishing emails, you need an inbox you can access. Any email add
 
 ```bash
 # Replace all @gmail.com with your domain
-python update_emails.py --old @gmail.com --new @icloud.com
+python scripts/update_emails.py --old @gmail.com --new @icloud.com
 
 # Or set a specific employee
-python update_emails.py --name "Alice Smith" --email alice@icloud.com
+python scripts/update_emails.py --name "Alice Smith" --email alice@icloud.com
 ```
 
-The `email_hash` column is what the execution agent uses (`emp.email or emp.email_hash`). The `update_emails.py` script sets both columns.
+The `email_hash` column is what the execution agent uses (`emp.email or emp.email_hash`). The `scripts/update_emails.py` script sets both columns.
 
 ```bash
 # Bulk replace: swap any substring across all employees
-python update_emails.py --old @gmail.com --new @company.com
-python update_emails.py --old rorshopping --new bob
+python scripts/update_emails.py --old @gmail.com --new @company.com
+python scripts/update_emails.py --old rorshopping --new bob
 
 # Single employee: set one address by name_hash
-python update_emails.py --name "Alice Smith" --email alice@company.com
+python scripts/update_emails.py --name "Alice Smith" --email alice@company.com
 ```
 
 ### Quick Test (1-step send)
@@ -387,7 +387,7 @@ python update_emails.py --name "Alice Smith" --email alice@company.com
 After setting target emails, run the test campaign:
 
 ```bash
-python run_test.py
+python scripts/run_test.py
 ```
 
 This creates 4 employees (alice/bob/carol/dave) with different scenarios (`bank_transfer`, `security_alert`, `shared_doc`, `password_reset`), creates Gophish resources, and launches the campaigns. No other steps needed — Gophish page, SMTP profile, and DB records are all handled automatically.

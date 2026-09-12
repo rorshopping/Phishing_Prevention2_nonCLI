@@ -1,17 +1,18 @@
 """One-step test: sends 4 phishing emails via Gophish with different scenarios.
 
 Usage:
-    python run_test.py
+    python scripts/run_test.py
 
 Prerequisites:
     - Gophish running (start_gophish.ps1)
     - .env configured with GMAIL_USER, GMAIL_APP_PASSWORD
-    - Target emails in DB (change with: python update_emails.py --old @gmail.com --new @yourdomain.com)
+    - Target emails in DB (change with: python scripts/update_emails.py --old @gmail.com --new @yourdomain.com)
 """
 import asyncio, uuid, os, sys
-sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)))
-os.environ["PYTHONPATH"] = os.path.dirname(os.path.abspath(__file__))
-os.chdir(os.path.dirname(os.path.abspath(__file__)))
+REPO_ROOT = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
+sys.path.insert(0, REPO_ROOT)
+os.environ["PYTHONPATH"] = REPO_ROOT
+os.chdir(REPO_ROOT)
 
 import logging
 logging.basicConfig(level=logging.INFO, format="%(asctime)s %(levelname)-8s %(name)s %(message)s")

@@ -23,11 +23,11 @@ When asked to work on this project, explore ONLY the relevant files. Do not expl
 ### Run a test campaign
 ```powershell
 $env:PYTHONPATH = "C:\Users\Richard\Documents\Projects\Phishing_Prevention2_nonCLI"
-python debug_execution2.py
+python scripts/debug_execution2.py
 ```
 Or use the full orchestrator flow:
 ```powershell
-python debug_execution.py
+python scripts/debug_execution.py
 ```
 
 ### Environment
@@ -121,5 +121,5 @@ Remove-Item phishguard_test.db -Force
 
 ### Clean Gophish campaigns
 ```powershell
-python test_cleanup_gophish.py
+python scripts/cleanup_gophish.py
 ```

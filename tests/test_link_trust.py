@@ -185,6 +185,7 @@ def cleanurl_server():
     yield base
     server.shutdown()
     thread.join(timeout=5)
+    server.server_close()
 
 
 def _http_status(base_url, path):
