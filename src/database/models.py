@@ -57,6 +57,8 @@ class Employee(Base):
 
     id: Mapped[uuid.UUID] = mapped_column(Uuid, primary_key=True, default=uuid.uuid4)
     client_id: Mapped[uuid.UUID] = mapped_column(Uuid, ForeignKey("clients.id"), nullable=False)
+    # Plaintext address, needed for campaign targeting (see _resolve_target_email
+    # in src/agents/execution_agent.py); purge after completion - docs/gdpr-pii.md
     email: Mapped[str] = mapped_column(String(255), nullable=True)
     email_hash: Mapped[str] = mapped_column(String(255), nullable=False)
     name: Mapped[str] = mapped_column(String(255), nullable=True)

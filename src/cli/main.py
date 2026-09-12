@@ -826,3 +826,37 @@ cli.add_command(template)
 
 if __name__ == "__main__":
     cli()
+
+
+@click.group()
+def privacy():
+    """GDPR data-minimization utilities."""
+
+
+@privacy.command("purge-emails")
+@click.option("--client-id", required=True, help="Client whose employee emails should be purged")
+@click.option("--campaign-id", default=None, help="Restrict to employees who participated in one campaign")
+def privacy_purge_emails(client_id, campaign_id):
+    """Null plaintext employee emails for terminal campaigns (GDPR Art. 5).
+
+    Hashed identifiers are kept, so reporting keeps working. Rejected with
+    409 while referenced campaigns are still running (emails are needed
+    for targeting).
+    """
+    resp = _api(
+        "POST",
+        "/ops/privacy/purge-emails",
+        json={"client_id": client_id, "campaign_id": campaign_id or None},
+    )
+    if resp.status_code >= 400:
+        try:
+            detail = resp.json().get("detail", resp.text)
+        except Exception:
+            detail = resp.text
+        console.print(f"[red]Purge failed (HTTP {resp.status_code}): {detail}[/]")
+        raise SystemExit(1)
+    data = resp.json()
+    console.print(f"[green]Purged {data['purged']} plaintext email(s).[/]")
+
+
+cli.add_command(privacy)

@@ -4,7 +4,7 @@ from typing import Any, Optional
 
 from fastapi import APIRouter, Depends, HTTPException, Query, Request
 from pydantic import BaseModel, Field
-from sqlalchemy import select, func
+from sqlalchemy import select, func, update
 from sqlalchemy.ext.asyncio import AsyncSession
 
 from src.config import settings
@@ -424,3 +424,81 @@ async def ops_trigger_campaign(
     if "error" in result:
         raise HTTPException(status_code=400, detail=result["error"])
     return result
+
+
+class PurgeEmailsRequest(BaseModel):
+    client_id: Optional[uuid.UUID] = None
+    campaign_id: Optional[uuid.UUID] = None
+
+
+@router.post("/privacy/purge-emails")
+async def purge_emails(body: PurgeEmailsRequest, db: AsyncSession = Depends(get_db)):
+    """Data minimization (GDPR Art. 5(1)(c)): null plaintext employee emails.
+
+    Employees keep their hashed identifiers, so reporting and monitoring keep
+    working; only the plaintext address required for campaign targeting is
+    removed. See docs/gdpr-pii.md.
+    """
+    if not body.client_id and not body.campaign_id:
+        raise HTTPException(
+            status_code=422, detail="client_id or campaign_id is required"
+        )
+
+    terminal = (m.CampaignStatus.completed, m.CampaignStatus.cancelled)
+    client_id = body.client_id
+    if body.campaign_id:
+        campaign = await db.get(m.Campaign, body.campaign_id)
+        if not campaign:
+            raise HTTPException(status_code=404, detail="Campaign not found")
+        if campaign.status not in terminal:
+            raise HTTPException(
+                status_code=409,
+                detail="Campaign is not terminal; target emails are still needed",
+            )
+        client_id = campaign.client_id
+    else:
+        if not await db.get(m.Client, client_id):
+            raise HTTPException(status_code=404, detail="Client not found")
+
+    non_terminal_participation = (
+        select(m.CampaignResult.employee_id)
+        .join(m.Campaign, m.Campaign.id == m.CampaignResult.campaign_id)
+        .where(
+            m.Campaign.client_id == client_id,
+            m.Campaign.status.in_(
+                (m.CampaignStatus.draft, m.CampaignStatus.scheduled, m.CampaignStatus.running)
+            ),
+        )
+    )
+    employee_filter = [m.Employee.client_id == client_id, m.Employee.email.is_not(None)]
+    if body.campaign_id:
+        employee_filter.append(
+            m.Employee.id.in_(
+                select(m.CampaignResult.employee_id).where(
+                    m.CampaignResult.campaign_id == body.campaign_id
+                )
+            )
+        )
+    employee_filter.append(m.Employee.id.not_in(non_terminal_participation))
+
+    result = await db.execute(
+        update(m.Employee).where(*employee_filter).values(email=None)
+    )
+    purged = result.rowcount or 0
+    await db.commit()
+
+    db.add(m.AuditLog(
+        client_id=client_id,
+        action="pii_emails_purged",
+        details={
+            "purged": purged,
+            "campaign_id": str(body.campaign_id) if body.campaign_id else None,
+        },
+    ))
+    await db.commit()
+
+    return {
+        "purged": purged,
+        "client_id": str(client_id),
+        "campaign_id": str(body.campaign_id) if body.campaign_id else None,
+    }
