@@ -1,12 +1,11 @@
 import uuid
 import logging
-from datetime import datetime
 from typing import Any
 
 from sqlalchemy import select
 from sqlalchemy.ext.asyncio import AsyncSession
 
-from src.database.models import CampaignTemplate
+from src.database.models import CampaignTemplate, utcnow
 
 logger = logging.getLogger(__name__)
 
@@ -63,7 +62,7 @@ async def update_template(
     for key, value in kwargs.items():
         if value is not None and hasattr(tpl, key):
             setattr(tpl, key, value)
-    tpl.updated_at = datetime.utcnow()
+    tpl.updated_at = utcnow()
     await db.flush()
     return tpl
 

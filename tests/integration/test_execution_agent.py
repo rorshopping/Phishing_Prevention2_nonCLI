@@ -124,7 +124,7 @@ class TestExecutionAgent:
         assert success is True
 
     @pytest.mark.asyncio
-    async def test_execute_campaign_unknown_campaign(self):
+    async def test_execute_campaign_unknown_campaign(self, patched_db_session):
         mock_gophish = AsyncMock()
         agent = ExecutionAgent(gophish=mock_gophish)
         success = await agent.execute_campaign(uuid4(), None)

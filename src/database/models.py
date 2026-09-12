@@ -1,10 +1,15 @@
 import uuid
-from datetime import datetime
+from datetime import datetime, timezone
 from sqlalchemy import String, Boolean, DateTime, Integer, Float, ForeignKey, Text, JSON, Enum as SAEnum, Uuid
 from sqlalchemy.orm import Mapped, mapped_column, relationship
 
 from src.database.session import Base
 import enum
+
+
+def utcnow() -> datetime:
+    """Naive UTC timestamp (datetime.utcnow() is deprecated and slated for removal)."""
+    return datetime.now(timezone.utc).replace(tzinfo=None)
 
 
 class CampaignStatus(str, enum.Enum):
@@ -40,8 +45,8 @@ class Client(Base):
     api_key_hash: Mapped[str] = mapped_column(String(255), nullable=True)
     campaigns_per_year: Mapped[int] = mapped_column(Integer, default=25)
     vishing_enabled: Mapped[bool] = mapped_column(Boolean, default=False)
-    created_at: Mapped[datetime] = mapped_column(DateTime, default=datetime.utcnow)
-    updated_at: Mapped[datetime] = mapped_column(DateTime, default=datetime.utcnow, onupdate=datetime.utcnow)
+    created_at: Mapped[datetime] = mapped_column(DateTime, default=utcnow)
+    updated_at: Mapped[datetime] = mapped_column(DateTime, default=utcnow, onupdate=utcnow)
 
     employees = relationship("Employee", back_populates="client", cascade="all, delete-orphan")
     campaigns = relationship("Campaign", back_populates="client", cascade="all, delete-orphan")
@@ -64,7 +69,7 @@ class Employee(Base):
     linkedin_url: Mapped[str] = mapped_column(String(500), nullable=True)
     public_data: Mapped[dict] = mapped_column(JSON, nullable=True)
     is_active: Mapped[bool] = mapped_column(Boolean, default=True)
-    created_at: Mapped[datetime] = mapped_column(DateTime, default=datetime.utcnow)
+    created_at: Mapped[datetime] = mapped_column(DateTime, default=utcnow)
 
     client = relationship("Client", back_populates="employees")
     results = relationship("CampaignResult", back_populates="employee", cascade="all, delete-orphan")
@@ -87,7 +92,7 @@ class Campaign(Base):
     gophish_group_id: Mapped[str] = mapped_column(Text, nullable=True)
     gophish_template_id: Mapped[str] = mapped_column(Text, nullable=True)
     gophish_page_id: Mapped[int] = mapped_column(Integer, nullable=True)
-    created_at: Mapped[datetime] = mapped_column(DateTime, default=datetime.utcnow)
+    created_at: Mapped[datetime] = mapped_column(DateTime, default=utcnow)
     completed_at: Mapped[datetime] = mapped_column(DateTime, nullable=True)
 
     client = relationship("Client", back_populates="campaigns")
@@ -131,7 +136,7 @@ class VishingSession(Base):
     transcript: Mapped[str] = mapped_column(Text, nullable=True)
     ai_used: Mapped[bool] = mapped_column(Boolean, default=True)
     sensitive_info_disclosed: Mapped[bool] = mapped_column(Boolean, default=False)
-    created_at: Mapped[datetime] = mapped_column(DateTime, default=datetime.utcnow)
+    created_at: Mapped[datetime] = mapped_column(DateTime, default=utcnow)
 
     client = relationship("Client")
     employee = relationship("Employee")
@@ -151,7 +156,7 @@ class RiskScore(Base):
     link_clicked: Mapped[bool] = mapped_column(Boolean, default=False)
     credentials_submitted: Mapped[bool] = mapped_column(Boolean, default=False)
     reported_phishing: Mapped[bool] = mapped_column(Boolean, default=False)
-    calculated_at: Mapped[datetime] = mapped_column(DateTime, default=datetime.utcnow)
+    calculated_at: Mapped[datetime] = mapped_column(DateTime, default=utcnow)
 
     employee = relationship("Employee")
     client = relationship("Client")
@@ -167,7 +172,7 @@ class TrainingAssignment(Base):
     campaign_id: Mapped[uuid.UUID] = mapped_column(Uuid, ForeignKey("campaigns.id"), nullable=True)
     training_type: Mapped[str] = mapped_column(String(100), nullable=False)
     status: Mapped[str] = mapped_column(String(20), default="pending")
-    assigned_at: Mapped[datetime] = mapped_column(DateTime, default=datetime.utcnow)
+    assigned_at: Mapped[datetime] = mapped_column(DateTime, default=utcnow)
     completed_at: Mapped[datetime] = mapped_column(DateTime, nullable=True)
     score_before: Mapped[float] = mapped_column(Float, default=0.0)
     score_after: Mapped[float] = mapped_column(Float, nullable=True)
@@ -189,8 +194,8 @@ class CampaignTemplate(Base):
     scenario_weights: Mapped[dict] = mapped_column(JSON, nullable=True)
     page_html: Mapped[str] = mapped_column(Text, nullable=True)
     is_active: Mapped[bool] = mapped_column(Boolean, default=True)
-    created_at: Mapped[datetime] = mapped_column(DateTime, default=datetime.utcnow)
-    updated_at: Mapped[datetime] = mapped_column(DateTime, default=datetime.utcnow, onupdate=datetime.utcnow)
+    created_at: Mapped[datetime] = mapped_column(DateTime, default=utcnow)
+    updated_at: Mapped[datetime] = mapped_column(DateTime, default=utcnow, onupdate=utcnow)
 
     client = relationship("Client")
 
@@ -203,4 +208,4 @@ class AuditLog(Base):
     action: Mapped[str] = mapped_column(String(100), nullable=False)
     details: Mapped[dict] = mapped_column(JSON, nullable=True)
     ip_address: Mapped[str] = mapped_column(String(45), nullable=True)
-    created_at: Mapped[datetime] = mapped_column(DateTime, default=datetime.utcnow)
+    created_at: Mapped[datetime] = mapped_column(DateTime, default=utcnow)

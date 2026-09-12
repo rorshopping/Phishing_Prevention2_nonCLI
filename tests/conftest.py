@@ -119,3 +119,18 @@ async def sample_campaign(sample_client, db_session) -> Campaign:
     db_session.add(campaign)
     await db_session.commit()
     return campaign
+
+
+@pytest.hookimpl(trylast=True)
+def pytest_sessionfinish(session, exitstatus):
+    # Any test that touches the real src.database.session engine leaves a pooled
+    # aiosqlite connection behind; its worker thread is non-daemon and blocks
+    # interpreter exit (pytest prints the summary, then hangs forever).
+    import asyncio
+
+    from src.database.session import engine
+
+    try:
+        asyncio.run(engine.dispose())
+    except Exception:
+        pass
