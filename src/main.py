@@ -1,6 +1,7 @@
 import asyncio
 import logging
 import time
+from contextlib import asynccontextmanager
 from pathlib import Path
 
 from fastapi import FastAPI, Request
@@ -23,7 +24,34 @@ logging.basicConfig(
 )
 logger = logging.getLogger("phishguard")
 
-app = FastAPI(title="PhishDefend AI", version="1.0.0")
+@asynccontextmanager
+async def lifespan(app: FastAPI):
+    async with engine.begin() as conn:
+        await conn.run_sync(Base.metadata.create_all)
+    logger.info("Database tables created (if not already present)")
+
+    global _scheduler_task
+    if settings.gophish_api_key:
+        _scheduler_task = asyncio.create_task(_scheduler_loop())
+        ops.scheduler_task = _scheduler_task
+        logger.info("Background scheduler started")
+    else:
+        logger.warning("No GOPHISH_API_KEY set — scheduler disabled")
+
+    yield
+
+    if _scheduler_task:
+        _scheduler_task.cancel()
+        try:
+            await _scheduler_task
+        except asyncio.CancelledError:
+            pass
+    ops.scheduler_task = None
+    await engine.dispose()
+    logger.info("Engine disposed")
+
+
+app = FastAPI(title="PhishDefend AI", version="1.0.0", lifespan=lifespan)
 
 app.add_middleware(
     CORSMiddleware,
@@ -73,34 +101,6 @@ async def _scheduler_loop():
         except Exception:
             logger.exception("Scheduler campaign launch error")
         await asyncio.sleep(interval)
-
-
-@app.on_event("startup")
-async def on_startup():
-    async with engine.begin() as conn:
-        await conn.run_sync(Base.metadata.create_all)
-    logger.info("Database tables created (if not already present)")
-
-    if settings.gophish_api_key:
-        global _scheduler_task
-        _scheduler_task = asyncio.create_task(_scheduler_loop())
-        ops.scheduler_task = _scheduler_task
-        logger.info("Background scheduler started")
-    else:
-        logger.warning("No GOPHISH_API_KEY set — scheduler disabled")
-
-
-@app.on_event("shutdown")
-async def on_shutdown():
-    if _scheduler_task:
-        _scheduler_task.cancel()
-        try:
-            await _scheduler_task
-        except asyncio.CancelledError:
-            pass
-    ops.scheduler_task = None
-    await engine.dispose()
-    logger.info("Engine disposed")
 
 
 @app.get("/health")
