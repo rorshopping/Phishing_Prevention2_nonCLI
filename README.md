@@ -40,6 +40,8 @@ CLI (Click)  ──►  FastAPI REST API  ──►  Gophish (phishing engine)
 
 ## Quick Start
 
+> Running the product for customers? Start with the [Operator Guide](docs/operator-guide.md).
+
 ```bash
 # Install
 pip install -e .

@@ -40,6 +40,7 @@ class Settings(BaseSettings):
     alert_webhook_threshold: int = Field(default=0, ge=0, description="Minimum click count to trigger webhook alert (0 = always)")
     ops_token: str = Field(default="", description="Bearer token required by the /ops operations console endpoints (empty = no auth)")
     environment: str = Field(default="development", description='Deployment environment: "development" (default, open ops console allowed) or "production" (empty OPS_TOKEN disables the ops console and data API)')
+    redis_url: str = Field(default="", description="Optional Redis URL (e.g. redis://localhost:6379/0) for rate-limit state shared across replicas; empty = in-memory per process")
 
     fallback_llm_api_key: str = ""
     fallback_llm_base_url: str = "https://api.groq.com/openai/v1"

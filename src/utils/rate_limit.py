@@ -4,11 +4,16 @@ Suitable for the single-container deployment (see Dockerfile): state is
 per-process, resets on restart, and is not shared across replicas. A
 deployment scaled to multiple instances needs a shared store (e.g. Redis).
 """
+import logging
 import threading
 import time
 from collections import defaultdict, deque
 
 from fastapi import HTTPException, Request
+
+from src.config import settings
+
+logger = logging.getLogger(__name__)
 
 # Keys are client IPs; if far too many accumulate (IP spoofing via
 # X-Forwarded-For on a directly exposed instance), prune expired queues.
@@ -79,8 +84,88 @@ class SlidingWindowLimiter:
             self._events.pop(key, None)
 
 
+class RedisSlidingWindowLimiter(SlidingWindowLimiter):
+    """Shared limiter for multi-replica deployments (REDIS_URL configured).
+
+    Same semantics as the in-memory limiter, backed by one sorted set per
+    key. Fails OPEN on Redis errors (availability over strictness): a Redis
+    outage must not take the API down, and rate limiting degrades to what a
+    single replica sees.
+    """
+
+    def __init__(self, max_events: int, window_seconds: float, redis_url: str):
+        super().__init__(max_events, window_seconds)
+        import redis
+
+        self._redis = redis.Redis.from_url(
+            redis_url, socket_connect_timeout=1, socket_timeout=1
+        )
+
+    def count(self, key: str) -> int:
+        now = time.time()
+        try:
+            name = f"ratelimit:{id(self)}:{key}"
+            pipe = self._redis.pipeline()
+            pipe.zremrangebyscore(name, "-inf", now - self.window_seconds)
+            pipe.zcard(name)
+            return int(pipe.execute()[1])
+        except Exception:
+            logger.warning("Redis rate-limit backend unavailable; failing open")
+            return 0
+
+    def record(self, key: str) -> None:
+        try:
+            now = time.time()
+            name = f"ratelimit:{id(self)}:{key}"
+            pipe = self._redis.pipeline()
+            pipe.zremrangebyscore(name, "-inf", now - self.window_seconds)
+            pipe.zadd(name, {f"{now}": now})
+            pipe.expire(name, int(self.window_seconds) + 1)
+            pipe.execute()
+        except Exception:
+            logger.warning("Redis rate-limit backend unavailable; failing open")
+
+    def check(self, key: str) -> None:
+        from fastapi import HTTPException
+
+        now = time.time()
+        try:
+            name = f"ratelimit:{id(self)}:{key}"
+            pipe = self._redis.pipeline()
+            pipe.zremrangebyscore(name, "-inf", now - self.window_seconds)
+            pipe.zcard(name)
+            count = int(pipe.execute()[1])
+            if count >= self.max_events:
+                raise HTTPException(
+                    status_code=429,
+                    detail="Too many requests. Please try again later.",
+                )
+            pipe = self._redis.pipeline()
+            pipe.zadd(name, {f"{now}": now})
+            pipe.expire(name, int(self.window_seconds) + 1)
+            pipe.execute()
+        except HTTPException:
+            raise
+        except Exception:
+            logger.warning("Redis rate-limit backend unavailable; failing open")
+
+    def reset(self, key: str) -> None:
+        try:
+            self._redis.delete(f"ratelimit:{id(self)}:{key}")
+        except Exception:
+            pass
+
+
+def _build_limiter(max_events: int, window_seconds: float) -> SlidingWindowLimiter:
+    """Redis-backed when REDIS_URL is set, in-memory otherwise. Redis
+    connection problems at runtime fail open (see RedisSlidingWindowLimiter)."""
+    if settings.redis_url:
+        return RedisSlidingWindowLimiter(max_events, window_seconds, settings.redis_url)
+    return SlidingWindowLimiter(max_events, window_seconds)
+
+
 # Public contact form: low volume expected; each submission costs SMTP quota.
-contact_limiter = SlidingWindowLimiter(max_events=5, window_seconds=3600)
+contact_limiter = _build_limiter(max_events=5, window_seconds=3600)
 
 # Failed ops-token attempts: slows brute-forcing of OPS_TOKEN per IP.
-ops_failure_limiter = SlidingWindowLimiter(max_events=10, window_seconds=300)
+ops_failure_limiter = _build_limiter(max_events=10, window_seconds=300)
